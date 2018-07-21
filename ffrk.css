@@ -5,18 +5,35 @@
 }
 
 #title {
+  font-family: 'Lato', sans-serif;
   color: blue;
   margin-top: 0;
 }
 
+h3, span, #search-button {
+  font-family: 'Lato', sans-serif;
+}
+
+p, #search-text, .cmd span { /** TODO change these rules to something simpler */
+  font-family: 'Merriweather', serif;
+}
+
 #search-text {
   width: 120px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  padding: 3px 3px 3px 4px;
 }
 
 #search-select {
   width: 110px;
 }
 
+#search-button {
+  border: 1px solid grey;
+  border-radius: 5px;
+  padding: 3px 6px;
+}
 
 /**
  * Soul Break Results
