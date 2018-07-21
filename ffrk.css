@@ -1,0 +1,116 @@
+#body {
+  width: 300px;
+  height: 100px;
+  max-height: 400px;
+}
+
+#title {
+  color: blue;
+  margin-top: 0;
+}
+
+#search-text {
+  width: 120px;
+}
+
+#search-select {
+  width: 110px;
+}
+
+
+/**
+ * Soul Break Results
+ */
+
+/*.sb-result {
+  border-bottom: 1px solid grey;  TODO make border-top on all results except the first
+  padding-bottom: 14px;
+}*/
+
+.sb-result {
+  margin-top: 16px;
+  border: 1px solid gray;
+  padding: 5px;
+}
+
+.sb-result:last-child {
+  margin-bottom: 16px;
+}
+
+.sb {
+  padding-bottom: 6px;
+}
+
+.sb-result__name {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.sb-main {
+  display: flex;
+}
+
+.sb-result__icon {
+  float: left;
+  min-height: 64px;
+  min-width: 64px;
+  height: 64px;
+  width: 64px;
+  margin-left: -10px;
+}
+
+.sb-result__effect {
+  margin-bottom: auto;
+  margin-top: auto;
+}
+
+.cmds {
+  padding: 2px;
+}
+
+.cmd {
+  display: flex;
+  padding: 5px 0;
+}
+
+.cmd__icon {
+  min-height: 32px;
+  min-width: 32px;
+  height: 32px;
+  width: 32px;
+  margin-right: 10px;
+}
+
+.cmd__effect {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.status__name {
+  display: inline;
+  font-weight: bold;
+}
+
+/** Legend Materia **/
+.lm__name {
+  margin: 0.5rem 0 0.25rem 0;
+}
+
+.lm__container {
+  display: flex;
+  align-items: center;
+}
+
+
+/** HELPERS **/
+.margin-right {
+  margin-right: auto;
+}
+
+.border-bottom {
+  border-bottom: 1px solid gray;
+}
+
+.bold {
+  font-weight: bold;
+}
