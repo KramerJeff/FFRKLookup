@@ -61,62 +61,80 @@ $(function () {
 	$("#search-button").click(function(e) {
     e.preventDefault();
 
-    let $select = $("#search-select"); //dropdown menu
-    let query = $("#search-text").val();
-    if($select.val() === "sb") {
-      //parse text
-      let parsedQuery = parseSBRequest(query);
-      console.log(sbURL + parsedQuery);
-      $.getJSON(sbURL + parsedQuery, function(json) {
-        if(json[0] !== undefined) {
-          console.log(json[0]);
-          $("#results").html(formatSBJSON(json[0]));
-        }
-        else {
-          $("#results").html("Invalid query, try again");
-        }
-      });
-    }
-    else if($select.val() === "lm") {
-      let arr = query.split(" ");
-      let cbParams = new Object();
+    //based on command, send data to correct function
+    //functions handle the data and return the formatted HTML
+    //the formatted HTML is added to a variable until loop is finished.
+    //once loop is finished, replace div with formatted HTML
+    //TODO Refactor using promises to guarantee order of requests.
 
-      getCharacterID(arr[0], cbParams, getLMsForCharID);
-    }
-    else {
-      console.log("character");
-    }
+    //grab query
+    let query = $("#search-text").val();
+    let requests = parseRequests(query);
+    let sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|UOSB|GSB|Glint/gi; //lcsb is caught by the CSB
+    $("#results").html(""); //clear window
+    requests.forEach(function(request) {
+      //grab command and see what it goes to
+      if(request[1].match(sbRegex)) {
+        let parsedQuery = parseSBRequest(request);
+      }
+      else if(request[1] === "lm") {
+        getCharacterID(request[0], new Object(), getLMsForCharID);
+      }
+    });
 	});
 });
 
+/**
+ * Take the input from the search box and parses it into
+ * one or multiple requests, depending on the content
+ * @param text - the text from the search box
+ */
+function parseRequests(text) {
+  let requests = [];
+  //search for commas - if commas are present, split into multiple commands
+  if(text.includes(',')) {
+    let queries = text.split(',');
+    queries.forEach(function(query) { //for each request, grab command and character name
+      query = query.trim();
+      requests.push(getParts(query));
+    });
+  }
+  else { //if there's a single request, grab command and character name
+    requests.push(getParts(text));
+  }
+  return requests;
+}
+
+/**
+ * Gets parts of a query depending on the text
+ */
+function getParts(query) {
+    let parts = [];
+    if (query.includes('"')) {
+        parts = query.split('"');
+        parts.shift(); //get rid of empty element
+    } else {
+        parts = query.split(" ");
+    }
+    parts[0] = searchAliases(parts[0]);
+    parts[1] = parts[1].trim().toLowerCase();
+    return parts;
+}
 
 /**
  * This function parses if the user is asking for a specific soul break by name
  * or by a character's name and SB tier e.g. Cloud USB
  */
-function parseSBRequest(text) {
+function parseSBRequest(arr) {
   let sbRegex = /SSB|BSB|USB|CSB|chain|OSB|AOSB|UOSB|GSB|Glint/gi; //lcsb is caught by the CSB
-  if(text.match(sbRegex)) { //contains specific character name and tier
-    //search to see if there are quotes
-    let arr = [];
-    if(text.includes('"')) {
-      let splitData = text.split('"');
-      splitData[0] = splitData[0].trim(); //get rid of spaces in
-      arr = splitData;
-    }
-    else {
-      arr = text.split(" ");
-    }
-
-    let sbTier = arr[0];
-    let charName = searchAliases(arr[1]);
-
-    //filter the tier info to pass to getting the soul breaks
-    let objSBTier = filterSBTier(sbTier);
-    getCharacterID(charName, objSBTier, getTierSBsForCharID);
+  let charName = arr[0];
+  let sbTier = arr[1];
+  if(sbTier === 'sb') { //generic sb request
+    console.log("get ALL the soul breaks!");
   }
-  else {
-    return text;
+  else if(sbTier.match(sbRegex)) { //contains specific character name and tier
+    let objSBTier = filterSBTier(sbTier); //filter the tier info to pass to getting the soul breaks
+    getCharacterID(charName, objSBTier, getTierSBsForCharID);
   }
 }
 
@@ -208,14 +226,14 @@ function getTierSBsForCharID(charID, cbParams) {
     let SBs = "";
     let arr = [];
 
-    if(cbParams.index === 0) {
+    if(cbParams.index === 0) { //if there is no sb number e.g. cloud usb2
       json.forEach((json) => {
         if(json.soulBreakTier === cbParams.tierID) {
           SBs += formatSBJSON(json);
         }
       });
     }
-    else {
+    else { //if there IS an index - TODO REFACTOR so the loop breaks once the correct SB is reached
       json.forEach((json) => {
         if(json.soulBreakTier === cbParams.tierID) {
           arr.push(json);
@@ -224,7 +242,7 @@ function getTierSBsForCharID(charID, cbParams) {
       SBs += formatSBJSON(arr[cbParams.index-1]);
     }
 
-    $("#results").html(SBs); //TODO this could be bad if we wait to chain requests e.g. Squall BSB, LM
+    $("#results").append(SBs); //TODO this could be bad if we want to chain requests e.g. Squall BSB, LM
   });
 }
 
@@ -236,7 +254,7 @@ function getLMsForCharID(charID, cbParams) {
       console.log(json);
       LMs += formatLMJSON(json);
     });
-    $("#results").html(LMs);
+    $("#results").append(LMs);
   });
 }
 
@@ -307,7 +325,7 @@ function formatSBJSON(json) {
     otherEffects += "<div class='otherEffects'>";
     for(let i = 0; i < json.otherEffects.length; i++) {
       if(json.otherEffects[i].description !== "Attack") {
-        otherEffects += "<span class='bold'>" + json.otherEffects[i].description + "</span>";
+        otherEffects += "<span class='status__name'>" + json.otherEffects[i].description + "</span>";
         otherEffects += "<p class='otherEffects__effect'>" + json.otherEffects[i].effects + "</p>";
       }
     }
