@@ -53,10 +53,10 @@ const characterAliases = {
   "aerith": "aeris",
   "cid (xiv)": "cid xiv",
   "cid (vii)": "cid vii",
-  "elarra": "urara"
+  "elarra": "urara",
+  "barbariccia": "barb"
 };
 
-//TODO Need to handle multi-word characters
 $(function () {
 	$("#search-button").click(function(e) {
     e.preventDefault();
@@ -65,21 +65,25 @@ $(function () {
     //functions handle the data and return the formatted HTML
     //the formatted HTML is added to a variable until loop is finished.
     //once loop is finished, replace div with formatted HTML
-    //TODO Refactor using promises to guarantee order of requests.
 
     //grab query
     let query = $("#search-text").val();
+    $("#results").html("");
     let requests = parseRequests(query);
     let sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|UOSB|GSB|Glint/gi; //lcsb is caught by the CSB
-    $("#results").html(""); //clear window
+    let sequence = Promise.resolve();
+
     requests.forEach(function(request) {
-      //grab command and see what it goes to
-      if(request[1].match(sbRegex)) {
-        let parsedQuery = parseSBRequest(request);
-      }
-      else if(request[1] === "lm") {
-        getCharacterID(request[0], new Object(), getLMsForCharID);
-      }
+      sequence = sequence.then(function() {
+        if(request[1].match(sbRegex)) {
+          return parseSBRequest(request);
+        }
+        else if(request[1] === "lm") { //TODO this is broken
+          return getCharacterID(request[0]).then(charID => getLMsForCharID(charID));
+        }
+      }).then(function(HTML) {
+        $("#results").append(HTML);
+      });
     });
 	});
 });
@@ -92,8 +96,8 @@ $(function () {
 function parseRequests(text) {
   let requests = [];
   //search for commas - if commas are present, split into multiple commands
-  if(text.includes(',')) {
-    let queries = text.split(',');
+  if(text.includes(';')) {
+    let queries = text.split(';');
     queries.forEach(function(query) { //for each request, grab command and character name
       query = query.trim();
       requests.push(getParts(query));
@@ -126,26 +130,25 @@ function getParts(query) {
  * or by a character's name and SB tier e.g. Cloud USB
  */
 function parseSBRequest(arr) {
+  let sbHTML = "";
   let sbRegex = /SSB|BSB|USB|CSB|chain|OSB|AOSB|UOSB|GSB|Glint/gi; //lcsb is caught by the CSB
   let charName = arr[0];
   let sbTier = arr[1];
-  if(sbTier === 'sb') { //generic sb request
+  if(sbTier === 'sb') { //TODO generic sb request
     console.log("get ALL the soul breaks!");
   }
   else if(sbTier.match(sbRegex)) { //contains specific character name and tier
     let objSBTier = filterSBTier(sbTier); //filter the tier info to pass to getting the soul breaks
-    getCharacterID(charName, objSBTier, getTierSBsForCharID);
+    return getCharacterID(charName)
+      .then(charID => getTierSBsForCharID(charID, objSBTier));
   }
 }
 
 function filterSBTier(sbString) {
-  //find if there's a number
-  console.log("the string is " + sbString);
   let sbTier = sbString.toLowerCase();
   let format = { index: 0 };
-  if(hasNumber(sbTier)) {
-    //create an index
-    format.index = sbTier.charAt(sbTier.length-1);
+  if(hasNumber(sbTier)) { //find if there's a number
+    format.index = sbTier.charAt(sbTier.length-1); //create an index
     sbTier = sbTier.substring(0, sbTier.length-1); //get rid of last character
   }
   format.tierName = sbTier;
@@ -179,10 +182,20 @@ function filterSBTier(sbString) {
   return format;
 }
 
+/**
+ * Helper function to find out if a string has a number or not
+ */
 function hasNumber(myString) {
   return /\d/.test(myString);
 }
 
+/**
+ * Searches through the characterAliases dictionary to see
+ * if the name is an alias - if it does, it replaces it with a name
+ * the API can recognize.
+ * @param charName - the alleged name of the character
+ * @returns the API recognizable name
+ */
 function searchAliases(charName) {
   for(key in characterAliases) {
     if(characterAliases[key].includes(charName)) {
@@ -193,25 +206,18 @@ function searchAliases(charName) {
 }
 
 /**
- * TODO rename, make it only execute callback if present, otherwise return character ID
- * Gets the character ID of the specified character and executes the callback function
+ * Gets the character ID of the specified character
  * @param charName - name of the character to retrieve their ID
- * @param cbParams - the parameters the callback will need e.g.
- *    tierID - the tier ID of the soul breaks being searched
- *    index - the index in the list of soulbreaks e.g. 1 for "Cloud USB1"
- * @param callback - function that will make use of the character ID
+ * @returns charID - the integer ID of the character
  */
-function getCharacterID(charName, cbParams, callback) {
-  console.log("this is the callback");
-  console.log(callback.name);
-  $.getJSON(apiBase + "/Characters/Name/" + charName, function(json) {
-    //execute different code based on the callback name
-    //pass in callback params as object
-    json.forEach((json) => {
-      if(json.characterName.toLowerCase() === charName.toLowerCase()) { //loop through and find exact match for Character Name
-        callback(json.id, cbParams); //calls function to get character SBs for specified tier
-        return; //break out of loop if exact match
-      }
+function getCharacterID(charName) {
+  return new Promise(function(resolve, reject) {
+    $.getJSON(apiBase + "/Characters/Name/" + charName, function(outerJSON) {
+      outerJSON.forEach((json) => {
+        if(json.characterName.toLowerCase() === charName.toLowerCase()) { //loop through and find exact match for Character Name
+          resolve(json.id); //resolve promise with correct character ID
+        }
+      });
     });
   });
 }
@@ -222,39 +228,43 @@ function getCharacterID(charName, cbParams, callback) {
  * @param cbParams - callback parameters
  */
 function getTierSBsForCharID(charID, cbParams) {
-  $.getJSON(apiBase + "/SoulBreaks/Character/" + charID, function(json) {
-    let SBs = "";
-    let arr = [];
+  return new Promise(function(resolve, reject) {
+    $.getJSON(apiBase + "/SoulBreaks/Character/" + charID, function(json) {
+      let SBs = "";
+      let arr = [];
 
-    if(cbParams.index === 0) { //if there is no sb number e.g. cloud usb2
-      json.forEach((json) => {
-        if(json.soulBreakTier === cbParams.tierID) {
-          SBs += formatSBJSON(json);
-        }
-      });
-    }
-    else { //if there IS an index - TODO REFACTOR so the loop breaks once the correct SB is reached
-      json.forEach((json) => {
-        if(json.soulBreakTier === cbParams.tierID) {
-          arr.push(json);
-        }
-      }); //TODO REFACTOR handle array out of bound exception
-      SBs += formatSBJSON(arr[cbParams.index-1]);
-    }
-
-    $("#results").append(SBs); //TODO this could be bad if we want to chain requests e.g. Squall BSB, LM
+      if(cbParams.index === 0) { //if there is no sb number e.g. cloud usb2
+        json.forEach((json) => {
+          if(json.soulBreakTier === cbParams.tierID) {
+            SBs += formatSBJSON(json);
+          }
+        });
+      }
+      else { //if there IS an index - TODO REFACTOR so the loop breaks once the correct SB is reached
+        json.forEach((json) => {
+          if(json.soulBreakTier === cbParams.tierID) {
+            arr.push(json);
+          }
+        }); //TODO REFACTOR handle array out of bound exception
+        SBs += formatSBJSON(arr[cbParams.index-1]);
+      }
+      resolve(SBs);
+    });
   });
+
 }
 
-function getLMsForCharID(charID, cbParams) {
-  $.getJSON(apiBase + "/LegendMaterias/Character/" + charID, function(json) {
-    let LMs = "<h3 class='character__name'>" + json[0].characterName + "</h3>"; //get the character name once
-    json.forEach((json) => {
-      console.log("legend materia");
-      console.log(json);
-      LMs += formatLMJSON(json);
+function getLMsForCharID(charID) {
+  return new Promise(function(resolve, reject) {
+    $.getJSON(apiBase + "/LegendMaterias/Character/" + charID, function(json) {
+      let LMs = "<div class='sb-result'><h3 class='character__name'>" + json[0].characterName + "</h3>"; //get the character name once
+      json.forEach((json) => {
+        console.log("legend materia " + json);
+        LMs += formatLMJSON(json);
+      });
+      LMs += "</div>";
+      resolve(LMs);
     });
-    $("#results").append(LMs);
   });
 }
 
@@ -265,7 +275,7 @@ function getLMsForCharID(charID, cbParams) {
  * TODO add elements to effect? also to commands? json.elements array has numbers to indicate the elements
  */
 function formatSBJSON(json) {
-  console.log(json);
+  console.log("formatSBJSON " + json);
   let html = "<div class='sb-result'>";
   let name = "<div class='sb'><h3 class='sb-result__name'>" + json.description + "</h3>";
   let icon = "<div class='sb-main'><img class='sb-result__icon' src='" + json.imagePath.split('"')[0] + "'/>"; //TODO make effect text vertically aligned like BSB commands
@@ -297,7 +307,7 @@ function formatSBJSON(json) {
 
       //Multiplier and Cast Time
       commands += "<div class='cmd";
-      if(i !== json.commands.length-1) { //Due to uncertainty of number of previous/next elements/features, it most likely can only be solved this way
+      if(i !== json.commands.length-1) { //Due to uncertainty of number of previous/next elements/features, this is my best solution
         commands += " border-bottom'>"
       }
       else {
@@ -331,11 +341,14 @@ function formatSBJSON(json) {
     }
     otherEffects += "</div>";
   }
+  //if(json.braveActions) TODO Brave Actions!
+  //braveCondition in braveActions specifies how to increment Brave
   html += name + icon + effect + statuses + otherEffects + commands + "</div>";
   return html;
 }
 
 /**
+ * TODO figure out what this should look like!
  * This function will format the Character JSON into a human-readable result.
  * @param json - the JSON from the API query
  */
@@ -352,9 +365,6 @@ function formatLMJSON(json) {
   let name = "<div class='lm'><h4 class='lm__name'>" + json.description + "</h4>";
   let icon = "<div class='lm__container'><img class='cmd__icon' src='" + json.imagePath.split('"')[0] + "'/>"; //TODO change name of this class
   let effect = "<p class='lm__effect'>" + json.effect + "</p></div></div>";
-  //soulbreaks
-  //lms?
-  //record materia?
   html += name + icon + effect;
   return html;
 }

@@ -5,21 +5,33 @@
 }
 
 #title {
-  font-family: 'Lato', sans-serif;
-  color: blue;
-  margin-top: 0;
+  font-family: 'Play', sans-serif;
+  text-shadow: 1px 1px 1px rgba(150,150,150,1);
+  margin: 0;
 }
 
-h3, span, #search-button {
+.title__desc {
+  font-size: 13px;
+}
+
+#search-button, #search-text {
+  font-size: 12px;
+}
+
+h3, span, #search-button, #search-text, .title__desc {
   font-family: 'Lato', sans-serif;
 }
 
-p, #search-text, .cmd span { /** TODO change these rules to something simpler */
+p, .cmd span { /** TODO change these rules to something simpler */
   font-family: 'Merriweather', serif;
 }
 
+p {
+  margin: 8px 0;
+}
+
 #search-text {
-  width: 120px;
+  width: 237px;
   border: 1px solid grey;
   border-radius: 5px;
   padding: 3px 3px 3px 4px;
@@ -45,8 +57,9 @@ p, #search-text, .cmd span { /** TODO change these rules to something simpler */
 }*/
 
 .sb-result {
-  margin-top: 16px;
+  margin-top: 12px;
   border: 1px solid gray;
+  border-radius: 5px;
   padding: 5px;
 }
 
@@ -55,11 +68,11 @@ p, #search-text, .cmd span { /** TODO change these rules to something simpler */
 }
 
 .sb {
-  padding-bottom: 6px;
+  padding-bottom: 8px;
 }
 
 .sb-result__name {
-  margin-bottom: 0;
+  margin-bottom: 8px;
   margin-top: 0;
 }
 
@@ -105,7 +118,7 @@ p, #search-text, .cmd span { /** TODO change these rules to something simpler */
 
 .status__name {
   display: inline;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: bold;
 }
 
@@ -117,6 +130,10 @@ p, #search-text, .cmd span { /** TODO change these rules to something simpler */
 .lm__container {
   display: flex;
   align-items: center;
+}
+
+.character__name {
+  margin: 0 0 8px 0;
 }
 
 
