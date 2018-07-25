@@ -22,7 +22,7 @@ h3, span, #search-button, #search-text, .title__desc {
   font-family: 'Lato', sans-serif;
 }
 
-p, .cmd span { /** TODO change these rules to something simpler */
+p, .cmd span, .braveMode__elements, .braveMode__castTime{ /** TODO change these rules to something simpler */
   font-family: 'Merriweather', serif;
 }
 
@@ -101,6 +101,7 @@ p {
 .cmd {
   display: flex;
   padding: 5px 0;
+  align-items: center;
 }
 
 .cmd__icon {
@@ -119,6 +120,10 @@ p {
 .status__name {
   display: inline;
   font-size: 0.875rem;
+  font-weight: bold;
+}
+
+.braveMode__desc {
   font-weight: bold;
 }
 
@@ -148,4 +153,8 @@ p {
 
 .bold {
   font-weight: bold;
+}
+
+.flex {
+  display: flex;
 }
