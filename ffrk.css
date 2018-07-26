@@ -22,7 +22,7 @@ h3, span, #search-button, #search-text, .title__desc {
   font-family: 'Lato', sans-serif;
 }
 
-p, .cmd span, .braveMode__elements, .braveMode__castTime{ /** TODO change these rules to something simpler */
+p, .cmd span, .braveMode__elements, .braveMode__castTime, .entry__elements, .entry__castTime { /** TODO change these rules to something simpler */
   font-family: 'Merriweather', serif;
 }
 
@@ -149,6 +149,10 @@ p {
 
 .border-bottom {
   border-bottom: 1px solid gray;
+}
+
+.border-top {
+  border-top: 1px solid gray;
 }
 
 .bold {

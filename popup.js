@@ -47,8 +47,8 @@ const schoolDict = {
 const characterAliases = {
   "onion knight": ["ok", "onion knight", "onion"],
   "orlandeau": ["tg cid", "tgc"],
-  "cecil (dark knight)": ["dcecil", "dark knight cecil", "cecil dark knight"],
-  "cecil (paladin)": ["pcecil", "paladin cecil", "cecil paladin"],
+  "cecil (dark knight)": ["decil", "dcecil", "dark knight cecil", "cecil dark knight"],
+  "cecil (paladin)": ["pecil", "pcecil", "paladin cecil", "cecil paladin"],
   "gilgamesh": "greg",
   "aerith": "aeris",
   "cid (iv)": ["cid iv", "cid4", "cid 4"],
@@ -63,6 +63,10 @@ const characterAliases = {
 
 };
 
+const sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|Glint/gi; //lcsb is caught by the CSB
+const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|Glint|lm|lmr/gi;
+
+
 $(function () {
 	$("#search-button").click(function(e) {
     e.preventDefault();
@@ -76,16 +80,19 @@ $(function () {
     let query = $("#search-text").val();
     $("#results").html("");
     let requests = parseRequests(query);
-    let sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|UOSB|GSB|FSB|Glint/gi; //lcsb is caught by the CSB
     let sequence = Promise.resolve();
 
     requests.forEach(function(request) {
       sequence = sequence.then(function() {
-        if(request[1].match(sbRegex)) {
+        if(request.length > 1 && request[1].match(sbRegex)) {
           return parseSBRequest(request);
         }
-        else if(request[1] === "lm") { //TODO this is broken
+        else if(request.length > 1 && request[1] === "lm" || request[1] === "lmr") {
           return getCharacterID(request[0]).then(charID => getLMsForCharID(charID));
+        }
+        else {
+          console.log("generic SB request?");
+          return getSoulBreak(request);
         }
       }).then(function(HTML) {
         $("#results").append(HTML);
@@ -126,8 +133,11 @@ function getParts(query) {
     } else {
         parts = query.split(" ");
     }
-    parts[0] = searchAliases(parts[0]);
-    parts[1] = parts[1].trim().toLowerCase();
+
+    if(parts.length > 1 && parts[1].match(cmdRegex)) {
+      parts[0] = searchAliases(parts[0]);
+      parts[1] = parts[1].trim().toLowerCase();
+    }
     return parts;
 }
 
@@ -137,7 +147,6 @@ function getParts(query) {
  */
 function parseSBRequest(arr) {
   let sbHTML = "";
-  let sbRegex = /SSB|BSB|USB|CSB|chain|OSB|AOSB|UOSB|GSB|FSB|Glint/gi; //lcsb is caught by the CSB
   let charName = arr[0];
   let sbTier = arr[1];
   if(sbTier === 'sb') { //TODO generic sb request
@@ -184,6 +193,7 @@ function filterSBTier(sbString) {
       break;
     case "aosb":
     case "uosb":
+    case "asb":
       format.tierID = 11;
       break;
   }
@@ -267,7 +277,11 @@ function getTierSBsForCharID(charID, cbParams) {
   });
 
 }
-
+/**
+ * Gets the Legend Materia for the specified character
+ * @param charID - the integer ID for the character
+ * @returns a Promise with the formatted HTML for the Legend Materia
+ */
 function getLMsForCharID(charID) {
   return new Promise(function(resolve, reject) {
     $.getJSON(apiBase + "/LegendMaterias/Character/" + charID, function(json) {
@@ -283,24 +297,41 @@ function getLMsForCharID(charID) {
 }
 
 /**
+ * This function does a reverse search for a Soul Break name based on the request based in
+ * @param request - array passed down from getParts method
+ */
+function getSoulBreak(request) {
+  return new Promise(function(resolve,reject) {
+    $.getJSON(apiBase + "/SoulBreaks/Name/" + request.join(" "), function(json) {
+      let SBs = "";
+      json.forEach((json) => {
+        SBs += formatSBJSON(json);
+      });
+      resolve(SBs);
+    });
+  });
+}
+
+/**
  * This function will format the Soul Break JSON into a human-readable result.
  * @param json - the JSON from the API query
+ * @returns HTML formatted string to represent the Soul Break
  * TODO add if the relic gives +element? relicName and relicId are provided
- * TODO add elements to effect? also to commands? json.elements array has numbers to indicate the elements
  */
 function formatSBJSON(json) {
   console.log("formatSBJSON " + json);
   let html = "<div class='sb-result'>";
   let name = "<div class='sb'><h3 class='sb-result__name'>" + json.description + "</h3>";
-  let icon = "<div class='sb-main'><img class='sb-result__icon' src='" + json.imagePath.split('"')[0] + "'/>"; //TODO make effect text vertically aligned like BSB commands
-  let effect = "<p class='sb-result__effect'>" + json.effects + "</p></div></div>";
+  let icon = "<div class='sb-main'><img class='sb-result__icon' src='" + json.imagePath.split('"')[0] + "'/>";
+  let effect = "<p class='sb-result__effect'>" + json.effects + "</p></div>";
+  let entry = "<div class='flex'><span class='margin-right entry__castTime'>Cast Time - " + json.castTime + "</span><span class='entry__elements'>" + formatElements(json) + "</span></div></div>";
 
   let commands = "";
   let statuses = "";
   let otherEffects = "";
   let braveActions = "";
   if(json.commands.length !== 0) {
-    commands += "<div class='cmds'>";
+    commands += "<div class='cmds border-top'>";
     for(let i = 0; i < json.commands.length; i++) {
       //TODO create container for these so they never overlap
       commands += "<div class='cmd'><img class='cmd__icon' src='" + json.commands[i].imagePath.split('"')[0] + "'/>";
@@ -310,13 +341,7 @@ function formatSBJSON(json) {
       commands += "<div class='cmd'><span class='margin-right'>";
       commands += "School - " + schoolDict[json.commands[i].school] + "</span>";
       commands += "<span>"
-      for(let j = 0; j < json.commands[i].elements.length; j++){
-        //console.log("value = " + elementDict[json.commands[i].elements[j]]);
-        commands += parseElementNumber(json.commands[i].elements[j]);
-        if(j !== json.commands[i].elements.length - 1) {
-          commands += ", ";
-        }
-      }
+      commands += formatElements(json.commands[i]);
       commands += "</span>";
       commands += "</div>";
 
@@ -343,12 +368,7 @@ function formatSBJSON(json) {
         statuses += "<p class='braveMode__condition'>Condition - " + json.braveActions[0].braveCondition + "</p>";
         statuses += "<div class='flex'><span class='margin-right braveMode__castTime'>Cast Time - " + json.braveActions[0].castTime + "</span>";
         statuses += "<span class='braveMode__elements'>Elements - ";
-        for(let j = 0; j < json.braveActions[0].elements.length; j++){
-          statuses += parseElementNumber(json.braveActions[0].elements[j]);
-          if(j !== json.braveActions[0].elements.length - 1) {
-            statuses += ", ";
-          }
-        }
+        statuses += formatElements(json.braveActions[0]);
         statuses += "</span></div>";
         for(let j = 0; j < json.braveActions.length; j++) {
           if(j === 0 ) {
@@ -360,7 +380,6 @@ function formatSBJSON(json) {
       else if(json.statuses[i].description !== "Remove" && json.statuses[i].description !== "Reraise" && json.statuses[i].description !== "Haste" && json.statuses[i].description !== "Burst Mode" && !json.statuses[i].description.includes("Attach") && !json.statuses[i].description.includes("Imp") && !json.statuses[i].description.includes("Blink")) {
         statuses += "<span class='status__name'>" + json.statuses[i].description + "</span>";
         statuses += "<p class='status__effect'>" + json.statuses[i].effects + "</p>";
-        //TODO if statuses[i].description === "Brave Mode" - find Brave Mode data from BraveActions/Character/{CharacterID}
       }
     }
     statuses += "</div>";
@@ -369,16 +388,15 @@ function formatSBJSON(json) {
     otherEffects += "<div class='otherEffects'>";
     for(let i = 0; i < json.otherEffects.length; i++) {
       if(json.otherEffects[i].description !== "Attack") {
-          otherEffects += "<span class='status__name'>" + json.otherEffects[i].description; //TODO do i need to check if the otherEffect doesn't have an element?
-          otherEffects += " - (";
-          for(let j = 0; j < json.otherEffects[i].elements.length; j++){ //TODO put this loop in a helper function?
-
-            otherEffects += parseElementNumber(json.otherEffects[i].elements[j]);
-            if(j !== json.otherEffects[i].elements.length - 1) {
-              otherEffects += ", ";
-            }
+          otherEffects += "<span class='status__name'>" + json.otherEffects[i].description;
+          if(json.otherEffects[i].elements.length > 0) {
+            otherEffects += " - (";
+            otherEffects += formatElements(json.otherEffects[i]);
+            otherEffects += ")</span>";
           }
-          otherEffects += ")</span>";
+          else {
+            otherEffects += "</span>";
+          }
           otherEffects += "<p class='otherEffects__effect'>" + json.otherEffects[i].effects + "</p>";
       }
     }
@@ -386,7 +404,7 @@ function formatSBJSON(json) {
   }
 
   //braveCondition in braveActions specifies how to increment Brave
-  html += name + icon + effect + statuses + otherEffects + commands + "</div>";
+  html += name + icon + effect + entry + statuses + otherEffects + commands + "</div>";
   return html;
 }
 
@@ -425,4 +443,16 @@ function parseElementNumber(elementID) {
   else {
     return elementName;
   }
+}
+
+
+function formatElements(json) {
+  let elements = "";
+  for (let j = 0; j < json.elements.length; j++) { //TODO put this loop in a helper function?
+    elements += parseElementNumber(json.elements[j]);
+    if (j !== json.elements.length - 1) {
+      elements += ", ";
+    }
+  }
+  return elements;
 }
