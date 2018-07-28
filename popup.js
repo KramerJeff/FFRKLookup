@@ -44,6 +44,233 @@ const schoolDict = {
   23: "Witch"
 };
 
+const charIDs = {
+  "ace": 206,
+  "aemo": 221,
+  "aerith": 100,
+  "agrias": 194,
+  "alma": 205,
+  "alphinaud": 181,
+  "amarant": 135,
+  "angeal": 109,
+  "aphmau": 155,
+  "aranea": 192,
+  "arc": 45,
+  "aria": 51,
+  "ashe": 161,
+  "auron": 145,
+  "ayame": 151,
+  "balthier": 158,
+  "barbariccia": 69,
+  "bard": 20,
+  "barret": 98,
+  "bartz": 74,
+  "basch": 160,
+  "beatrix": 136,
+  "berserker": 17,
+  "black mage": 7,
+  "braska": 147,
+  "cait sith": 103,
+  "cecil (dark knight)": 52,
+  "cecil (paladin)": 53,
+  "celes": 83,
+  "ceodore": 66,
+  "cid (iv)": 65,
+  "cid (vii)": 107,
+  "cid (xiv)": 183,
+  "cid raines": 174,
+  "cinque": 213,
+  "cloud": 97,
+  "cloud of darkness": 50,
+  "curilla": 152,
+  "cyan": 88,
+  "dark knight": 14,
+  "delita": 195,
+  "desch": 48,
+  "deuce": 207,
+  "devout": 10,
+  "dorgann": 76,
+  "dragoon": 13,
+  "echo": 27,
+  "edea": 122,
+  "edgar": 85,
+  "edge": 62,
+  "edward": 57,
+  "eiko": 134,
+  "elarra": 2,
+  "elena": 113,
+  "emperor": 41,
+  "enna": 224,
+  "estinien": 186,
+  "exdeath": 77,
+  "fang": 172,
+  "faris": 75,
+  "firion": 32,
+  "fran": 159,
+  "freya": 132,
+  "fujin": 124,
+  "fusoya": 63,
+  "gabranth": 163,
+  "gaffgarion": 199,
+  "galuf": 71,
+  "garland": 24,
+  "garnet": 129,
+  "gau": 89,
+  "gilgamesh": 73,
+  "gladiator": 22,
+  "gladiolus": 188,
+  "gogo (v)": 72,
+  "gogo (vi)": 93,
+  "golbez": 64,
+  "gordon": 37,
+  "guy": 34,
+  "haurchefant": 185,
+  "hilda": 42,
+  "hope": 171,
+  "ignis": 189,
+  "ingus": 47,
+  "iris": 191,
+  "irvine": 119,
+  "jecht": 146,
+  "josef": 40,
+  "kain": 54,
+  "kefka": 95,
+  "kelger": 80,
+  "kimahri": 143,
+  "king": 212,
+  "kiros": 125,
+  "knight": 4,
+  "krile": 78,
+  "kuja": 137,
+  "laguna": 121,
+  "lann": 219,
+  "larsa": 164,
+  "leila": 38,
+  "lenna": 70,
+  "leo": 96,
+  "leon": 35,
+  "lightning": 167,
+  "lion": 154,
+  "locke": 82,
+  "lulu": 142,
+  "luneth": 44,
+  "machina": 210,
+  "magus": 8,
+  "marach": 201,
+  "marche": 203,
+  "marcus": 138,
+  "maria": 33,
+  "master": 28,
+  "matoya": 29,
+  "meia": 30,
+  "meliadoul": 202,
+  "minfilia": 182,
+  "minwu": 36,
+  "mog": 84,
+  "monk": 5,
+  "montblanc": 204,
+  "morrow": 220,
+  "mustadio": 197,
+  "nabaat": 176,
+  "nine": 208,
+  "ninja": 21,
+  "noctis": 187,
+  "noel": 175,
+  "onion knight": 49,
+  "orlandeau": 198,
+  "ovelia": 196,
+  "paine": 148,
+  "palom": 59,
+  "papalymo": 180,
+  "penelo": 162,
+  "porom": 60,
+  "prishe": 153,
+  "prompto": 190,
+  "queen": 211,
+  "quina": 133,
+  "quistis": 116,
+  "raijin": 123,
+  "ramza": 193,
+  "ranger": 18,
+  "rapha": 200,
+  "red mage": 6,
+  "red xiii": 101,
+  "refia": 46,
+  "reks": 166,
+  "relm": 92,
+  "rem": 209,
+  "reno": 108,
+  "reynn": 218,
+  "ricard": 39,
+  "rikku": 144,
+  "riku": 217,
+  "rinoa": 115,
+  "rosa": 56,
+  "rubicante": 67,
+  "rude": 112,
+  "rufus": 110,
+  "rydia": 55,
+  "sabin": 86,
+  "samurai": 12,
+  "sarah": 25,
+  "sazh": 170,
+  "scott": 43,
+  "seifer": 120,
+  "selphie": 118,
+  "sephiroth": 106,
+  "serah": 173,
+  "setzer": 90,
+  "seven": 214,
+  "seymour": 149,
+  "shadow": 87,
+  "shantotto": 150,
+  "shelke": 111,
+  "sice": 215,
+  "snow": 168,
+  "sora": 216,
+  "spellblade": 15,
+  "squall": 114,
+  "steiner": 131,
+  "strago": 91,
+  "summoner": 11,
+  "tama": 223,
+  "tellah": 61,
+  "terra": 81,
+  "thancred": 178,
+  "thief (core)": 19,
+  "thief (i)": 31,
+  "tidus": 139,
+  "tifa": 99,
+  "tyro": 1,
+  "ultimecia": 127,
+  "umaro": 94,
+  "ursula": 68,
+  "vaan": 157,
+  "vanille": 169,
+  "vayne": 165,
+  "viking": 16,
+  "vincent": 104,
+  "vivi": 130,
+  "wakka": 141,
+  "ward": 126,
+  "warrior": 3,
+  "warrior of light": 23,
+  "white mage": 9,
+  "wol": 26,
+  "wrieg": 222,
+  "xezat": 79,
+  "y'shtola": 177,
+  "yang": 58,
+  "yda": 179,
+  "ysayle": 184,
+  "yuffie": 102,
+  "yuna": 140,
+  "zack": 105,
+  "zeid": 156,
+  "zell": 117,
+  "zidane": 128
+};
+
 const characterAliases = {
   "onion knight": ["ok", "onion knight", "onion"],
   "orlandeau": ["tg cid", "tgc"],
@@ -88,10 +315,10 @@ $(function () {
           return parseSBRequest(request);
         }
         else if(request.length > 1 && request[1] === "lm" || request[1] === "lmr") {
-          return getCharacterID(request[0]).then(charID => getLMsForCharID(charID));
+          let charID = getCharacterID(request[0]);
+          return getLMsForCharID(charID);
         }
         else {
-          console.log("generic SB request?");
           return getSoulBreak(request);
         }
       }).then(function(HTML) {
@@ -149,14 +376,16 @@ function parseSBRequest(arr) {
   let sbHTML = "";
   let charName = arr[0];
   let sbTier = arr[1];
+  let charID = getCharacterID(charName);
   if(sbTier === 'sb') { //TODO generic sb request
     let objSBTier = { tierID: 0};
-    return getCharacterID(charName).then(charID => getTierSBsForCharID(charID, objSBTier));
+    console.log("parseSBRequest " + charID);
+    return getTierSBsForCharID(charID, objSBTier);
   }
   else if(sbTier.match(sbRegex)) { //contains specific character name and tier
     let objSBTier = filterSBTier(sbTier); //filter the tier info to pass to getting the soul breaks
-    return getCharacterID(charName)
-      .then(charID => getTierSBsForCharID(charID, objSBTier));
+    console.log("parseSBRequest " + charID);
+    return getTierSBsForCharID(charID, objSBTier);
   }
 }
 
@@ -232,15 +461,7 @@ function searchAliases(charName) {
  * @returns charID - the integer ID of the character
  */
 function getCharacterID(charName) {
-  return new Promise(function(resolve, reject) {
-    $.getJSON(apiBase + "/Characters/Name/" + charName, function(outerJSON) {
-      outerJSON.forEach((json) => {
-        if(json.characterName.toLowerCase() === charName.toLowerCase()) { //loop through and find exact match for Character Name
-          resolve(json.id); //resolve promise with correct character ID
-        }
-      });
-    });
-  });
+  return charIDs[charName];
 }
 
 /**
