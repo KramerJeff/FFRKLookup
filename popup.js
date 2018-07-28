@@ -379,12 +379,10 @@ function parseSBRequest(arr) {
   let charID = getCharacterID(charName);
   if(sbTier === 'sb') { //TODO generic sb request
     let objSBTier = { tierID: 0};
-    console.log("parseSBRequest " + charID);
     return getTierSBsForCharID(charID, objSBTier);
   }
   else if(sbTier.match(sbRegex)) { //contains specific character name and tier
     let objSBTier = filterSBTier(sbTier); //filter the tier info to pass to getting the soul breaks
-    console.log("parseSBRequest " + charID);
     return getTierSBsForCharID(charID, objSBTier);
   }
 }
@@ -508,7 +506,6 @@ function getLMsForCharID(charID) {
     $.getJSON(apiBase + "/LegendMaterias/Character/" + charID, function(json) {
       let LMs = "<div class='sb-result'><h3 class='character__name'>" + json[0].characterName + "</h3>"; //get the character name once
       json.forEach((json) => {
-        console.log("legend materia " + json);
         LMs += formatLMJSON(json);
       });
       LMs += "</div>";
@@ -540,7 +537,6 @@ function getSoulBreak(request) {
  * TODO add if the relic gives +element? relicName and relicId are provided
  */
 function formatSBJSON(json) {
-  console.log("formatSBJSON " + json);
   let html = "<div class='sb-result'>";
   let name = "<div class='sb'><h3 class='sb-result__name'>" + json.description + "</h3>";
   let icon = "<div class='sb-main'><img class='sb-result__icon' src='" + json.imagePath.split('"')[0] + "'/>";
