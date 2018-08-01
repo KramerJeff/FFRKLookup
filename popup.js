@@ -1,7 +1,6 @@
 var bgPage = chrome.extension.getBackgroundPage();
 const apiBase = "http://ffrkapi.azurewebsites.net/api/v1.0/";
-let sbURL = apiBase + "/SoulBreaks/Name/";
-let $results = $("#results");
+
 const elementDict = {
   0: "unknown",
   1: "",
@@ -297,13 +296,22 @@ const characterAliases = {
 };
 
 const sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|Glint/gi; //lcsb is caught by the CSB
-const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|Glint|lm|lmr/gi;
+const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|Glint|lm|lmr|abil|ability|rm/gi;
+
+
+// createAbilityDict().then(data => {
+//   abilDict = data;
+// });
 
 
 $(function () {
+  let dictSequence = Promise.resolve();
+  let abilDict = {};
+
+  createAbilityDict().then(function(data) { abilDict = data; });
+  //createCharacterDict().then(function(data) { charDict = data; }); TODO
 	$("#search-button").click(function(e) {
     e.preventDefault();
-
     //based on command, send data to correct function
     //functions handle the data and return the formatted HTML
     //the formatted HTML is added to a variable until loop is finished.
@@ -314,15 +322,21 @@ $(function () {
     $("#results").html("");
     let requests = parseRequests(query);
     let sequence = Promise.resolve();
-
     requests.forEach(function(request) {
       sequence = sequence.then(function() {
         if(request.length > 1 && request[1].match(sbRegex)) {
           return parseSBRequest(request);
         }
-        else if(request.length > 1 && request[1] === "lm" || request[1] === "lmr") {
+        else if(request.length > 1 && request[1] === "lm" || request[1] === "lmr") { //if i did contains.("lm") that could be too generic
           let charID = getCharacterID(request[0]);
           return getLMsForCharID(charID);
+        }
+        else if(request.length > 1 && request[1] === "abil" || request[1] === "ability") {
+          return getAbility(request[0], abilDict);
+        }
+        else if(request.length > 1 && request[1] === "rm") {
+          //TODO RM aliases
+          return getRecordMateria(request[0]);
         }
         else {
           return getSoulBreak(request);
@@ -344,7 +358,7 @@ function parseRequests(text) {
   //search for commas - if commas are present, split into multiple commands
   if(text.includes(';')) {
     let queries = text.split(';');
-    queries.forEach(function(query) { //for each request, grab command and character name
+    queries.forEach(function(query) { //for each request, grab command and request text
       query = query.trim();
       requests.push(getParts(query));
     });
@@ -355,23 +369,15 @@ function parseRequests(text) {
   return requests;
 }
 
-/**
- * Gets parts of a query depending on the text
- */
 function getParts(query) {
-    let parts = [];
-    if (query.includes('"')) {
-        parts = query.split('"');
-        parts.shift(); //get rid of empty element
-    } else {
-        parts = query.split(" ");
-    }
-
-    if(parts.length > 1 && parts[1].match(cmdRegex)) {
-      parts[0] = searchAliases(parts[0]);
-      parts[1] = parts[1].trim().toLowerCase();
-    }
-    return parts;
+  let parts = [];
+  let words = query.trim().split(" ");
+  let cmd = words.pop().toLowerCase();
+  if(cmd.match(cmdRegex)) {
+    parts[0] = searchAliases(words.join(" "));
+    parts[1] = cmd;
+  }
+  return parts;
 }
 
 /**
@@ -510,7 +516,7 @@ function getTierSBsForCharID(charID, cbParams) {
 function getLMsForCharID(charID) {
   return new Promise(function(resolve, reject) {
     $.getJSON(apiBase + "/LegendMaterias/Character/" + charID, function(json) {
-      let LMs = "<div class='sb-result'><h3 class='character__name'>" + json[0].characterName + "</h3>"; //get the character name once
+      let LMs = "<div class='sb-result result'><h3 class='character__name'>" + json[0].characterName + "</h3>"; //get the character name once
       json.forEach((json) => {
         LMs += formatLMJSON(json);
       });
@@ -532,6 +538,40 @@ function getSoulBreak(request) {
         SBs += formatSBJSON(json);
       });
       resolve(SBs);
+    });
+  });
+}
+
+/**
+ * TODO map IdLists to abilities
+ */
+function getAbility(abilityName, abilDict) {
+  let abilName = abilityName.toLowerCase();
+  if(abilName in abilDict) {
+    let id = abilDict[abilName];
+    return new Promise(function(resolve,reject) {
+      $.getJSON(apiBase + "/Abilities/" + id, function(json) {
+        let abil = "";
+        json.forEach((json) => {
+          abil += formatAbilityJSON(json);
+        });
+        resolve(abil);
+      });
+    });
+  }
+  else {
+    return Promise.reject(new Error(abilityName + ' is not an acceptable ability name'));
+  }
+}
+
+function getRecordMateria(rmName) {
+  return new Promise(function(resolve, reject) {
+    $.getJSON(apiBase + "/RecordMaterias/Name/" + rmName, function(json) {
+      let RMs = "";
+      json.forEach((json) => {
+        RMs += formatRMJSON(json);
+      });
+      resolve(RMs);
     });
   });
 }
@@ -590,7 +630,7 @@ function formatSBJSON(json) {
         statuses += "<span class='status__name'>" + json.statuses[i].description + "</span>";
         statuses += "<p class='braveMode__condition'>Condition - " + json.braveActions[0].braveCondition + "</p>";
         statuses += "<div class='flex'><span class='margin-right braveMode__castTime'>Cast Time - " + json.braveActions[0].castTime + "</span>";
-        statuses += "<span class='braveMode__elements'>Elements - ";
+        statuses += "<span class='braveMode__elements'>";
         statuses += formatElements(json.braveActions[0]);
         statuses += "</span></div>";
         for(let j = 0; j < json.braveActions.length; j++) {
@@ -654,6 +694,45 @@ function formatLMJSON(json) {
 }
 
 /**
+ * This function will format the Record Materia JSON into a human-readable result.
+ * @param json - the JSON from the API query
+ */
+function formatRMJSON(json) {
+  let start = "<div class='result'>";
+  let name = "<h3 class='result__name'>" + json.recordMateriaName + "</h3>";
+  let icon = "<div class='icon-container'><img class='icon' src='" + json.imagePath.split('"')[0] + "'/>";
+  let effect = "<p class='effect'>" + json.effect + "</p></div>";
+  let unlock = "<p class='info'>Unlock Criteria - " + json.unlockCriteria + "</p>";
+  let end = "</div>";
+  return start + name + icon + effect + unlock +  end;
+}
+
+function formatAbilityJSON(json) {
+  let start = "<div class='result'>";
+  let name = "<h3 class='result__name'>" + json.abilityName + "</h3>";
+  let icon = "<div class='icon-container'><img class='icon' src='" + json.imagePath.split('"')[0] + "'/>";
+  let effect = "<p class='effect'>" + json.effects + "</p></div>";
+  let flexDiv = "<div class='flex'>";
+  let castTime = "<span class='margin-right info'>Cast Time - " + json.castTime + "</span>";
+  let elements = "<span class='elements info'>Elements - " + formatElements(json) + "</span>";
+  let endDiv = "</div>";
+  return start + name + icon + effect + flexDiv + castTime + elements + endDiv + formatOrbRequirements(json) + endDiv;
+}
+
+function createAbilityDict() {
+  let abilDict = {};
+  return new Promise(function(resolve,reject) {
+    $.getJSON(apiBase + "IdLists/Ability", function(abilJSON) {
+      abilJSON.forEach((json) => {
+        abilDict[json.value.toLowerCase()] = json.key;
+      });
+      resolve(abilDict);
+    });
+  });
+}
+
+
+/**
  * This helper function will find the element name to match the ID passed in
  * @param elementID - the element ID
  * @returns human readable element name
@@ -668,14 +747,48 @@ function parseElementNumber(elementID) {
   }
 }
 
-
 function formatElements(json) {
   let elements = "";
-  for (let j = 0; j < json.elements.length; j++) { //TODO put this loop in a helper function?
+  for (let j = 0; j < json.elements.length; j++) {
     elements += parseElementNumber(json.elements[j]);
     if (j !== json.elements.length - 1) {
       elements += ", ";
     }
   }
   return elements;
+}
+
+function formatOrbRequirements(json) {
+  let orbReqs = "<p class='info'>Hone Requirements</p><table class='info' border='1'><thead>";
+  let headerRow = "<tr><th>Rank</th>";
+  let row1 = "<tbody class='center'><tr><td>R1</td>";
+  let row2 = "<tr><td>R2</td>";
+  let row3 = "<tr><td>R3</td>";
+  let row4 = "<tr><td>R4</td>";
+  let row5 = "<tr><td>R5</td>";
+  for(let i = 0; i < json.orbRequirements.length; i++) {
+    switch(i % 5) {
+      case 0:
+        if(json.orbRequirements[i].orbName !== "Ability Record") {
+          headerRow += "<th>" + json.orbRequirements[i].orbName + "</th>";
+          row1 += "<td>" + json.orbRequirements[i].orbCount + "</td>";
+        }
+        break;
+      case 1:
+        row2 += "<td>" + json.orbRequirements[i].orbCount + "</td>";
+        break;
+      case 2:
+        row3 += "<td>" + json.orbRequirements[i].orbCount + "</td>";
+        break;
+      case 3:
+        row4 += "<td>" + json.orbRequirements[i].orbCount + "</td>";
+        break;
+      case 4:
+        row5 += "<td>" + json.orbRequirements[i].orbCount + "</td>";
+        break;
+    }
+  }
+  headerRow += "</tr></thead>";
+  row5 += "</tbody></table>";
+  return orbReqs + headerRow + row1 + row2 + row3 + row4 + row5;
 }

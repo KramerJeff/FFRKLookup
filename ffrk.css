@@ -1,5 +1,5 @@
 #body {
-  width: 300px;
+  width: 370px;
   height: 100px;
   max-height: 400px;
 }
@@ -22,12 +22,26 @@ h3, span, #search-button, #search-text, .title__desc {
   font-family: 'Lato', sans-serif;
 }
 
-p, .cmd span, .braveMode__elements, .braveMode__castTime, .entry__elements, .entry__castTime { /** TODO change these rules to something simpler */
+p, .cmd span, .braveMode__elements, .braveMode__castTime, .entry__elements, .entry__castTime, .info { /** TODO change these rules to something simpler */
   font-family: 'Merriweather', serif;
 }
 
 p {
   margin: 8px 0;
+}
+
+table {
+  border-collapse: collapse;
+  margin-bottom: 5px;
+  width: 100%;
+}
+
+th {
+  font-weight: normal;
+}
+
+th, td {
+  padding: 1px 3px;
 }
 
 #search-text {
@@ -56,14 +70,14 @@ p {
   padding-bottom: 14px;
 }*/
 
-.sb-result {
+.sb-result, .result {
   margin-top: 12px;
   border: 1px solid gray;
   border-radius: 5px;
   padding: 5px;
 }
 
-.sb-result:last-child {
+.sb-result:last-child, .result:last-child {
   margin-bottom: 16px;
 }
 
@@ -80,13 +94,22 @@ p {
   display: flex;
 }
 
-.sb-result__icon {
+.sb-result__icon, .lg-icon {
   float: left;
   min-height: 64px;
   min-width: 64px;
   height: 64px;
   width: 64px;
   margin-left: -10px;
+}
+
+.icon {
+  float: left;
+  min-height: 52px;
+  min-width: 52px;
+  height: 52px;
+  width: 52px;
+  margin: 0 5px 0 -2px;
 }
 
 .sb-result__effect {
@@ -104,7 +127,7 @@ p {
   align-items: center;
 }
 
-.cmd__icon {
+.cmd__icon, .sm-icon {
   min-height: 32px;
   min-width: 32px;
   height: 32px;
@@ -132,12 +155,16 @@ p {
   margin: 0.5rem 0 0.25rem 0;
 }
 
-.lm__container {
+.lm__container, .icon-container {
   display: flex;
   align-items: center;
 }
 
-.character__name {
+.icon-container {
+  margin-bottom: 8px;
+}
+
+.character__name, .result__name {
   margin: 0 0 8px 0;
 }
 
@@ -161,4 +188,8 @@ p {
 
 .flex {
   display: flex;
+}
+
+.center {
+  text-align: center;
 }
