@@ -5,8 +5,10 @@
 | ------------- |:--------------| 
 | Search for a specific Soul Break tier for a character | Cloud BSB | 
 | Search for an individual Soul Break of a certain tier for a character | Cloud BSB2 | 
-| Search for a character with multiple words in their name | "Onion Knight" USB |
+| Search for a character with multiple words in their name | Onion Knight USB |
 | Search for a character's Legend Materia | Cloud LM |
+| Search for an Ability by name | Meltdown abil |
+| Search for a Record Materia by name | Battleforged RM |
 | Use multiple commands in a single request | Cloud BSB; Cloud LM; Elarra USB |
 
 ### Aliases
