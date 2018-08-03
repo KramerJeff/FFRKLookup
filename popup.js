@@ -44,6 +44,24 @@ const schoolDict = {
   23: "Witch"
 };
 
+const targetDict = {
+  0: "Unknown",
+  1: "-",
+  2: "All allies",
+  3: "All enemies",
+  4: "Ally with status",
+  5: "Another ally",
+  6: "Lowest HP% ally",
+  7: "Random ally",
+  8: "Random enemies",
+  9: "Random enemy",
+  10: "Self",
+  11: "Single",
+  12: "Single ally",
+  13: "Single enemy",
+  14: ""
+};
+
 const charIDs = {
     'ace': 210,
     'aemo': 226,
@@ -292,7 +310,11 @@ const characterAliases = {
   "red xiii": ["nanaki", "red13", "red 13"],
   "gogo (v)": ["gogo v", "gogo5", "gogo 5"],
   "gogo (vi)": ["gogo vi", "gogo6", "gogo 6"]
+};
 
+const abilityAliases = {
+  "bahamut (v)": ["bahamut", "bahamut5", "bahamut v"],
+  "bahamut (vi)": ["bahamut6", "bahamut vi"]
 };
 
 const sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|Glint/gi; //lcsb is caught by the CSB
@@ -374,7 +396,7 @@ function getParts(query) {
   let words = query.trim().split(" ");
   let cmd = words.pop().toLowerCase();
   if(cmd.match(cmdRegex)) {
-    parts[0] = searchAliases(words.join(" "));
+    parts[0] = searchAliases(characterAliases, words.join(" ").toLowerCase());
     parts[1] = cmd;
   }
   return parts;
@@ -447,31 +469,32 @@ function hasNumber(myString) {
 }
 
 /**
- * Searches through the characterAliases dictionary to see
+ * Searches through the alias dictionary to see
  * if the name is an alias - if it does, it replaces it with a name
  * the API can recognize.
- * @param charName - the alleged name of the character
+ * @param aliasDict - the dictionary to search through
+ * @param name - the name input into the search
  * @returns the API recognizable name
  */
-function searchAliases(charName) {
-  if( charName === "WoL" ) {
+function searchAliases(aliasDict, name) {
+  if( name === "WoL" ) {
     return "warrior of light";
   }
-  for(key in characterAliases) {
-    if(characterAliases[key].includes(charName.toLowerCase())) {
-      charName = key;
+  for(key in aliasDict) {
+    if(aliasDict[key].includes(name.toLowerCase())) {
+      name = key;
     }
   }
-  return charName;
+  return name;
 }
 
 /**
  * Gets the character ID of the specified character
  * @param charName - name of the character to retrieve their ID
- * @returns charID - the integer ID of the character
+ * @returns charID - the integer ID of the character, -1 if charName is not in dictionary
  */
 function getCharacterID(charName) {
-  return charIDs[charName];
+  return (charIDs[charName] ? charIDs[charName] : -1);
 }
 
 /**
@@ -532,6 +555,7 @@ function getLMsForCharID(charID) {
  */
 function getSoulBreak(request) {
   return new Promise(function(resolve,reject) {
+    console.log(request.join(" "));
     $.getJSON(apiBase + "/SoulBreaks/Name/" + request.join(" "), function(json) {
       let SBs = "";
       json.forEach((json) => {
@@ -546,7 +570,7 @@ function getSoulBreak(request) {
  * TODO map IdLists to abilities
  */
 function getAbility(abilityName, abilDict) {
-  let abilName = abilityName.toLowerCase();
+  let abilName = searchAliases(abilityAliases, abilityName.toLowerCase());
   if(abilName in abilDict) {
     let id = abilDict[abilName];
     return new Promise(function(resolve,reject) {
@@ -715,8 +739,12 @@ function formatAbilityJSON(json) {
   let flexDiv = "<div class='flex'>";
   let castTime = "<span class='margin-right info'>Cast Time - " + json.castTime + "</span>";
   let elements = "<span class='elements info'>Elements - " + formatElements(json) + "</span>";
+  let multiplier = "<span class='info'>Total Multiplier - " + json.multiplier + "</span>";
+  let school = "<span class='margin-right info'>School - " + schoolDict[json.school] + "</span>";
+  let sbGain = "<span class='margin-right info'>SB Gain - " + json.soulBreakPointsGained + "</span>";
+  let target = "<span class='info'>Target - " + targetDict[json.targetType] + "</span>";
   let endDiv = "</div>";
-  return start + name + icon + effect + flexDiv + castTime + elements + endDiv + formatOrbRequirements(json) + endDiv;
+  return start + name + icon + effect + flexDiv + castTime + elements + endDiv + flexDiv + school + multiplier + endDiv + flexDiv + sbGain + target + endDiv + formatOrbRequirements(json) + endDiv;
 }
 
 function createAbilityDict() {

@@ -188,8 +188,13 @@ th, td {
 
 .flex {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .center {
   text-align: center;
+}
+
+.info {
+  margin-bottom: 0.25rem;
 }
