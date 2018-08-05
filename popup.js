@@ -350,8 +350,7 @@ $(function () {
           return parseSBRequest(request);
         }
         else if(request.length > 1 && request[1] === "lm" || request[1] === "lmr") { //if i did contains.("lm") that could be too generic
-          let charID = getCharacterID(request[0]);
-          return getLMsForCharID(charID);
+          return getLMsForChar(request);
         }
         else if(request.length > 1 && request[1] === "abil" || request[1] === "ability") {
           return getAbility(request[0], abilDict);
@@ -361,10 +360,14 @@ $(function () {
           return getRecordMateria(request[0]);
         }
         else {
+          console.log("getSoulBreak " + request);
           return getSoulBreak(request);
         }
       }).then(function(HTML) {
         $("#results").append(HTML);
+      }).catch(function(err) {
+        let errHTML = "<div class='sb-result result'><span class='error'>" + err + "</span></div>";
+        $("#results").append(errHTML);
       });
     });
 	});
@@ -399,6 +402,9 @@ function getParts(query) {
     parts[0] = searchAliases(characterAliases, words.join(" ").toLowerCase());
     parts[1] = cmd;
   }
+  else {
+    return query; //if it isn't a cmd, return the pure query
+  }
   return parts;
 }
 
@@ -411,13 +417,19 @@ function parseSBRequest(arr) {
   let charName = arr[0];
   let sbTier = arr[1];
   let charID = getCharacterID(charName);
-  if(sbTier === 'sb') { //TODO generic sb request
+  if(charID === -1) {
+    return Promise.reject(new Error(charName + ' is not a valid character name'));
+  }
+  else if(sbTier === 'sb') { //TODO generic sb request
     let objSBTier = { tierID: 0};
-    return getTierSBsForCharID(charID, objSBTier);
+    return getTierSBsForCharID(charID, objSBTier, arr);
   }
   else if(sbTier.match(sbRegex)) { //contains specific character name and tier
     let objSBTier = filterSBTier(sbTier); //filter the tier info to pass to getting the soul breaks
-    return getTierSBsForCharID(charID, objSBTier);
+    return getTierSBsForCharID(charID, objSBTier, arr);
+  }
+  else {
+    return Promise.reject(new Error(charName + ' ' + sbTier + ' is not a valid request'));
   }
 }
 
@@ -502,13 +514,12 @@ function getCharacterID(charName) {
  * @param charID - character ID
  * @param cbParams - callback parameters
  */
-function getTierSBsForCharID(charID, cbParams) {
+function getTierSBsForCharID(charID, cbParams, request) {
   return new Promise(function(resolve, reject) {
     $.getJSON(apiBase + "/SoulBreaks/Character/" + charID, function(json) {
       let SBs = "";
       let arr = [];
-      //TODO if cbParams.tierID === 0 -> get all soul breaks
-      if(cbParams.tierID === 0) {
+      if(cbParams.tierID === 0) { //if tierID = 0, get all SBs
         json.forEach((json) => { SBs += formatSBJSON(json); });
       }
       else if(cbParams.index === 0) { //if there is no sb number e.g. cloud usb2
@@ -523,8 +534,13 @@ function getTierSBsForCharID(charID, cbParams) {
           if(json.soulBreakTier === cbParams.tierID) {
             arr.push(json);
           }
-        }); //TODO REFACTOR handle array out of bound exception
-        SBs += formatSBJSON(arr[cbParams.index-1]);
+        });
+        if(arr.length > cbParams.index-1) {
+          SBs += formatSBJSON(arr[cbParams.index-1]); //TODO REFACTOR handle array out of bound exception
+        }
+        else {
+          reject(new Error(request[0] + " does not have " + cbParams.index + " " + request[1].replace(/[0-9]/g, '') + "s"));
+        }
       }
       resolve(SBs);
     });
@@ -533,10 +549,14 @@ function getTierSBsForCharID(charID, cbParams) {
 }
 /**
  * Gets the Legend Materia for the specified character
- * @param charID - the integer ID for the character
+ * @param request - the
  * @returns a Promise with the formatted HTML for the Legend Materia
  */
-function getLMsForCharID(charID) {
+function getLMsForChar(request) {
+  let charID = getCharacterID(request[0]);
+  if(charID === -1) {
+    return Promise.reject(new Error(request[0] + ' is not a valid character name'));
+  }
   return new Promise(function(resolve, reject) {
     $.getJSON(apiBase + "/LegendMaterias/Character/" + charID, function(json) {
       let LMs = "<div class='sb-result result'><h3 class='character__name'>" + json[0].characterName + "</h3>"; //get the character name once
@@ -554,14 +574,19 @@ function getLMsForCharID(charID) {
  * @param request - array passed down from getParts method
  */
 function getSoulBreak(request) {
+  //TODO add error if json retrieves no results (json.length === 0? json === undefined?)
   return new Promise(function(resolve,reject) {
-    console.log(request.join(" "));
-    $.getJSON(apiBase + "/SoulBreaks/Name/" + request.join(" "), function(json) {
+    $.getJSON(apiBase + "/SoulBreaks/Name/" + request, function(json) {
       let SBs = "";
-      json.forEach((json) => {
-        SBs += formatSBJSON(json);
-      });
-      resolve(SBs);
+      if(json.length === 0) {
+        reject(new Error("There is no soul break named " + request));
+      }
+      else {
+        json.forEach((json) => {
+          SBs += formatSBJSON(json);
+        });
+        resolve(SBs);
+      }
     });
   });
 }
