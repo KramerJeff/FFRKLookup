@@ -314,7 +314,8 @@ const characterAliases = {
 
 const abilityAliases = {
   "bahamut (v)": ["bahamut", "bahamut5", "bahamut v"],
-  "bahamut (vi)": ["bahamut6", "bahamut vi"]
+  "bahamut (vi)": ["bahamut6", "bahamut vi"],
+  "vortex": ["voltech"]
 };
 
 const sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|Glint/gi; //lcsb is caught by the CSB
