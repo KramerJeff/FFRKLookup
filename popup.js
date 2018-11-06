@@ -16,7 +16,9 @@ const elementDict = {
   11: "Pioson", //typo from the API...
   12: "Water",
   13: "Wind",
-  14: "Light."
+  14: "Light.",
+  15: "Earth", //extra type from API
+  16: "Water" //extra type from API
 };
 
 const schoolDict = {
@@ -90,8 +92,8 @@ const abilityAliases = {
   "vortex": ["voltech"]
 };
 
-const sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|Glint/gi; //lcsb is caught by the CSB
-const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|Glint|lm|lmr|abil|ability|rm/gi;
+const sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|AASB|Glint/gi; //lcsb is caught by the CSB
+const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|AASB|Glint|lm|lmr|abil|ability|rm|stat/gi;
 
 
 // createAbilityDict().then(data => {
@@ -131,6 +133,9 @@ $(function () {
         else if(request.length > 1 && request[1] === "rm") {
           //TODO RM aliases
           return getRecordMateria(request[0]);
+        }
+        else if(request.length > 1 && request[1] === "stat") {
+          return getStatus(request[0]);
         }
         else {
           console.log("getSoulBreak " + request);
@@ -193,7 +198,7 @@ function parseSBRequest(arr) {
   if(charID === -1) {
     return Promise.reject(new Error(charName + ' is not a valid character name'));
   }
-  else if(sbTier === 'sb') { //TODO generic sb request
+  else if(sbTier === 'sb') {
     let objSBTier = { tierID: 0};
     return getTierSBsForCharID(charID, objSBTier, arr);
   }
@@ -206,12 +211,18 @@ function parseSBRequest(arr) {
   }
 }
 
+/**
+ * Creates an Object based on the SB search string to help create the API
+ * request to retrieve Soul Break data.
+ * @param sbString - the Soul Break search string e.g. BSB1, USB2, BSB
+ * @returns Object containing the tierID and index of the SB you are looking for e.g. USB2 (second USB)
+ */
 function filterSBTier(sbString) {
   let sbTier = sbString.toLowerCase();
   let format = { index: 0 };
   if(hasNumber(sbTier)) { //find if there's a number
     format.index = sbTier.charAt(sbTier.length-1); //create an index
-    sbTier = sbTier.substring(0, sbTier.length-1); //get rid of last character
+    sbTier = sbTier.substring(0, sbTier.length-1); //get rid of number in tier
   }
   format.tierName = sbTier;
   switch(sbTier) {
@@ -242,12 +253,17 @@ function filterSBTier(sbString) {
     case "asb":
       format.tierID = 11;
       break;
+    case "aasb":
+      format.tierID = 12;
+      break;
   }
   return format;
 }
 
 /**
  * Helper function to find out if a string has a number or not
+ * @param myString - string you want to find number in
+ * @returns True if the string contains a number
  */
 function hasNumber(myString) {
   return /\d/.test(myString);
@@ -322,7 +338,7 @@ function getTierSBsForCharID(charID, cbParams, request) {
 }
 /**
  * Gets the Legend Materia for the specified character
- * @param request - the
+ * @param request - array containing the character name
  * @returns a Promise with the formatted HTML for the Legend Materia
  */
 function getLMsForChar(request) {
@@ -394,6 +410,18 @@ function getRecordMateria(rmName) {
         RMs += formatRMJSON(json);
       });
       resolve(RMs);
+    });
+  });
+}
+
+function getStatus(statusName) {
+  return new Promise(function(resolve, reject) {
+    $.getJSON(apiBase + "/Statuses/CommonName/" + statusName, function(json) {
+      let statuses = "";
+      json.forEach((json) => {
+        statuses += formatStatusJSON(json);
+      });
+      resolve(statuses);
     });
   });
 }
@@ -527,6 +555,14 @@ function formatRMJSON(json) {
   let unlock = "<p class='info'>Unlock Criteria - " + json.unlockCriteria + "</p>";
   let end = "</div>";
   return start + name + icon + effect + unlock +  end;
+}
+
+function formatStatusJSON(json) {
+  let start = "<div class='result'>";
+  let name = "<h3 class='result__name'>" + json.commonName + "</h3>";
+  let effect = "<div><p class='effect'>" + json.effects + "</p></div>";
+  let end = "</div>";
+  return start + name + effect + end;
 }
 
 function formatAbilityJSON(json) {
