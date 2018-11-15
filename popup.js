@@ -92,6 +92,7 @@ const abilityAliases = {
   "vortex": ["voltech"]
 };
 
+const ignoredStatuses = ["Remove", "Reraise", "Haste", "Burst Mode", "Imp", "Attach", "Blink"];
 const sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|AASB|Glint/gi; //lcsb is caught by the CSB
 const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|AASB|Glint|lm|lmr|abil|ability|rm|stat/gi;
 
@@ -124,27 +125,25 @@ $(function () {
         if(request.length > 1 && request[1].match(sbRegex)) {
           return parseSBRequest(request);
         }
-        else if(request.length > 1 && request[1] === "lm" || request[1] === "lmr") { //if i did contains.("lm") that could be too generic
+        else if(request.length > 1 && request[1] === "lm" || request[1] === "lmr") { //if i did contains.("lm") that would be too generic
           return getLMsForChar(request);
         }
         else if(request.length > 1 && request[1] === "abil" || request[1] === "ability") {
           return getAbility(request[0], abilDict);
         }
         else if(request.length > 1 && request[1] === "rm") {
-          //TODO RM aliases
-          return getRecordMateria(request[0]);
+          return getRecordMateria(request[0]); //TODO RM aliases
         }
         else if(request.length > 1 && request[1] === "stat") {
           return getStatus(request[0]);
         }
         else {
-          console.log("getSoulBreak " + request);
           return getSoulBreak(request);
         }
       }).then(function(HTML) {
         $("#results").append(HTML);
       }).catch(function(err) {
-        let errHTML = "<div class='sb-result result'><span class='error'>" + err + "</span></div>";
+        let errHTML = `<div class='sb-result result'><span class='error'>${err}</span></div>`;
         $("#results").append(errHTML);
       });
     });
@@ -196,7 +195,7 @@ function parseSBRequest(arr) {
   let sbTier = arr[1];
   let charID = getCharacterID(charName);
   if(charID === -1) {
-    return Promise.reject(new Error(charName + ' is not a valid character name'));
+    return Promise.reject(new Error(`${charName} is not a valid character name`));
   }
   else if(sbTier === 'sb') {
     let objSBTier = { tierID: 0};
@@ -207,7 +206,7 @@ function parseSBRequest(arr) {
     return getTierSBsForCharID(charID, objSBTier, arr);
   }
   else {
-    return Promise.reject(new Error(charName + ' ' + sbTier + ' is not a valid request'));
+    return Promise.reject(new Error(`${charName} ${sbTier} is not a valid request`));
   }
 }
 
@@ -270,6 +269,36 @@ function hasNumber(myString) {
 }
 
 /**
+ * Determines if the specified status is allowed and should be displayed in the text
+ * @param statusName - the name of the status to be verified
+ * @returns true if the status is allowed, false otherwise
+ */
+function statusAllowed(statusName) {
+  let val = true;
+  for(let i = 0; i < ignoredStatuses.length; i++){
+    if(statusName.includes(ignoredStatuses[i])) {
+      val = false;
+      break;
+    }    
+  }
+  return val;
+}
+
+//returns an array of status names
+function findStatusInText(text) {
+  let arr = [];
+  if(text.includes("grants")) {
+    arr = text.split("grants")[1].split("to")[0].split(","); //TODO lookout for statuses with commas in them
+    for(let i = 0; i < arr.length; i++) {
+      arr[i] = arr[i].includes("and") ? arr[i].substring(arr[i].indexOf("and")+3, arr[i].length).trim() : arr[i].trim();
+    }
+  }
+  return arr;
+}
+
+
+
+/**
  * Searches through the alias dictionary to see
  * if the name is an alias - if it does, it replaces it with a name
  * the API can recognize.
@@ -328,7 +357,7 @@ function getTierSBsForCharID(charID, cbParams, request) {
           SBs += formatSBJSON(arr[cbParams.index-1]); //TODO REFACTOR handle array out of bound exception
         }
         else {
-          reject(new Error(request[0] + " does not have " + cbParams.index + " " + request[1].replace(/[0-9]/g, '') + "s"));
+          reject(new Error(`${request[0]} does not have ${cbParams.index} ${request[1].replace(/[0-9]/g, '')}s`));
         }
       }
       resolve(SBs);
@@ -347,8 +376,8 @@ function getLMsForChar(request) {
     return Promise.reject(new Error(request[0] + ' is not a valid character name'));
   }
   return new Promise(function(resolve, reject) {
-    $.getJSON(apiBase + "/LegendMaterias/Character/" + charID, function(json) {
-      let LMs = "<div class='sb-result result'><h3 class='character__name'>" + json[0].characterName + "</h3>"; //get the character name once
+    $.getJSON(`${apiBase}/LegendMaterias/Character/${charID}`, function(json) {
+      let LMs = `<div class='sb-result result'><h3 class='character__name'>${json[0].characterName}</h3>`; //get the character name once
       json.forEach((json) => {
         LMs += formatLMJSON(json);
       });
@@ -365,10 +394,10 @@ function getLMsForChar(request) {
 function getSoulBreak(request) {
   //TODO add error if json retrieves no results (json.length === 0? json === undefined?)
   return new Promise(function(resolve,reject) {
-    $.getJSON(apiBase + "/SoulBreaks/Name/" + request, function(json) {
+    $.getJSON(`${apiBase}/SoulBreaks/Name/${request}`, function(json) {
       let SBs = "";
       if(json.length === 0) {
-        reject(new Error("There is no soul break named " + request));
+        reject(new Error(`There is no soul break named ${request}`));
       }
       else {
         json.forEach((json) => {
@@ -388,7 +417,7 @@ function getAbility(abilityName, abilDict) {
   if(abilName in abilDict) {
     let id = abilDict[abilName];
     return new Promise(function(resolve,reject) {
-      $.getJSON(apiBase + "/Abilities/" + id, function(json) {
+      $.getJSON(`${apiBase}/Abilities/${id}`, function(json) {
         let abil = "";
         json.forEach((json) => {
           abil += formatAbilityJSON(json);
@@ -398,13 +427,13 @@ function getAbility(abilityName, abilDict) {
     });
   }
   else {
-    return Promise.reject(new Error(abilityName + ' is not an acceptable ability name'));
+    return Promise.reject(new Error(`${abilityName} is not an acceptable ability name`));
   }
 }
 
 function getRecordMateria(rmName) {
   return new Promise(function(resolve, reject) {
-    $.getJSON(apiBase + "/RecordMaterias/Name/" + rmName, function(json) {
+    $.getJSON(`${apiBase}/RecordMaterias/Name/${rmName}`, function(json) {
       let RMs = "";
       json.forEach((json) => {
         RMs += formatRMJSON(json);
@@ -416,7 +445,7 @@ function getRecordMateria(rmName) {
 
 function getStatus(statusName) {
   return new Promise(function(resolve, reject) {
-    $.getJSON(apiBase + "/Statuses/CommonName/" + statusName, function(json) {
+    $.getJSON(`${apiBase}/Statuses/CommonName/${statusName}`, function(json) {
       let statuses = "";
       json.forEach((json) => {
         statuses += formatStatusJSON(json);
@@ -426,6 +455,26 @@ function getStatus(statusName) {
   });
 }
 
+// function getStatusJSONFromArray(arr) {
+//   return new Promise(function(resolve, reject) {
+//     let sequence = Promise.resolve();
+//     let retJSON = "";
+//     for(let i = 0; i < arr.length; i++) {
+//       sequence = sequence.then(() =>
+//         getStatus(arr[i]).then((json) => {
+//           retJSON += json;
+//           console.log('lower ' + retJSON + " json " + json);
+//         });
+//         console.log("i " + i + " arrlen " + (arr.length-1));
+//         if(i === (arr.length-1)) {
+//           console.log("end of array");
+//           resolve(retJSON);
+//         }
+//       );
+//     }
+//   });
+// }
+
 /**
  * This function will format the Soul Break JSON into a human-readable result.
  * @param json - the JSON from the API query
@@ -434,10 +483,10 @@ function getStatus(statusName) {
  */
 function formatSBJSON(json) {
   let html = "<div class='sb-result'>";
-  let name = "<div class='sb'><h3 class='sb-result__name'>" + json.description + "</h3>";
+  let name = `<div class='sb'><h3 class='sb-result__name'>${json.description}</h3>`;
   let icon = "<div class='sb-main'><img class='sb-result__icon' src='" + json.imagePath.split('"')[0] + "'/>";
-  let effect = "<p class='sb-result__effect'>" + json.effects + "</p></div>";
-  let entry = "<div class='flex'><span class='margin-right entry__castTime'>Cast Time - " + json.castTime + "</span><span class='entry__elements'>" + formatElements(json) + "</span></div></div>";
+  let effect = `<p class='sb-result__effect'>${json.effects}</p></div>`;
+  let entry = `<div class='flex'><span class='margin-right entry__castTime'>Cast Time - ${json.castTime}</span><span class='entry__elements'>${formatElements(json)}</span></div></div>`;
 
   let commands = "";
   let statuses = "";
@@ -448,14 +497,15 @@ function formatSBJSON(json) {
     for(let i = 0; i < json.commands.length; i++) {
       //TODO create container for these so they never overlap
       commands += "<div class='cmd'><img class='cmd__icon' src='" + json.commands[i].imagePath.split('"')[0] + "'/>";
-      commands += "<p class='cmd__effect'>" + json.commands[i].effects + "</p></div>";
-
+      commands += `<p class='cmd__effect'>${json.commands[i].effects}</p></div>`; //TODO SEARCH FOR STATUS
+      // if(findStatusInText(json.commands[i].effects).length > 0) {
+      //   commands += `<p class='cmd__effect'>${findStatusInText(json.commands[i].effects)}`;
+      //   //getStatusJSONFromArray(findStatusInText(json.commands[i].effects)).then((json) => console.log("upper " + json));
+      // }
       //School and Elements
       commands += "<div class='cmd'><span class='margin-right'>";
-      commands += "School - " + schoolDict[json.commands[i].school] + "</span>";
-      commands += "<span>"
-      commands += formatElements(json.commands[i]);
-      commands += "</span>";
+      commands += `School - ${schoolDict[json.commands[i].school]}</span>`;
+      commands += `<span>${formatElements(json.commands[i])}</span>`;
       commands += "</div>";
 
       //Multiplier and Cast Time
@@ -466,15 +516,14 @@ function formatSBJSON(json) {
       else {
         commands += "'>";
       }
-      commands += "<span class='margin-right'>Multiplier - " + json.commands[i].multiplier + "</span>";
-      commands += "<span>Cast Time - " + json.commands[i].castTime + "</span></div>";
+      commands += `<span class='margin-right'>Multiplier - ${json.commands[i].multiplier}</span>`;
+      commands += `<span>Cast Time - ${json.commands[i].castTime}</span></div>`;
     }
     commands += "</div>";
   }
   if(json.statuses) {
     statuses += "<div class='status'>";
     for(let i = 0; i < json.statuses.length; i++) {
-      //TODO create list of unwanted statuses included in SB preview
       //List so far: Poison, Minor Resist Dark (Resist?), KO, Instant KO, Protect, Shell, Magical Blink, Astra, Instant Cast
       if(json.statuses[i].description === "Brave Mode") {
         statuses += "<span class='status__name'>" + json.statuses[i].description + "</span>";
@@ -490,7 +539,7 @@ function formatSBJSON(json) {
           statuses += "<p class='braveMode__effects'>" + json.braveActions[j].braveLevel + " - " + json.braveActions[j].effects + "</p>";
         }
       }
-      else if(json.statuses[i].description !== "Remove" && json.statuses[i].description !== "Reraise" && json.statuses[i].description !== "Haste" && json.statuses[i].description !== "Burst Mode" && !json.statuses[i].description.includes("Attach") && !json.statuses[i].description.includes("Imp") && !json.statuses[i].description.includes("Blink")) {
+      else if(statusAllowed(json.statuses[i].description)) { //make sure status is not 'blacklisted'
         statuses += "<span class='status__name'>" + json.statuses[i].description + "</span>";
         statuses += "<p class='status__effect'>" + json.statuses[i].effects + "</p>";
       }
@@ -557,12 +606,17 @@ function formatRMJSON(json) {
   return start + name + icon + effect + unlock +  end;
 }
 
-function formatStatusJSON(json) {
+function formatStatusJSON(json, options) {
   let start = "<div class='result'>";
   let name = "<h3 class='result__name'>" + json.commonName + "</h3>";
   let effect = "<div><p class='effect'>" + json.effects + "</p></div>";
   let end = "</div>";
-  return start + name + effect + end;
+  if(options === "append") {
+    return name + effect;
+  }
+  else {
+    return start + name + effect + end;
+  }
 }
 
 function formatAbilityJSON(json) {
