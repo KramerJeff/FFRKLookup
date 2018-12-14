@@ -89,18 +89,14 @@ const characterAliases = {
 const abilityAliases = {
   "bahamut (v)": ["bahamut", "bahamut5", "bahamut v"],
   "bahamut (vi)": ["bahamut6", "bahamut vi"],
-  "vortex": ["voltech"]
+  "voltech": ["vortex"],
+  "sapphire blitz": ["sapphire bullet"],
+  "sundering assault": ["tremor assault"]
 };
 
 const ignoredStatuses = ["Remove", "Reraise", "Haste", "Burst Mode", "Imp", "Attach", "Blink"];
 const sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|AASB|Glint/gi; //lcsb is caught by the CSB
 const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|AASB|Glint|lm|lmr|abil|ability|rm|stat/gi;
-
-
-// createAbilityDict().then(data => {
-//   abilDict = data;
-// });
-
 
 $(function () {
   let dictSequence = Promise.resolve();
@@ -137,6 +133,9 @@ $(function () {
         else if(request.length > 1 && request[1] === "stat") {
           return getStatus(request[0]);
         }
+        //else if(request.length > 1 && request[1] === "char") {
+        //  return getCharacter(request[0]);
+        //}
         else {
           return getSoulBreak(request);
         }
@@ -289,14 +288,19 @@ function findStatusInText(text) {
   let arr = [];
   if(text.includes("grants")) {
     arr = text.split("grants")[1].split("to")[0].split(","); //TODO lookout for statuses with commas in them
+    if(arr[arr.length-1].includes('and')) { //if there's an and
+      arr.push(arr[arr.length-1].split('and')[1]); //push last status on end of array
+      arr[arr.length-2] = arr[arr.length-2].split('and')[0]; //fix 2nd to last status
+    }
     for(let i = 0; i < arr.length; i++) {
-      arr[i] = arr[i].includes("and") ? arr[i].substring(arr[i].indexOf("and")+3, arr[i].length).trim() : arr[i].trim();
+      arr[i] = arr[i].trim(); //get rid of whitespace
     }
   }
   return arr;
 }
 
-
+//findStatusInEffects
+//Look through statuses in effects and add them to an array
 
 /**
  * Searches through the alias dictionary to see
@@ -307,7 +311,7 @@ function findStatusInText(text) {
  * @returns the API recognizable name
  */
 function searchAliases(aliasDict, name) {
-  if( name === "WoL" ) {
+  if( name === "WoL" ) { //TODO fix this?
     return "warrior of light";
   }
   for(key in aliasDict) {
@@ -392,7 +396,6 @@ function getLMsForChar(request) {
  * @param request - array passed down from getParts method
  */
 function getSoulBreak(request) {
-  //TODO add error if json retrieves no results (json.length === 0? json === undefined?)
   return new Promise(function(resolve,reject) {
     $.getJSON(`${apiBase}/SoulBreaks/Name/${request}`, function(json) {
       let SBs = "";
@@ -455,6 +458,13 @@ function getStatus(statusName) {
   });
 }
 
+//function getCharacter(characterName) {
+  //weaponAccess
+  //abilityAccess
+  //LMs
+  //Record Materia
+//}
+
 // function getStatusJSONFromArray(arr) {
 //   return new Promise(function(resolve, reject) {
 //     let sequence = Promise.resolve();
@@ -476,6 +486,88 @@ function getStatus(statusName) {
 // }
 
 /**
+ * SB helper
+ */
+function getCommands(cmdArr) {
+    let commands = "<div class='cmds border-top'>";
+    for(let i = 0; i < cmdArr.length; i++) {
+      //TODO create container for these so they never overlap
+      commands += "<div class='cmd'><img class='cmd__icon' src='" + cmdArr[i].imagePath.split('"')[0] + "'/>";
+      commands += `<p class='cmd__effect'>${cmdArr[i].effects}</p></div>`; //TODO SEARCH FOR STATUS
+      // if(findStatusInText(json.commands[i].effects).length > 0) {
+      //   commands += `<p class='cmd__effect'>${findStatusInText(json.commands[i].effects)}`;
+      //   //getStatusJSONFromArray(findStatusInText(json.commands[i].effects)).then((json) => console.log("upper " + json));
+      // }
+      //School and Elements
+      commands += "<div class='cmd'><span class='margin-right'>";
+      commands += `School - ${schoolDict[cmdArr[i].school]}</span>`;
+      commands += `<span>${formatElements(cmdArr[i])}</span>`;
+      commands += "</div>";
+
+      //Multiplier and Cast Time
+      commands += "<div class='cmd";
+      if(i !== cmdArr.length-1) { //Due to uncertainty of number of previous/next elements/features, this is my best solution
+        commands += " border-bottom'>"
+      }
+      else {
+        commands += "'>";
+      }
+      commands += `<span class='margin-right'>Multiplier - ${cmdArr[i].multiplier}</span>`;
+      commands += `<span>Cast Time - ${cmdArr[i].castTime}</span></div>`;
+    }
+    commands += "</div>";
+    return commands;  
+}
+
+function getSBStatuses(statusJson, braveJson, statusArr) {
+    let statuses = "<div class='status'>";
+    console.log(statusArr);
+    for(let i = 0; i < statusJson.length; i++) {
+      //List so far: Poison, Minor Resist Dark (Resist?), KO, Instant KO, Protect, Shell, Magical Blink, Astra, Instant Cast
+      if(statusJson[i].description === "Brave Mode") {
+        statuses += "<span class='status__name'>" + statusJson[i].description + "</span>";
+        statuses += "<p class='braveMode__condition'>Condition - " + braveJson[0].braveCondition + "</p>";
+        statuses += "<div class='flex'><span class='margin-right braveMode__castTime'>Cast Time - " + braveJson[0].castTime + "</span>";
+        statuses += "<span class='braveMode__elements'>";
+        statuses += formatElements(braveJson[0]);
+        statuses += "</span></div>";
+        for(let j = 0; j < braveJson.length; j++) {
+          if(j === 0) {
+            statuses += "<p class='braveMode__desc'>" + braveJson[j].braveActionName + "</p>";
+          }
+          statuses += "<p class='braveMode__effects'>" + braveJson[j].braveLevel + " - " + braveJson[j].effects + "</p>";
+        }
+      }
+      else if(statusAllowed(statusJson[i].description) && statusArr.includes(statusJson[i].description)) { //make sure status is not 'blacklisted'
+        statuses += "<span class='status__name'>" + statusJson[i].description + "</span>";
+        statuses += "<p class='status__effect'>" + statusJson[i].effects + "</p>";
+      }
+    }
+    statuses += "</div>";
+    return statuses;
+}
+
+function getOtherEffects(jsonArr) {
+  let otherEffects = "<div class='otherEffects'>";
+  for(let i = 0; i < jsonArr.length; i++) {
+    if(jsonArr[i].description !== "Attack") {
+      otherEffects += "<span class='status__name'>" + jsonArr[i].description;
+      if(jsonArr[i].elements.length > 0) {
+        otherEffects += " - (";
+        otherEffects += formatElements(jsonArr[i]);
+        otherEffects += ")</span>";
+      }
+      else {
+        otherEffects += "</span>";
+      }
+      otherEffects += "<p class='otherEffects__effect'>" + jsonArr[i].effects + "</p>";
+    }
+  }
+  otherEffects += "</div>";
+  return otherEffects;  
+}
+
+/**
  * This function will format the Soul Break JSON into a human-readable result.
  * @param json - the JSON from the API query
  * @returns HTML formatted string to represent the Soul Break
@@ -493,76 +585,14 @@ function formatSBJSON(json) {
   let otherEffects = "";
   let braveActions = "";
   if(json.commands.length !== 0) {
-    commands += "<div class='cmds border-top'>";
-    for(let i = 0; i < json.commands.length; i++) {
-      //TODO create container for these so they never overlap
-      commands += "<div class='cmd'><img class='cmd__icon' src='" + json.commands[i].imagePath.split('"')[0] + "'/>";
-      commands += `<p class='cmd__effect'>${json.commands[i].effects}</p></div>`; //TODO SEARCH FOR STATUS
-      // if(findStatusInText(json.commands[i].effects).length > 0) {
-      //   commands += `<p class='cmd__effect'>${findStatusInText(json.commands[i].effects)}`;
-      //   //getStatusJSONFromArray(findStatusInText(json.commands[i].effects)).then((json) => console.log("upper " + json));
-      // }
-      //School and Elements
-      commands += "<div class='cmd'><span class='margin-right'>";
-      commands += `School - ${schoolDict[json.commands[i].school]}</span>`;
-      commands += `<span>${formatElements(json.commands[i])}</span>`;
-      commands += "</div>";
-
-      //Multiplier and Cast Time
-      commands += "<div class='cmd";
-      if(i !== json.commands.length-1) { //Due to uncertainty of number of previous/next elements/features, this is my best solution
-        commands += " border-bottom'>"
-      }
-      else {
-        commands += "'>";
-      }
-      commands += `<span class='margin-right'>Multiplier - ${json.commands[i].multiplier}</span>`;
-      commands += `<span>Cast Time - ${json.commands[i].castTime}</span></div>`;
-    }
-    commands += "</div>";
+    commands = getCommands(json.commands);
   }
   if(json.statuses) {
-    statuses += "<div class='status'>";
-    for(let i = 0; i < json.statuses.length; i++) {
-      //List so far: Poison, Minor Resist Dark (Resist?), KO, Instant KO, Protect, Shell, Magical Blink, Astra, Instant Cast
-      if(json.statuses[i].description === "Brave Mode") {
-        statuses += "<span class='status__name'>" + json.statuses[i].description + "</span>";
-        statuses += "<p class='braveMode__condition'>Condition - " + json.braveActions[0].braveCondition + "</p>";
-        statuses += "<div class='flex'><span class='margin-right braveMode__castTime'>Cast Time - " + json.braveActions[0].castTime + "</span>";
-        statuses += "<span class='braveMode__elements'>";
-        statuses += formatElements(json.braveActions[0]);
-        statuses += "</span></div>";
-        for(let j = 0; j < json.braveActions.length; j++) {
-          if(j === 0 ) {
-            statuses += "<p class='braveMode__desc'>" + json.braveActions[j].braveActionName + "</p>";
-          }
-          statuses += "<p class='braveMode__effects'>" + json.braveActions[j].braveLevel + " - " + json.braveActions[j].effects + "</p>";
-        }
-      }
-      else if(statusAllowed(json.statuses[i].description)) { //make sure status is not 'blacklisted'
-        statuses += "<span class='status__name'>" + json.statuses[i].description + "</span>";
-        statuses += "<p class='status__effect'>" + json.statuses[i].effects + "</p>";
-      }
-    }
-    statuses += "</div>";
+    let statusArr = findStatusInText(json.effects);
+    statuses = getSBStatuses(json.statuses, json.braveActions, statusArr);
   }
   if(json.otherEffects) {
-    otherEffects += "<div class='otherEffects'>";
-    for(let i = 0; i < json.otherEffects.length; i++) {
-      if(json.otherEffects[i].description !== "Attack") {
-          otherEffects += "<span class='status__name'>" + json.otherEffects[i].description;
-          if(json.otherEffects[i].elements.length > 0) {
-            otherEffects += " - (";
-            otherEffects += formatElements(json.otherEffects[i]);
-            otherEffects += ")</span>";
-          }
-          else {
-            otherEffects += "</span>";
-          }
-          otherEffects += "<p class='otherEffects__effect'>" + json.otherEffects[i].effects + "</p>";
-      }
-    }
-    otherEffects += "</div>";
+    otherEffects = getOtherEffects(json.otherEffects);
   }
 
   //braveCondition in braveActions specifies how to increment Brave
