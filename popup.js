@@ -526,16 +526,20 @@ function getSBStatuses(statusJson, braveJson, statusArr) {
       //List so far: Poison, Minor Resist Dark (Resist?), KO, Instant KO, Protect, Shell, Magical Blink, Astra, Instant Cast
       if(statusJson[i].description === "Brave Mode") {
         statuses += "<span class='status__name'>" + statusJson[i].description + "</span>";
-        statuses += "<p class='braveMode__condition'>Condition - " + braveJson[0].braveCondition + "</p>";
-        statuses += "<div class='flex'><span class='margin-right braveMode__castTime'>Cast Time - " + braveJson[0].castTime + "</span>";
-        statuses += "<span class='braveMode__elements'>";
-        statuses += formatElements(braveJson[0]);
-        statuses += "</span></div>";
-        for(let j = 0; j < braveJson.length; j++) {
-          if(j === 0) {
-            statuses += "<p class='braveMode__desc'>" + braveJson[j].braveActionName + "</p>";
+        console.log(statusJson[i]);
+        console.log(braveJson);
+        if(braveJson[0]) {
+          statuses += "<p class='braveMode__condition'>Condition - " + braveJson[0].braveCondition + "</p>";
+          statuses += "<div class='flex'><span class='margin-right braveMode__castTime'>Cast Time - " + braveJson[0].castTime + "</span>";
+          statuses += "<span class='braveMode__elements'>";
+          statuses += formatElements(braveJson[0]);
+          statuses += "</span></div>";
+          for(let j = 0; j < braveJson.length; j++) {
+            if(j === 0) {
+              statuses += "<p class='braveMode__desc'>" + braveJson[j].braveActionName + "</p>";
+            }
+            statuses += "<p class='braveMode__effects'>" + braveJson[j].braveLevel + " - " + braveJson[j].effects + "</p>";
           }
-          statuses += "<p class='braveMode__effects'>" + braveJson[j].braveLevel + " - " + braveJson[j].effects + "</p>";
         }
       }
       else if(statusAllowed(statusJson[i].description) && statusArr.includes(statusJson[i].description)) { //make sure status is not 'blacklisted'
