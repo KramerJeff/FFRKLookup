@@ -89,9 +89,7 @@ const characterAliases = {
 const abilityAliases = {
   "bahamut (v)": ["bahamut", "bahamut5", "bahamut v"],
   "bahamut (vi)": ["bahamut6", "bahamut vi"],
-  "voltech": ["vortex"],
-  "sapphire blitz": ["sapphire bullet"],
-  "sundering assault": ["tremor assault"]
+  "voltech": ["vortex"]
 };
 
 const ignoredStatuses = ["Remove", "Reraise", "Haste", "Burst Mode", "Imp", "Attach", "Blink"];
