@@ -94,7 +94,7 @@ const abilityAliases = {
 
 const ignoredStatuses = ["Remove", "Reraise", "Haste", "Burst Mode", "Imp", "Attach", "Blink"];
 const sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|AASB|Glint/gi; //lcsb is caught by the CSB
-const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|AASB|Glint|lm|lmr|abil|ability|rm|stat/gi;
+const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|AASB|Glint|lm|lmr|abil|ability|rm|stat|char/gi;
 
 $(function () {
   let dictSequence = Promise.resolve();
@@ -131,10 +131,11 @@ $(function () {
         else if(request.length > 1 && request[1] === "stat") {
           return getStatus(request[0]);
         }
-        //else if(request.length > 1 && request[1] === "char") {
-        //  return getCharacter(request[0]);
-        //}
+        else if(request.length > 1 && request[1] === "char") {
+          return getCharacter(request[0]);
+        }
         else {
+          console.log('fallback');
           return getSoulBreak(request);
         }
       }).then(function(HTML) {
@@ -456,12 +457,41 @@ function getStatus(statusName) {
   });
 }
 
-//function getCharacter(characterName) {
+function getCharacter(charName) {
+  return new Promise(function(resolve, reject) {
+      let charID = getCharacterID(charName);
+      if(charID === -1) {
+        return Promise.reject(new Error(`${charName} is not a valid character name`));
+      }
+      $.getJSON(`${apiBase}/Characters/${charID}`, function(json) {
+        //console.log(json[0].SchoolAccessInfos);
+        let schools = [];
+        let schoolInfo = json[0].SchoolAccessInfos;
+        for(let i = 0; i < schoolInfo.length; i++) {
+          if(schoolInfo[i].AccessLevel > 0) {
+            let school = {};
+            school.schoolName = schoolInfo[i].SchoolName;
+            school.accessLevel = schoolInfo[i].AccessLevel;
+            schools.push(school);
+          }
+        }
+        let html = formatSchoolJSON(schools);
+
+        //recordSpheres is an array
+        //recordSpheres[0].recordSphereLevels[0].benefit contains ->
+        // split (★)[1].lastChar
+        // `Enable Spellblade 3★`
+        resolve(html);
+        // for(let i = 0; i < json[SchoolAccessInfos].length; i++) {
+        //   console.log(json[SchoolAccessInfos][i]);
+        // }
+      });
+  });
   //weaponAccess
   //abilityAccess
   //LMs
   //Record Materia
-//}
+}
 
 // function getStatusJSONFromArray(arr) {
 //   return new Promise(function(resolve, reject) {
@@ -609,6 +639,23 @@ function formatSBJSON(json) {
  */
 function formatCharacterJSON(json) {
 
+}
+
+/**
+ * @param arr - array of objects containing schoolName and accessLevel
+ */
+function formatSchoolJSON(arr) {
+  let html = `<span>`;
+  for(let i = 0; i < arr.length; i++) {
+    html += `${arr[i].schoolName}: ${arr[i].accessLevel}`;
+    if(i !== arr.length-1) {
+      html += `, `;
+    }
+    else {
+      html += `</span>`;
+    }
+  }
+  return html;
 }
 
 /**
