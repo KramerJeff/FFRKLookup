@@ -1,5 +1,5 @@
 var bgPage = chrome.extension.getBackgroundPage();
-const apiBase = "http://ffrkapi.azurewebsites.net/api/v1.0/";
+const apiBase = "https://ffrkapi.azurewebsites.net/api/v1.0/";
 
 const elementDict = {
   0: "unknown",
@@ -135,7 +135,6 @@ $(function () {
           return getCharacter(request[0]);
         }
         else {
-          console.log('fallback');
           return getSoulBreak(request);
         }
       }).then(function(HTML) {
@@ -356,8 +355,8 @@ function getTierSBsForCharID(charID, cbParams, request) {
             arr.push(json);
           }
         });
-        if(arr.length > cbParams.index-1) {
-          SBs += formatSBJSON(arr[cbParams.index-1]); //TODO REFACTOR handle array out of bound exception
+        if(arr.length > cbParams.index-1) { //this should handle array out of bound exception
+          SBs += formatSBJSON(arr[cbParams.index-1]); 
         }
         else {
           reject(new Error(`${request[0]} does not have ${cbParams.index} ${request[1].replace(/[0-9]/g, '')}s`));
@@ -381,9 +380,18 @@ function getLMsForChar(request) {
   return new Promise(function(resolve, reject) {
     $.getJSON(`${apiBase}/LegendMaterias/Character/${charID}`, function(json) {
       let LMs = `<div class='sb-result result'><h3 class='character__name'>${json[0].characterName}</h3>`; //get the character name once
+      let index = 0;
+      if(request[1].includes('lmr')) {
+        json = json.slice(2); //get rid of dive LMs
+      }
+      if(hasNumber(request[1])) {
+        index = sbTier.charAt(sbTier.length-1); //create an index
+        //sbTier = sbTier.substring(0, sbTier.length-1); //get rid of number in tier
+      }
       json.forEach((json) => {
         LMs += formatLMJSON(json);
       });
+      
       LMs += "</div>";
       resolve(LMs);
     });
@@ -464,7 +472,6 @@ function getCharacter(charName) {
         return Promise.reject(new Error(`${charName} is not a valid character name`));
       }
       $.getJSON(`${apiBase}/Characters/${charID}`, function(json) {
-        //console.log(json[0].SchoolAccessInfos);
         let schools = [];
         let schoolInfo = json[0].SchoolAccessInfos;
         for(let i = 0; i < schoolInfo.length; i++) {
@@ -475,6 +482,7 @@ function getCharacter(charName) {
             schools.push(school);
           }
         }
+        //let html = `<table><tr><th></th></tr>`;
         let html = formatSchoolJSON(schools);
 
         //recordSpheres is an array
@@ -493,26 +501,6 @@ function getCharacter(charName) {
   //Record Materia
 }
 
-// function getStatusJSONFromArray(arr) {
-//   return new Promise(function(resolve, reject) {
-//     let sequence = Promise.resolve();
-//     let retJSON = "";
-//     for(let i = 0; i < arr.length; i++) {
-//       sequence = sequence.then(() =>
-//         getStatus(arr[i]).then((json) => {
-//           retJSON += json;
-//           console.log('lower ' + retJSON + " json " + json);
-//         });
-//         console.log("i " + i + " arrlen " + (arr.length-1));
-//         if(i === (arr.length-1)) {
-//           console.log("end of array");
-//           resolve(retJSON);
-//         }
-//       );
-//     }
-//   });
-// }
-
 /**
  * SB helper
  */
@@ -522,10 +510,7 @@ function getCommands(cmdArr) {
       //TODO create container for these so they never overlap
       commands += "<div class='cmd'><img class='cmd__icon' src='" + cmdArr[i].imagePath.split('"')[0] + "'/>";
       commands += `<p class='cmd__effect'>${cmdArr[i].effects}</p></div>`; //TODO SEARCH FOR STATUS
-      // if(findStatusInText(json.commands[i].effects).length > 0) {
-      //   commands += `<p class='cmd__effect'>${findStatusInText(json.commands[i].effects)}`;
-      //   //getStatusJSONFromArray(findStatusInText(json.commands[i].effects)).then((json) => console.log("upper " + json));
-      // }
+
       //School and Elements
       commands += "<div class='cmd'><span class='margin-right'>";
       commands += `School - ${schoolDict[cmdArr[i].school]}</span>`;
@@ -549,13 +534,13 @@ function getCommands(cmdArr) {
 
 function getSBStatuses(statusJson, braveJson, statusArr) {
     let statuses = "<div class='status'>";
-    console.log(statusArr);
+
     for(let i = 0; i < statusJson.length; i++) {
       //List so far: Poison, Minor Resist Dark (Resist?), KO, Instant KO, Protect, Shell, Magical Blink, Astra, Instant Cast
+ 
       if(statusJson[i].description === "Brave Mode") {
         statuses += "<span class='status__name'>" + statusJson[i].description + "</span>";
-        console.log(statusJson[i]);
-        console.log(braveJson);
+
         if(braveJson[0]) {
           statuses += "<p class='braveMode__condition'>Condition - " + braveJson[0].braveCondition + "</p>";
           statuses += "<div class='flex'><span class='margin-right braveMode__castTime'>Cast Time - " + braveJson[0].castTime + "</span>";
@@ -570,7 +555,7 @@ function getSBStatuses(statusJson, braveJson, statusArr) {
           }
         }
       }
-      else if(statusAllowed(statusJson[i].description) && statusArr.includes(statusJson[i].description)) { //make sure status is not 'blacklisted'
+      else if(statusAllowed(statusJson[i].description)) { //make sure status is not 'blacklisted'
         statuses += "<span class='status__name'>" + statusJson[i].description + "</span>";
         statuses += "<p class='status__effect'>" + statusJson[i].effects + "</p>";
       }
