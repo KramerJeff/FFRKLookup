@@ -482,10 +482,20 @@ function getCharacter(charName) {
             schools.push(school);
           }
         }
-        //let html = `<table><tr><th></th></tr>`;
-        let html = formatSchoolJSON(schools);
 
-        //recordSpheres is an array
+        let html = `<div class='result'><h3 class='result__name'>${json[0].Description}</h3>${formatSchoolTableJSON(schools)}`;
+
+        let recordSpheres = [];
+        for(let i = 0; i < json[0].RecordSpheres.length; i++) {
+          console.log(`${json[0].RecordSpheres[i].RecordSphereName} Levels: ${json[0].RecordSpheres[i].RecordSphereLevels} Length: ${json[0].RecordSpheres[i].RecordSphereLevels.length}`);
+          for(let j = 0; j < json[0].RecordSpheres[i].RecordSphereLevels.length; j++) {
+              if(json[0].RecordSpheres[i].RecordSphereLevels[j].Benefit.includes(String.fromCharCode(9733))) {
+                 html += `<p>${json[0].RecordSpheres[i].RecordSphereLevels[j].Benefit}</p>`;
+              }
+          }
+        }
+
+        html += '</div>';
         //recordSpheres[0].recordSphereLevels[0].benefit contains ->
         // split (★)[1].lastChar
         // `Enable Spellblade 3★`
@@ -629,15 +639,12 @@ function formatCharacterJSON(json) {
 /**
  * @param arr - array of objects containing schoolName and accessLevel
  */
-function formatSchoolJSON(arr) {
-  let html = `<span>`;
+function formatSchoolTableJSON(arr) {
+  let html = `<table class='info' border='1'><thead><tr><th>School</th><th>Access Level</th></tr></thead><tbody class='center'>`;
   for(let i = 0; i < arr.length; i++) {
-    html += `${arr[i].schoolName}: ${arr[i].accessLevel}`;
-    if(i !== arr.length-1) {
-      html += `, `;
-    }
-    else {
-      html += `</span>`;
+    html += `<tr><td>${arr[i].schoolName}</td><td>${arr[i].accessLevel}</td></tr>`;
+    if(i === arr.length-1) {
+      html += `</tbody></table>`;
     }
   }
   return html;
