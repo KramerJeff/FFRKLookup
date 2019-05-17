@@ -11,14 +11,20 @@
 }
 
 .title__desc {
+  display: inline-block;
   font-size: 13px;
+}
+
+.tutorial {
+  font-size: 13px;
+  margin-left: auto;
 }
 
 #search-button, #search-text {
   font-size: 12px;
 }
 
-h3, span, #search-button, #search-text, .title__desc {
+h3, span, #search-button, #search-text, .title__desc, .tutorial {
   font-family: 'Lato', sans-serif;
 }
 
@@ -42,6 +48,17 @@ th {
 
 th, td {
   padding: 1px 3px;
+}
+
+tbody.left th {
+  padding: 3px;
+}
+
+.flexcontainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 #search-text {
@@ -193,6 +210,10 @@ th, td {
 
 .center {
   text-align: center;
+}
+
+.left {
+  text-align: left;
 }
 
 .info {

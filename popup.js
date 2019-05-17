@@ -1,4 +1,4 @@
-var bgPage = chrome.extension.getBackgroundPage();
+//var bgPage = chrome.extension.getBackgroundPage();
 const apiBase = "https://ffrkapi.azurewebsites.net/api/v1.0/";
 
 const elementDict = {
@@ -96,9 +96,29 @@ const ignoredStatuses = ["Remove", "Reraise", "Haste", "Burst Mode", "Imp", "Att
 const sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|AASB|Glint/gi; //lcsb is caught by the CSB
 const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|AASB|Glint|lm|lmr|abil|ability|rm|stat|char/gi;
 
+
 $(function () {
+  //Autocomplete stuff
+  const form = document.querySelector('form');
+  const input = document.getElementById('search-text');
+  console.log(localStorage.getItem('data'));
+  let dataArray = localStorage.getItem('data') !== null ? JSON.parse(localStorage.getItem('data')) : [];
+  let options = {
+    data: dataArray,
+    list: {
+      match: {
+        enabled: true
+      }
+    }
+  };
+  localStorage.setItem('data', JSON.stringify(dataArray))
+  const data = JSON.parse(localStorage.getItem('data'));
+  $("#search-text").easyAutocomplete(options);
+
   let dictSequence = Promise.resolve();
   let abilDict = {};
+
+
 
   createAbilityDict().then(function(data) { abilDict = data; });
   //createCharacterDict().then(function(data) { charDict = data; }); TODO
@@ -111,6 +131,23 @@ $(function () {
 
     //grab query
     let query = $("#search-text").val();
+
+    if(!dataArray.includes(input.value)) { //only update if it isn't a duplicate value
+      dataArray.push(input.value);
+      localStorage.setItem('data', JSON.stringify(dataArray));
+    }
+    input.value = '';
+    options = {
+      data: dataArray,
+      list: {
+        match: {
+          enabled: true
+        }
+      }
+    };
+
+    $("#search-text").easyAutocomplete(options);
+
     $("#results").html("");
     let requests = parseRequests(query);
     let sequence = Promise.resolve();
@@ -144,6 +181,7 @@ $(function () {
         $("#results").append(errHTML);
       });
     });
+    $('#search-text').focus();
 	});
 });
 
@@ -356,7 +394,7 @@ function getTierSBsForCharID(charID, cbParams, request) {
           }
         });
         if(arr.length > cbParams.index-1) { //this should handle array out of bound exception
-          SBs += formatSBJSON(arr[cbParams.index-1]); 
+          SBs += formatSBJSON(arr[cbParams.index-1]);
         }
         else {
           reject(new Error(`${request[0]} does not have ${cbParams.index} ${request[1].replace(/[0-9]/g, '')}s`));
@@ -391,7 +429,7 @@ function getLMsForChar(request) {
       json.forEach((json) => {
         LMs += formatLMJSON(json);
       });
-      
+
       LMs += "</div>";
       resolve(LMs);
     });
@@ -547,7 +585,7 @@ function getSBStatuses(statusJson, braveJson, statusArr) {
 
     for(let i = 0; i < statusJson.length; i++) {
       //List so far: Poison, Minor Resist Dark (Resist?), KO, Instant KO, Protect, Shell, Magical Blink, Astra, Instant Cast
- 
+
       if(statusJson[i].description === "Brave Mode") {
         statuses += "<span class='status__name'>" + statusJson[i].description + "</span>";
 
