@@ -206,6 +206,11 @@ tbody.left th {
 .flex {
   display: flex;
   flex-wrap: wrap;
+  margin-bottom: 0.25rem;
+}
+
+.flex:last-child {
+  margin-bottom: 0;
 }
 
 .center {
