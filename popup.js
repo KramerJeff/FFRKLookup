@@ -94,6 +94,7 @@ const abilityAliases = {
 
 const ignoredStatuses = ["Remove", "Reraise", "Haste", "Burst Mode", "Imp", "Attach", "Blink"];
 const sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|AASB|Glint/gi; //lcsb is caught by the CSB
+const lmRegex = /LM|LMR/gi;
 const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|AASB|Glint|lm|lmr|abil|ability|rm|stat|char/gi;
 
 
@@ -101,7 +102,6 @@ $(function () {
   //Autocomplete stuff
   const form = document.querySelector('form');
   const input = document.getElementById('search-text');
-  console.log(localStorage.getItem('data'));
   let dataArray = localStorage.getItem('data') !== null ? JSON.parse(localStorage.getItem('data')) : [];
   let options = {
     data: dataArray,
@@ -156,7 +156,7 @@ $(function () {
         if(request.length > 1 && request[1].match(sbRegex)) {
           return parseSBRequest(request);
         }
-        else if(request.length > 1 && request[1] === "lm" || request[1] === "lmr") { //if i did contains.("lm") that would be too generic
+        else if(request.length > 1 && request[1].match(lmRegex)) { //if i did contains.("lm") that would be too generic
           return getLMsForChar(request);
         }
         else if(request.length > 1 && request[1] === "abil" || request[1] === "ability") {
@@ -223,6 +223,8 @@ function getParts(query) {
 /**
  * This function parses if the user is asking for a specific soul break by name
  * or by a character's name and SB tier e.g. Cloud USB
+ * @param arr - array index 0 is the character name, index 1 is the sbTier
+ * return Promise with HTML formatted data
  */
 function parseSBRequest(arr) {
   let sbHTML = "";
@@ -418,18 +420,26 @@ function getLMsForChar(request) {
   return new Promise(function(resolve, reject) {
     $.getJSON(`${apiBase}/LegendMaterias/Character/${charID}`, function(json) {
       let LMs = `<div class='sb-result result'><h3 class='character__name'>${json[0].characterName}</h3>`; //get the character name once
-      let index = 0;
-      if(request[1].includes('lmr')) {
+      let lmCmd = request[1];
+      if(lmCmd.includes('lmr')) {
         json = json.slice(2); //get rid of dive LMs
       }
-      if(hasNumber(request[1])) {
-        index = sbTier.charAt(sbTier.length-1); //create an index
-        //sbTier = sbTier.substring(0, sbTier.length-1); //get rid of number in tier
+      if(hasNumber(lmCmd)) {
+        let numIndex = lmCmd.search(/\d/);
+        let index = lmCmd.substring(numIndex, lmCmd.length);
+        lmCmd = lmCmd.substring(0, numIndex);
+        if(json.length > index-1) {
+          LMs += formatLMJSON(json[index-1]);
+        }
+        else {
+          reject(new Error(`${request[0]} does not have ${index} ${lmCmd}s`));
+        }
       }
-      json.forEach((json) => {
-        LMs += formatLMJSON(json);
-      });
-
+      else {
+        json.forEach((json) => {
+          LMs += formatLMJSON(json);
+        });
+      }
       LMs += "</div>";
       resolve(LMs);
     });
