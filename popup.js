@@ -46,7 +46,7 @@ const schoolDict = {
   23: "Witch"
 };
 
-const targetDict = {
+const targetTypeDict = {
   0: "Unknown",
   1: "-",
   2: "All allies",
@@ -61,7 +61,18 @@ const targetDict = {
   11: "Single",
   12: "Single ally",
   13: "Single enemy",
-  14: ""
+  14: "",
+  15: "ALl enemies",
+  16: "All Allies",
+  17: "?"
+};
+
+const damageFormulaDict = {
+  0: "Unknown",
+  1: "",
+  2: "Hybrid",
+  3: "Magical",
+  4: "Physical"
 };
 
 const charIDs = {
@@ -653,7 +664,7 @@ function formatSBJSON(json) {
   let name = `<div class='sb'><h3 class='sb-result__name'>${json.description}</h3>`;
   let icon = "<div class='sb-main'><img class='sb-result__icon' src='" + json.imagePath.split('"')[0] + "'/>";
   let effect = `<p class='sb-result__effect'>${json.effects}</p></div>`;
-  let entry = `<div class='flex'><span class='margin-right entry__castTime'>Cast Time - ${json.castTime}</span><span class='entry__elements'>${formatElements(json)}</span></div></div>`;
+  let entry = `<div class='flex'><span class='margin-right entry__castTime'><b>Element:</b> ${formatElements(json)}</span><span class='entry__elements'></span></div><div class='flex'><span class='margin-right entry__castTime'><b>Multiplier:</b> ${json.multiplier}</span><span class='entry__elements'><b>Cast Time:</b> ${json.castTime}</span></div><div class='flex'><span class='margin-right entry__castTime'><b>Target:</b> ${targetTypeDict[json.targetType]}</span><span class='entry__elements'><b>Type:</b> ${damageFormulaDict[json.damageFormulaType]}</span></div></div>`;
 
   let commands = "";
   let statuses = "";
@@ -749,7 +760,7 @@ function formatAbilityJSON(json) {
   let multiplier = "<span class='info'>Total Multiplier - " + json.multiplier + "</span>";
   let school = "<span class='margin-right info'>School - " + schoolDict[json.school] + "</span>";
   let sbGain = "<span class='margin-right info'>SB Gain - " + json.soulBreakPointsGained + "</span>";
-  let target = "<span class='info'>Target - " + targetDict[json.targetType] + "</span>";
+  let target = "<span class='info'>Target - " + targetTypeDict[json.targetType] + "</span>";
   let endDiv = "</div>";
   return start + name + icon + effect + flexDiv + castTime + elements + endDiv + flexDiv + school + multiplier + endDiv + flexDiv + sbGain + target + endDiv + formatOrbRequirements(json) + endDiv;
 }
