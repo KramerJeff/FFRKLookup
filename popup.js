@@ -577,25 +577,30 @@ function getCommands(cmdArr) {
     let commands = "<div class='cmds border-top'>";
     for(let i = 0; i < cmdArr.length; i++) {
       //TODO create container for these so they never overlap
-      commands += "<div class='cmd'><img class='cmd__icon' src='" + cmdArr[i].imagePath.split('"')[0] + "'/>";
+      commands += "<div class='cmd padding-top padding-bottom'><img class='cmd__icon' src='" + cmdArr[i].imagePath.split('"')[0] + "'/>";
       commands += `<p class='cmd__effect'>${cmdArr[i].effects}</p></div>`; //TODO SEARCH FOR STATUS
 
       //School and Elements
-      commands += "<div class='cmd'><span class='margin-right'>";
-      commands += `School - ${schoolDict[cmdArr[i].school]}</span>`;
-      commands += `<span>${formatElements(cmdArr[i])}</span>`;
+      commands += "<div class='cmd'>";
+      commands += `<span class='margin-right'><b>Elements:</b> ${formatElements(cmdArr[i])}</span>`;
+      commands += `<span><b>School:</b> ${schoolDict[cmdArr[i].school]}</span>`;
+      
       commands += "</div>";
+
+      commands += `<div class='cmd'><span class='margin-right'><b>Multiplier:</b> ${cmdArr[i].multiplier}</span>`;
+      commands += `<span><b>Cast Time:</b> ${cmdArr[i].castTime}</span></div>`;
 
       //Multiplier and Cast Time
       commands += "<div class='cmd";
       if(i !== cmdArr.length-1) { //Due to uncertainty of number of previous/next elements/features, this is my best solution
-        commands += " border-bottom'>"
+        commands += " border-bottom padding-bottom'>"
       }
       else {
         commands += "'>";
       }
-      commands += `<span class='margin-right'>Multiplier - ${cmdArr[i].multiplier}</span>`;
-      commands += `<span>Cast Time - ${cmdArr[i].castTime}</span></div>`;
+
+      commands += `<span class='margin-right'><b>Target:</b> ${targetTypeDict[cmdArr[i].targetType]}</span>`;
+      commands += `<span><b>Cast Time:</b> ${damageFormulaDict[cmdArr[i].damageFormulaType]}</span></div>`;
     }
     commands += "</div>";
     return commands;
@@ -755,12 +760,12 @@ function formatAbilityJSON(json) {
   let icon = "<div class='icon-container'><img class='icon' src='" + json.imagePath.split('"')[0] + "'/>";
   let effect = "<p class='effect'>" + json.effects + "</p></div>";
   let flexDiv = "<div class='flex'>";
-  let castTime = "<span class='margin-right info'>Cast Time - " + json.castTime + "</span>";
-  let elements = "<span class='elements info'>Elements - " + formatElements(json) + "</span>";
-  let multiplier = "<span class='info'>Total Multiplier - " + json.multiplier + "</span>";
-  let school = "<span class='margin-right info'>School - " + schoolDict[json.school] + "</span>";
-  let sbGain = "<span class='margin-right info'>SB Gain - " + json.soulBreakPointsGained + "</span>";
-  let target = "<span class='info'>Target - " + targetTypeDict[json.targetType] + "</span>";
+  let castTime = "<span class='margin-right info'><b>Cast Time:</b> " + json.castTime + "</span>";
+  let elements = "<span class='elements info'><b>Elements:</b> " + formatElements(json) + "</span>";
+  let multiplier = "<span class='info'><b>Multiplier:</b> " + json.multiplier + "</span>";
+  let school = "<span class='margin-right info'><b>School:</b> " + schoolDict[json.school] + "</span>";
+  let sbGain = "<span class='margin-right info'><b>SB Gain:</b> " + json.soulBreakPointsGained + "</span>";
+  let target = "<span class='info'><b>Target:</b> " + targetTypeDict[json.targetType] + "</span>";
   let endDiv = "</div>";
   return start + name + icon + effect + flexDiv + castTime + elements + endDiv + flexDiv + school + multiplier + endDiv + flexDiv + sbGain + target + endDiv + formatOrbRequirements(json) + endDiv;
 }
