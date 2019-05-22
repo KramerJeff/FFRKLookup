@@ -600,7 +600,7 @@ function getCommands(cmdArr) {
       }
 
       commands += `<span class='margin-right'><b>Target:</b> ${targetTypeDict[cmdArr[i].targetType]}</span>`;
-      commands += `<span><b>Cast Time:</b> ${damageFormulaDict[cmdArr[i].damageFormulaType]}</span></div>`;
+      commands += `<span><b>Type:</b> ${damageFormulaDict[cmdArr[i].damageFormulaType]}</span></div>`;
     }
     commands += "</div>";
     return commands;
