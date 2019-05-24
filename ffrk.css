@@ -1,13 +1,36 @@
 #body {
-  width: 370px;
+  /*width: 370px;*/
   height: 100px;
   max-height: 400px;
+  margin: 0;
+}
+
+.header {
+  height: 65px;
+  background-color: #398CBD;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px 0;
+}
+
+.header a {
+  color: #FFF;
+  font-size: 18px;
+  font-family: 'Lato', sans-serif;
+  text-decoration: none;
+}
+
+.content {
+  margin: 0 20px 0;
 }
 
 #title {
-  font-family: 'Play', sans-serif;
-  text-shadow: 1px 1px 1px rgba(150,150,150,1);
-  margin: 0;
+  font-size: 24px;
+  font-family: 'Lato', sans-serif;
+  margin: 12px 0 12px;
+
 }
 
 .title__desc {
@@ -20,7 +43,7 @@
   margin-left: auto;
 }
 
-#search-button, #search-text {
+#search-button, #search-text, .bug {
   font-size: 12px;
 }
 
@@ -62,10 +85,15 @@ tbody.left th {
 }
 
 #search-text {
-  width: 237px;
+  width: 95%;
   border: 1px solid grey;
   border-radius: 5px;
   padding: 3px 3px 3px 4px;
+}
+@media only screen and (min-width: 768px) {
+  #search-button {
+    width: 14%;
+  }
 }
 
 #search-select {
@@ -76,6 +104,8 @@ tbody.left th {
   border: 1px solid grey;
   border-radius: 5px;
   padding: 3px 6px;
+  width: 10%;
+  min-width: 50px;
 }
 
 /**
@@ -89,8 +119,6 @@ tbody.left th {
 
 .sb-result, .result {
   margin-top: 12px;
-  border: 1px solid gray;
-  border-radius: 5px;
   padding: 5px;
 }
 
@@ -118,6 +146,17 @@ tbody.left th {
   height: 64px;
   width: 64px;
   margin-left: -10px;
+
+}
+
+@media only screen and (min-width: 768px) {
+  .sb-result__icon {
+    min-height: 96px;
+    min-width: 96px;
+    height: 96px;
+    width: 96px;
+    margin-left: -10px;
+  }
 }
 
 .icon {
@@ -150,6 +189,15 @@ tbody.left th {
   height: 32px;
   width: 32px;
   margin-right: 10px;
+}
+
+@media only screen and (min-width: 768px) {
+  .cmd__icon, .sm-icon {
+    min-height: 48px;
+    min-width: 48px;
+    height: 48px;
+    width: 48px;
+  }
 }
 
 .cmd__effect {
@@ -200,13 +248,13 @@ tbody.left th {
   margin-bottom: 0;
 }
 
-.border-bottom {
+/*.border-bottom {
   border-bottom: 1px solid gray;
-}
+}*/
 
-.border-top {
+/*.border-top {
   border-top: 1px solid gray;
-}
+}*/
 
 .bold {
   font-weight: bold;
