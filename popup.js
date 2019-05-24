@@ -104,9 +104,9 @@ const abilityAliases = {
 };
 
 const ignoredStatuses = ["Remove", "Reraise", "Haste", "Burst Mode", "Imp", "Attach", "Blink"];
-const sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|AASB|Glint/gi; //lcsb is caught by the CSB
+const sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|GSB\+|FSB|AASB|Glint|Glint\+/gi; //lcsb is caught by the CSB
 const lmRegex = /LM|LMR/gi;
-const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|FSB|AASB|Glint|lm|lmr|abil|ability|rm|stat|char/gi;
+const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|GSB\+|FSB|AASB|Glint|Glint\+|lm|lmr|abil|ability|rm|stat|char/gi;
 
 
 $(function () {
@@ -294,6 +294,10 @@ function filterSBTier(sbString) {
     case "gsb":
     case "fsb":
       format.tierID = 10;
+      break;
+    case "glint+":
+    case "gsb+":
+      format.tierID = 11;
       break;
     case "aosb":
     case "uosb":
@@ -584,7 +588,7 @@ function getCommands(cmdArr) {
       commands += "<div class='cmd'>";
       commands += `<span class='margin-right'><b>Elements:</b> ${formatElements(cmdArr[i])}</span>`;
       commands += `<span><b>School:</b> ${schoolDict[cmdArr[i].school]}</span>`;
-      
+
       commands += "</div>";
 
       commands += `<div class='cmd'><span class='margin-right'><b>Multiplier:</b> ${cmdArr[i].multiplier}</span>`;

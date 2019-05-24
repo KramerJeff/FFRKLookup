@@ -4,7 +4,7 @@
   "name": "FFRK Lookup",
   "short_name": "FFRKLookup",
   "description": "This extension is used as a quick reference tool for Enlir's FFRK spreadsheet",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "browser_action": {
    "default_icon": "tyro.png",
    "default_popup": "popup.html"
