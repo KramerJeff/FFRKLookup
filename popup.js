@@ -671,9 +671,9 @@ function getOtherEffects(jsonArr) {
 function formatSBJSON(json) {
   let html = "<div class='sb-result'>";
   let name = `<div class='sb'><h3 class='sb-result__name'>${json.description}</h3>`;
-  let icon = "<div class='sb-main'><img class='sb-result__icon' src='" + json.imagePath.split('"')[0] + "'/>";
-  let effect = `<p class='sb-result__effect'>${json.effects}</p></div>`;
-  let entry = `<div class='flex'><span class='margin-right entry__castTime'><b>Element:</b> ${formatElements(json)}</span><span class='entry__elements'></span></div><div class='flex'><span class='margin-right entry__castTime'><b>Multiplier:</b> ${json.multiplier}</span><span class='entry__elements'><b>Cast Time:</b> ${json.castTime}</span></div><div class='flex'><span class='margin-right entry__castTime'><b>Target:</b> ${targetTypeDict[json.targetType]}</span><span class='entry__elements'><b>Type:</b> ${damageFormulaDict[json.damageFormulaType]}</span></div></div>`;
+  let icon = "<div class='sb-result__content'><img class='sb-result__icon' src='" + json.imagePath.split('"')[0] + "'/>";
+  let effect = `<div class='sb-result__text'><p class='sb-result__effect'>${json.effects}</p>`;
+  let entry = `<div class='flex'><span class='margin-right entry__castTime'><b>Element:</b> ${formatElements(json)}</span><span class='entry__elements'></span></div><div class='flex'><span class='margin-right entry__castTime'><b>Multiplier:</b> ${json.multiplier}</span><span class='entry__elements'><b>Cast Time:</b> ${json.castTime}</span></div><div class='flex'><span class='margin-right entry__castTime'><b>Target:</b> ${targetTypeDict[json.targetType]}</span><span class='entry__elements'><b>Type:</b> ${damageFormulaDict[json.damageFormulaType]}</span></div></div></div>`;
 
   let commands = "";
   let statuses = "";

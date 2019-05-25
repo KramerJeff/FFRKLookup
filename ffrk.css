@@ -1,9 +1,17 @@
-#body {
-  /*width: 370px;*/
-  height: 100px;
-  max-height: 400px;
+/* UNIVERSAL */
+
+html,
+body {
+  height: 100%;
+  width: 100%;
   margin: 0;
+  padding: 0;
+  left: 0;
+  top: 0;
+  font-size: 100%;
 }
+
+/* FFRK Styles */
 
 .header {
   height: 65px;
@@ -30,7 +38,6 @@
   font-size: 24px;
   font-family: 'Lato', sans-serif;
   margin: 12px 0 12px;
-
 }
 
 .title__desc {
@@ -130,9 +137,25 @@ tbody.left th {
   padding-bottom: 8px;
 }
 
+.sb-result__content {
+  display: flex;
+
+}
+@media only screen and (min-width: 768px) {
+  .sb-result__content {
+    margin-top: -2%;
+  }
+}
 .sb-result__name {
-  margin-bottom: 8px;
+  margin-bottom: 0;
   margin-top: 0;
+  font-size: 1.2rem;
+}
+
+@media only screen and (min-width: 768px) {
+  .sb-result__name {
+    margin-bottom: 8px;
+  }
 }
 
 .sb-main {
@@ -153,9 +176,9 @@ tbody.left th {
   .sb-result__icon {
     min-height: 96px;
     min-width: 96px;
-    height: 96px;
-    width: 96px;
-    margin-left: -10px;
+    height: 12%;
+    width: 12%;
+    margin-left: -2%;
   }
 }
 
@@ -168,9 +191,11 @@ tbody.left th {
   margin: 0 5px 0 -2px;
 }
 
-.sb-result__effect {
-  margin-bottom: auto;
+.sb-result__text {
   margin-top: auto;
+  margin-bottom: auto;
+  width: 88%;
+  font-size: 14px;
 }
 
 .cmds {
