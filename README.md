@@ -9,6 +9,7 @@
 | Search for a character's Legend Materia | Cloud LM |
 | Search for an Ability by name | Meltdown abil |
 | Search for a Record Materia by name | Battleforged RM |
+| Search for a status by name | Dark Bargain stat |
 | Use multiple commands in a single request | Cloud BSB; Cloud LM; Elarra USB |
 
 ### Aliases
