@@ -1,5 +1,6 @@
 # FFRKLookup
 [FFRK Lookup Chrome Extension - link](https://chrome.google.com/webstore/detail/ffrk-lookup/ppdciebmboigefmmgdmaedaajocohlcg)
+[FFRK Lookup website - link](https://ffrklookup.com)
 
 | Request       | Command       |
 | ------------- |:--------------| 
