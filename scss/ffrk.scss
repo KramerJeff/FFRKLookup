@@ -1,4 +1,7 @@
+$base-font-size: 16px;
+$bg-color: #398CBD;
 /* UNIVERSAL */
+
 html, body {
   height: 100%;
   width: 100%;
@@ -6,142 +9,183 @@ html, body {
   padding: 0;
   left: 0;
   top: 0;
-  font-size: 100%; }
+  font-size: 100%;
+}
 
 /* FFRK Styles */
+
 .header {
-  height: 65px; }
+  height: 65px;
+}
 
 .banner {
-  background-color: #398CBD;
-  width: 100%; }
+  background-color: $bg-color;
+  width: 100%;
+}
 
 .link-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 65px; }
+  height: 65px;
+}
 
 .container {
   width: 87.5%;
-  margin: 0 auto; }
+  margin: 0 auto;
+}
+
+.content {
+
+}
 
 .banner a {
   color: #FFF;
   font-size: 18px;
   font-family: 'Lato', sans-serif;
-  text-decoration: none; }
+  text-decoration: none;
+}
 
 @media only screen and (min-width: 768px) {
   .banner a {
-    font-size: 24px; }
+    font-size: 24px;
+  }
   .container {
-    width: 70%; }
+    width: 70%;
+  }
   .logo {
     width: auto;
-    height: auto; } }
+    height: auto;
+  }
+}
 
 #title {
   font-size: 24px;
   font-family: 'Lato', sans-serif;
-  margin: 12px 0 12px; }
+  margin: 12px 0 12px;
+}
 
 .title__desc {
   display: inline-block;
-  font-size: 13px; }
+  font-size: 13px;
+}
 
 .tutorial {
   font-size: 13px;
-  margin-left: auto; }
+  margin-left: auto;
+}
 
 #search-button, #search-text, .bug {
-  font-size: 12px; }
+  font-size: 12px;
+}
 
 h3, span, #search-button, #search-text, .title__desc, .tutorial {
-  font-family: 'Lato', sans-serif; }
+  font-family: 'Lato', sans-serif;
+}
 
-p, .cmd span, .braveMode__elements, .braveMode__castTime, .entry__elements, .entry__castTime {
-  /** TODO change these rules to something simpler */
-  font-family: 'Merriweather', serif; }
+p, .cmd span, .braveMode__elements, .braveMode__castTime, .entry__elements, .entry__castTime { /** TODO change these rules to something simpler */
+  font-family: 'Merriweather', serif;
+}
 
 p {
-  margin: 8px 0; }
+  margin: 8px 0;
+}
 
 table {
   border-collapse: collapse;
   margin-bottom: 5px;
-  width: 100%; }
+  width: 100%;
+}
 
 th {
-  font-weight: normal; }
+  font-weight: normal;
+}
 
 th, td {
-  padding: 1px 3px; }
+  padding: 1px 3px;
+}
 
 tbody.left th {
-  padding: 3px; }
+  padding: 3px;
+}
 
 .flexcontainer {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center; }
+  justify-content: center;
+}
 
 #search-text {
   width: 95%;
   border: 1px solid grey;
   border-radius: 5px;
-  padding: 3px 3px 3px 4px; }
-
+  padding: 3px 3px 3px 4px;
+}
 @media only screen and (min-width: 768px) {
   #search-button {
-    width: 14%; } }
+    width: 14%;
+  }
+}
 
 #search-select {
-  width: 110px; }
+  width: 110px;
+}
 
 #search-button {
   border: 1px solid grey;
   border-radius: 5px;
   padding: 3px 6px;
   width: 10%;
-  min-width: 50px; }
+  min-width: 50px;
+}
 
 /**
  * Soul Break Results
  */
+
 /*.sb-result {
   border-bottom: 1px solid grey;  TODO make border-top on all results except the first
   padding-bottom: 14px;
 }*/
+
 .sb-result, .result {
   margin-top: 12px;
-  padding: 5px; }
+  padding: 5px;
+}
 
 .sb-result:last-child, .result:last-child {
-  margin-bottom: 16px; }
+  margin-bottom: 16px;
+}
 
 .sb {
-  padding-bottom: 8px; }
+  padding-bottom: 8px;
+}
 
 .sb-result__content {
-  display: flex; }
+  display: flex;
 
+}
 @media only screen and (min-width: 768px) {
   .sb-result__content {
-    margin-top: -2%; } }
-
+    margin-top: -2%;
+  }
+}
 .sb-result__name {
   margin-bottom: 0;
   margin-top: 0;
-  font-size: 1.2rem; }
+  font-size: 1.2rem;
+}
 
 @media only screen and (min-width: 768px) {
   .sb-result__name {
-    margin-bottom: 8px; } }
+    margin-bottom: 8px;
+  }
+}
 
 .sb-main {
-  display: flex; }
+  display: flex;
+}
 
 .sb-result__icon, .lg-icon {
   float: left;
@@ -149,7 +193,9 @@ tbody.left th {
   min-width: 64px;
   height: 64px;
   width: 64px;
-  margin-left: -10px; }
+  margin-left: -10px;
+
+}
 
 @media only screen and (min-width: 768px) {
   .sb-result__icon {
@@ -157,7 +203,9 @@ tbody.left th {
     min-width: 96px;
     height: 12%;
     width: 12%;
-    margin-left: -2%; } }
+    margin-left: -2%;
+  }
+}
 
 .icon {
   float: left;
@@ -165,100 +213,127 @@ tbody.left th {
   min-width: 52px;
   height: 52px;
   width: 52px;
-  margin: 0 5px 0 -2px; }
+  margin: 0 5px 0 -2px;
+}
 
 .sb-result__text {
   margin-top: auto;
   margin-bottom: auto;
   width: 88%;
-  font-size: 14px; }
+  font-size: 14px;
+}
 
 .cmds {
-  padding: 2px; }
+  padding: 2px;
+}
 
 .cmd {
   display: flex;
   margin-bottom: 0.25rem;
-  align-items: center; }
+  align-items: center;
+}
 
 .cmd__icon, .sm-icon {
   min-height: 32px;
   min-width: 32px;
   height: 32px;
   width: 32px;
-  margin-right: 10px; }
+  margin-right: 10px;
+}
 
 @media only screen and (min-width: 768px) {
   .cmd__icon, .sm-icon {
     min-height: 48px;
     min-width: 48px;
     height: 48px;
-    width: 48px; } }
+    width: 48px;
+  }
+}
 
 .cmd__effect {
   margin-top: auto;
-  margin-bottom: auto; }
+  margin-bottom: auto;
+}
 
 .status__name {
   display: inline;
   font-size: 0.875rem;
-  font-weight: bold; }
+  font-weight: bold;
+}
 
 .braveMode__desc {
-  font-weight: bold; }
+  font-weight: bold;
+}
 
 /** Legend Materia **/
 .lm__name {
-  margin: 0.5rem 0 0.25rem 0; }
+  margin: 0.5rem 0 0.25rem 0;
+}
 
 .lm__container, .icon-container {
   display: flex;
-  align-items: center; }
+  align-items: center;
+}
 
 .icon-container {
-  margin-bottom: 8px; }
+  margin-bottom: 8px;
+}
 
 .character__name, .result__name {
-  margin: 0 0 8px 0; }
+  margin: 0 0 8px 0;
+}
+
 
 /** HELPERS **/
 .margin-right {
-  margin-right: auto; }
+  margin-right: auto;
+}
 
 .padding-top {
-  padding-top: 8px; }
+  padding-top: 8px;
+}
 
 .padding-bottom {
   padding-bottom: 8px;
-  margin-bottom: 0; }
+  margin-bottom: 0;
+}
 
 /*.border-bottom {
   border-bottom: 1px solid gray;
 }*/
+
 /*.border-top {
   border-top: 1px solid gray;
 }*/
+
 .bold {
-  font-weight: bold; }
+  font-weight: bold;
+}
 
 .flex {
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 0.25rem; }
+  margin-bottom: 0.25rem;
+}
 
 .flex:last-child {
-  margin-bottom: 0; }
+  margin-bottom: 0;
+}
 
 .center {
-  text-align: center; }
+  text-align: center;
+}
 
 .left {
-  text-align: left; }
+  text-align: left;
+}
 
 .info {
   margin-bottom: 0.25rem;
-  font-family: 'Merriweather', serif; }
+  font-family: 'Merriweather', serif;
+}
 
 .error {
   color: red;
-  font-family: 'Merriweather', serif; }
+  font-family: 'Merriweather', serif;
+}

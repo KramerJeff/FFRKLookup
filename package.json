@@ -1,0 +1,26 @@
+{
+  "name": "ffrklookup",
+  "version": "1.0.0",
+  "description": "[FFRK Lookup Chrome Extension - link](https://chrome.google.com/webstore/detail/ffrk-lookup/ppdciebmboigefmmgdmaedaajocohlcg)",
+  "main": "popup.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KramerJeff/FFRKLookup.git"
+  },
+  "author": "Jeff Kramer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KramerJeff/FFRKLookup/issues"
+  },
+  "homepage": "https://github.com/KramerJeff/FFRKLookup#readme",
+  "dependencies": {
+    "node-sass": "^4.12.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "scss": "node-sass --watch scss -o css"
+  }
+}
