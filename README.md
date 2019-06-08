@@ -1,6 +1,8 @@
 # FFRKLookup
 [FFRK Lookup Chrome Extension - link](https://chrome.google.com/webstore/detail/ffrk-lookup/ppdciebmboigefmmgdmaedaajocohlcg)
 
+[FFRK Lookup website - link](https://ffrklookup.com)
+
 | Request       | Command       |
 | ------------- |:--------------| 
 | Search for a specific Soul Break tier for a character | Cloud BSB | 
@@ -9,6 +11,7 @@
 | Search for a character's Legend Materia | Cloud LM |
 | Search for an Ability by name | Meltdown abil |
 | Search for a Record Materia by name | Battleforged RM |
+| Search for a status by name | Dark Bargain stat |
 | Use multiple commands in a single request | Cloud BSB; Cloud LM; Elarra USB |
 
 ### Aliases
