@@ -27,6 +27,15 @@ html, body {
 .banner {
   background-color: $bg-color;
   width: 100%;
+  &__link {
+    color: #FFF;
+    font-size: 18px;
+    font-family: 'Lato', sans-serif;
+    text-decoration: none;
+    @media screen and (min-width: $medium) {
+      font-size: 24px;
+    }
+  }
 }
 
 .link-container {
@@ -39,26 +48,12 @@ html, body {
 .container {
   width: 87.5%;
   margin: 0 auto;
-}
-
-.content {
-
-}
-
-.banner a {
-  color: #FFF;
-  font-size: 18px;
-  font-family: 'Lato', sans-serif;
-  text-decoration: none;
+  @media screen and (min-width: $medium) {
+    width: 70%;
+  }
 }
 
 @media only screen and (min-width: $medium) {
-  .banner a {
-    font-size: 24px;
-  }
-  .container {
-    width: 70%;
-  }
   .logo {
     width: auto;
     height: auto;
@@ -69,17 +64,13 @@ html, body {
   font-size: 24px;
   font-family: 'Lato', sans-serif;
   margin: 12px 0 12px;
-}
-
-@media only screen and (min-width: $large) {
-  .title {
+  @media screen and (min-width: $medium) {
     font-size: 32px;
   }
-}
-
-.title__desc {
-  display: inline-block;
-  font-size: 13px;
+  &__desc {
+    display: inline-block;
+    font-size: 13px;
+  }
 }
 
 .tutorial {
@@ -134,11 +125,6 @@ tbody.left th {
   border-radius: 5px;
   padding: 3px 3px 3px 4px;
 }
-@media only screen and (min-width: $medium) {
-  #search-button {
-    width: 14%;
-  }
-}
 
 #search-select {
   width: 110px;
@@ -150,6 +136,9 @@ tbody.left th {
   padding: 3px 6px;
   width: 10%;
   min-width: 50px;
+  @media screen and (min-width: $medium) {
+    width: 14%;
+  }
 }
 
 /**
@@ -170,59 +159,63 @@ tbody.left th {
 }
 
 .sb {
-  
-}
-
-.sb {
   padding-bottom: 8px;
   &__name {
     margin-bottom: 0;
     margin-top: 0;
-    font-size: 1.2rem;    
+    font-size: 1.2rem;
     @media screen and (min-width: $medium) {
       margin-bottom: 8px;
     }
   }
 
-  &__content {
-    display: grid;
-    grid-template-columns: repeat(12, [col-start] 1fr);
-    justify-items: start;  
-    @media screen and (min-width: $medium) {
-      margin-top: -1.5%;
-    }  
-  }
+    &__content {
+      display: grid;
+      grid-template-columns: repeat(12, [col-start] 1fr);
+      justify-items: start;
+      @media screen and (min-width: $medium) {
+        margin-top: -1.5%;
+      }
+    }
 
-  &__text {
-    margin-top: auto;
-    margin-bottom: auto;
-    font-size: 14px;
-    grid-column: col-start 3 / span 10;
-  }
+      &__text {
+        margin-top: auto;
+        margin-bottom: auto;
+        margin-left: 15px;
+        font-size: 12px;
+        grid-column: col-start 3 / span 10;
+        @media screen and (min-width: $medium) {
+          grid-column: col-start 2 / span 10
+          font-size: 14px;
+        }
+      }
 }
 
 .sb-main {
   display: flex;
 }
 
-.sb-result__icon, .lg-icon {
-  grid-column: col-start / span 2;
-  width: 100%;
-  min-height: 64px;
-  min-width: 64px;
-  /*width: 64px;*/
-  margin-left: -10px;
-
-  max-width: 164px;
-  max-height: 164px;
+.sb__icon, .lg-icon {
+  width: 148%;
+  grid-column: col-start / span 1;
 }
 
+.sb__icon-container {
+  grid-column: col-start / span 2;
+  overflow: hidden;
+  text-indent: -21%;
+  @media screeen and (min-width: $medium) {
+    grid-column: col-start / span 1;
+    text-indent: -11%;
+  }
+}
+
+
 @media only screen and (min-width: $medium) {
-  .sb-result__icon {
+  .sb__icon {
     min-height: 96px;
     min-width: 96px;
     margin-left: -14%;
-    
   }
 }
 
@@ -239,7 +232,10 @@ tbody.left th {
 
 .cmds {
   padding: 2px;
-  font-size: $base-font-size;
+  font-size: 12px;
+  @media screen and (min-width: $medium) {
+    font-size: 14px;
+  }
 }
 
 .cmd {
@@ -256,7 +252,7 @@ tbody.left th {
   margin-right: 10px;
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: $medium) {
   .cmd__icon, .sm-icon {
     min-height: 48px;
     min-width: 48px;

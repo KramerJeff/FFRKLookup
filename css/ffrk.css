@@ -15,6 +15,14 @@ html, body {
 .banner {
   background-color: #398CBD;
   width: 100%; }
+  .banner__link {
+    color: #FFF;
+    font-size: 18px;
+    font-family: 'Lato', sans-serif;
+    text-decoration: none; }
+    @media screen and (min-width: 768px) {
+      .banner__link {
+        font-size: 24px; } }
 
 .link-container {
   display: flex;
@@ -25,18 +33,11 @@ html, body {
 .container {
   width: 87.5%;
   margin: 0 auto; }
-
-.banner a {
-  color: #FFF;
-  font-size: 18px;
-  font-family: 'Lato', sans-serif;
-  text-decoration: none; }
+  @media screen and (min-width: 768px) {
+    .container {
+      width: 70%; } }
 
 @media only screen and (min-width: 768px) {
-  .banner a {
-    font-size: 24px; }
-  .container {
-    width: 70%; }
   .logo {
     width: auto;
     height: auto; } }
@@ -45,14 +46,12 @@ html, body {
   font-size: 24px;
   font-family: 'Lato', sans-serif;
   margin: 12px 0 12px; }
-
-@media only screen and (min-width: 992px) {
-  .title {
-    font-size: 32px; } }
-
-.title__desc {
-  display: inline-block;
-  font-size: 13px; }
+  @media screen and (min-width: 768px) {
+    .title {
+      font-size: 32px; } }
+  .title__desc {
+    display: inline-block;
+    font-size: 13px; }
 
 .tutorial {
   font-size: 13px;
@@ -97,10 +96,6 @@ tbody.left th {
   border-radius: 5px;
   padding: 3px 3px 3px 4px; }
 
-@media only screen and (min-width: 768px) {
-  #search-button {
-    width: 14%; } }
-
 #search-select {
   width: 110px; }
 
@@ -110,6 +105,9 @@ tbody.left th {
   padding: 3px 6px;
   width: 10%;
   min-width: 50px; }
+  @media screen and (min-width: 768px) {
+    #search-button {
+      width: 14%; } }
 
 /**
  * Soul Break Results
@@ -143,24 +141,31 @@ tbody.left th {
   .sb__text {
     margin-top: auto;
     margin-bottom: auto;
-    font-size: 14px;
+    margin-left: 15px;
+    font-size: 12px;
     grid-column: col-start 3 / span 10; }
+    @media screen and (min-width: 768px) {
+      .sb__text {
+        grid-column: col-start 3 / span 10;
+        font-size: 14px; } }
 
 .sb-main {
   display: flex; }
 
-.sb-result__icon, .lg-icon {
+.sb__icon, .lg-icon {
+  width: 148%; }
+
+.sb__icon-container {
   grid-column: col-start / span 2;
-  width: 100%;
-  min-height: 64px;
-  min-width: 64px;
-  /*width: 64px;*/
-  margin-left: -10px;
-  max-width: 164px;
-  max-height: 164px; }
+  overflow: hidden;
+  text-indent: -21%; }
+  @media screeen and (min-width: 768px) {
+    .sb__icon-container {
+      grid-column: col-start / span 1;
+      text-indent: -11%; } }
 
 @media only screen and (min-width: 768px) {
-  .sb-result__icon {
+  .sb__icon {
     min-height: 96px;
     min-width: 96px;
     margin-left: -14%; } }
@@ -175,7 +180,10 @@ tbody.left th {
 
 .cmds {
   padding: 2px;
-  font-size: 14px; }
+  font-size: 12px; }
+  @media screen and (min-width: 768px) {
+    .cmds {
+      font-size: 14px; } }
 
 .cmd {
   display: flex;
