@@ -1,5 +1,11 @@
-$base-font-size: 16px;
+$base-font-size: 14px;
 $bg-color: #398CBD;
+
+$small: 576px;
+$medium: 768px;
+$large: 992px;
+$xlarge: 1200px;
+
 /* UNIVERSAL */
 
 html, body {
@@ -46,7 +52,7 @@ html, body {
   text-decoration: none;
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: $medium) {
   .banner a {
     font-size: 24px;
   }
@@ -59,10 +65,16 @@ html, body {
   }
 }
 
-#title {
+.title {
   font-size: 24px;
   font-family: 'Lato', sans-serif;
   margin: 12px 0 12px;
+}
+
+@media only screen and (min-width: $large) {
+  .title {
+    font-size: 32px;
+  }
 }
 
 .title__desc {
@@ -122,7 +134,7 @@ tbody.left th {
   border-radius: 5px;
   padding: 3px 3px 3px 4px;
 }
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: $medium) {
   #search-button {
     width: 14%;
   }
@@ -151,7 +163,6 @@ tbody.left th {
 
 .sb-result, .result {
   margin-top: 12px;
-  padding: 5px;
 }
 
 .sb-result:last-child, .result:last-child {
@@ -159,27 +170,34 @@ tbody.left th {
 }
 
 .sb {
+  
+}
+
+.sb {
   padding-bottom: 8px;
-}
-
-.sb-result__content {
-  display: flex;
-
-}
-@media only screen and (min-width: 768px) {
-  .sb-result__content {
-    margin-top: -2%;
+  &__name {
+    margin-bottom: 0;
+    margin-top: 0;
+    font-size: 1.2rem;    
+    @media screen and (min-width: $medium) {
+      margin-bottom: 8px;
+    }
   }
-}
-.sb-result__name {
-  margin-bottom: 0;
-  margin-top: 0;
-  font-size: 1.2rem;
-}
 
-@media only screen and (min-width: 768px) {
-  .sb-result__name {
-    margin-bottom: 8px;
+  &__content {
+    display: grid;
+    grid-template-columns: repeat(12, [col-start] 1fr);
+    justify-items: start;  
+    @media screen and (min-width: $medium) {
+      margin-top: -1.5%;
+    }  
+  }
+
+  &__text {
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: 14px;
+    grid-column: col-start 3 / span 10;
   }
 }
 
@@ -188,22 +206,23 @@ tbody.left th {
 }
 
 .sb-result__icon, .lg-icon {
-  float: left;
+  grid-column: col-start / span 2;
+  width: 100%;
   min-height: 64px;
   min-width: 64px;
-  height: 64px;
-  width: 64px;
+  /*width: 64px;*/
   margin-left: -10px;
 
+  max-width: 164px;
+  max-height: 164px;
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: $medium) {
   .sb-result__icon {
     min-height: 96px;
     min-width: 96px;
-    height: 12%;
-    width: 12%;
-    margin-left: -2%;
+    margin-left: -14%;
+    
   }
 }
 
@@ -216,15 +235,11 @@ tbody.left th {
   margin: 0 5px 0 -2px;
 }
 
-.sb-result__text {
-  margin-top: auto;
-  margin-bottom: auto;
-  width: 88%;
-  font-size: 14px;
-}
+
 
 .cmds {
   padding: 2px;
+  font-size: $base-font-size;
 }
 
 .cmd {

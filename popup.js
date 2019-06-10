@@ -671,10 +671,10 @@ function getOtherEffects(jsonArr) {
  */
 function formatSBJSON(json) {
   let html = "<div class='sb-result'>";
-  let name = `<div class='sb'><h3 class='sb-result__name'>${json.description}</h3>`;
-  let icon = "<div class='sb-result__content'><img class='sb-result__icon' src='" + json.imagePath.split('"')[0] + "'/>";
-  let effect = `<div class='sb-result__text'><p class='sb-result__effect'>${json.effects}</p>`;
-  let entry = `<div class='flex'><span class='margin-right entry__castTime'><b>Element:</b> ${formatElements(json)}</span><span class='entry__elements'></span></div><div class='flex'><span class='margin-right entry__castTime'><b>Multiplier:</b> ${json.multiplier}</span><span class='entry__elements'><b>Cast Time:</b> ${json.castTime}</span></div><div class='flex'><span class='margin-right entry__castTime'><b>Target:</b> ${targetTypeDict[json.targetType]}</span><span class='entry__elements'><b>Type:</b> ${damageFormulaDict[json.damageFormulaType]}</span></div></div></div>`;
+  let name = `<div class='sb'><h3 class='sb__name'>${json.description}</h3>`;
+  let icon = "<div class='sb__content'><div class='img-container'><img class='sb__icon' src='" + json.imagePath.split('"')[0] + "'/></div>";
+  let effect = `<div class='sb__text'><p class='sb__effect'>${json.effects}</p>`;
+  let entry = `<div class='flex'><span class='margin-right entry__castTime'><b>Element:</b> ${formatElements(json)}</span><span class='entry__elements'></span></div><div class='flex'><span class='margin-right entry__castTime'><b>Multiplier:</b> ${json.multiplier}</span><span class='entry__elements'><b>Cast Time:</b> ${json.castTime}</span></div><div class='flex'><span class='margin-right entry__castTime'><b>Target:</b> ${targetTypeDict[json.targetType]}</span><span class='entry__elements'><b>Type:</b> ${damageFormulaDict[json.damageFormulaType]}</span></div></div></div></div>`;
 
   let commands = "";
   let statuses = "";

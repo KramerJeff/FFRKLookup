@@ -41,10 +41,14 @@ html, body {
     width: auto;
     height: auto; } }
 
-#title {
+.title {
   font-size: 24px;
   font-family: 'Lato', sans-serif;
   margin: 12px 0 12px; }
+
+@media only screen and (min-width: 992px) {
+  .title {
+    font-size: 32px; } }
 
 .title__desc {
   display: inline-block;
@@ -115,49 +119,51 @@ tbody.left th {
   padding-bottom: 14px;
 }*/
 .sb-result, .result {
-  margin-top: 12px;
-  padding: 5px; }
+  margin-top: 12px; }
 
 .sb-result:last-child, .result:last-child {
   margin-bottom: 16px; }
 
 .sb {
   padding-bottom: 8px; }
-
-.sb-result__content {
-  display: flex; }
-
-@media only screen and (min-width: 768px) {
-  .sb-result__content {
-    margin-top: -2%; } }
-
-.sb-result__name {
-  margin-bottom: 0;
-  margin-top: 0;
-  font-size: 1.2rem; }
-
-@media only screen and (min-width: 768px) {
-  .sb-result__name {
-    margin-bottom: 8px; } }
+  .sb__name {
+    margin-bottom: 0;
+    margin-top: 0;
+    font-size: 1.2rem; }
+    @media screen and (min-width: 768px) {
+      .sb__name {
+        margin-bottom: 8px; } }
+  .sb__content {
+    display: grid;
+    grid-template-columns: repeat(12, [col-start] 1fr);
+    justify-items: start; }
+    @media screen and (min-width: 768px) {
+      .sb__content {
+        margin-top: -1.5%; } }
+  .sb__text {
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: 14px;
+    grid-column: col-start 3 / span 10; }
 
 .sb-main {
   display: flex; }
 
 .sb-result__icon, .lg-icon {
-  float: left;
+  grid-column: col-start / span 2;
+  width: 100%;
   min-height: 64px;
   min-width: 64px;
-  height: 64px;
-  width: 64px;
-  margin-left: -10px; }
+  /*width: 64px;*/
+  margin-left: -10px;
+  max-width: 164px;
+  max-height: 164px; }
 
 @media only screen and (min-width: 768px) {
   .sb-result__icon {
     min-height: 96px;
     min-width: 96px;
-    height: 12%;
-    width: 12%;
-    margin-left: -2%; } }
+    margin-left: -14%; } }
 
 .icon {
   float: left;
@@ -167,14 +173,9 @@ tbody.left th {
   width: 52px;
   margin: 0 5px 0 -2px; }
 
-.sb-result__text {
-  margin-top: auto;
-  margin-bottom: auto;
-  width: 88%;
-  font-size: 14px; }
-
 .cmds {
-  padding: 2px; }
+  padding: 2px;
+  font-size: 14px; }
 
 .cmd {
   display: flex;
