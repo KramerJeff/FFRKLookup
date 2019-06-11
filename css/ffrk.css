@@ -31,8 +31,11 @@ html, body {
   height: 65px; }
 
 .container {
-  width: 87.5%;
+  width: 92.5%;
   margin: 0 auto; }
+  @media screen and (min-width: 370px) {
+    .container {
+      width: 87.5%; } }
   @media screen and (min-width: 768px) {
     .container {
       width: 70%; } }
@@ -60,7 +63,7 @@ html, body {
 #search-button, #search-text, .bug {
   font-size: 12px; }
 
-h3, span, #search-button, #search-text, .title__desc, .tutorial {
+h3, span, #search-button, #search-text, .title__desc, .tutorial, .lm__name {
   font-family: 'Lato', sans-serif; }
 
 p, .cmd span, .braveMode__elements, .braveMode__castTime, .entry__elements, .entry__castTime {
@@ -95,6 +98,9 @@ tbody.left th {
   border: 1px solid grey;
   border-radius: 5px;
   padding: 3px 3px 3px 4px; }
+  @media screen and (min-width: 768px) {
+    #search-text {
+      width: 97%; } }
 
 #search-select {
   width: 110px; }
@@ -132,28 +138,32 @@ tbody.left th {
       .sb__name {
         margin-bottom: 8px; } }
   .sb__content {
-    display: grid;
-    grid-template-columns: repeat(12, [col-start] 1fr);
-    justify-items: start; }
+    display: flex; }
     @media screen and (min-width: 768px) {
       .sb__content {
-        margin-top: -1.5%; } }
+        margin-top: -1%; } }
   .sb__text {
     margin-top: auto;
     margin-bottom: auto;
-    margin-left: 15px;
     font-size: 12px;
-    grid-column: col-start 3 / span 10; }
+    width: 100%; }
     @media screen and (min-width: 768px) {
       .sb__text {
-        grid-column: col-start 3 / span 10;
         font-size: 14px; } }
 
 .sb-main {
   display: flex; }
 
 .sb__icon, .lg-icon {
-  width: 148%; }
+  min-height: 64px;
+  min-width: 64px;
+  height: 64px;
+  width: 64px;
+  margin-left: -10px; }
+  @media screen and (min-width: 768px) {
+    .sb__icon, .lg-icon {
+      min-height: 96px;
+      min-width: 96px; } }
 
 .sb__icon-container {
   grid-column: col-start / span 2;
@@ -164,12 +174,6 @@ tbody.left th {
       grid-column: col-start / span 1;
       text-indent: -11%; } }
 
-@media only screen and (min-width: 768px) {
-  .sb__icon {
-    min-height: 96px;
-    min-width: 96px;
-    margin-left: -14%; } }
-
 .icon {
   float: left;
   min-height: 52px;
@@ -178,24 +182,30 @@ tbody.left th {
   width: 52px;
   margin: 0 5px 0 -2px; }
 
-.cmds {
-  padding: 2px;
-  font-size: 12px; }
-  @media screen and (min-width: 768px) {
-    .cmds {
-      font-size: 14px; } }
-
 .cmd {
   display: flex;
-  margin-bottom: 0.25rem;
-  align-items: center; }
+  margin-bottom: 8px;
+  font-size: 12px; }
+  @media screen and (min-width: 768px) {
+    .cmd {
+      font-size: 14px; } }
+  .cmd__text {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 11px;
+    width: 100%; }
+  .cmd__effect {
+    margin-top: auto; }
 
 .cmd__icon, .sm-icon {
   min-height: 32px;
   min-width: 32px;
   height: 32px;
   width: 32px;
-  margin-right: 10px; }
+  margin: 0 6px 0; }
+  @media screen and (min-width: 768px) {
+    .cmd__icon, .sm-icon {
+      margin: 0 14px 0; } }
 
 @media only screen and (min-width: 768px) {
   .cmd__icon, .sm-icon {
@@ -204,14 +214,16 @@ tbody.left th {
     height: 48px;
     width: 48px; } }
 
-.cmd__effect {
-  margin-top: auto;
-  margin-bottom: auto; }
-
 .status__name {
   display: inline;
   font-size: 0.875rem;
   font-weight: bold; }
+
+.status, .otherEffects, .lm, .icon-container, .info {
+  font-size: 12px; }
+  @media screen and (min-width: 768px) {
+    .status, .otherEffects, .lm, .icon-container, .info {
+      font-size: 14px; } }
 
 .braveMode__desc {
   font-weight: bold; }
@@ -271,3 +283,7 @@ tbody.left th {
 .error {
   color: red;
   font-family: 'Merriweather', serif; }
+
+@media screen and (min-width: 768px) {
+  .easy-autocomplete {
+    width: 85% !important; } }

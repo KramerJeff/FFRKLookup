@@ -46,8 +46,11 @@ html, body {
 }
 
 .container {
-  width: 87.5%;
+  width: 92.5%;
   margin: 0 auto;
+  @media screen and (min-width: 370px) {
+    width: 87.5%;
+  }
   @media screen and (min-width: $medium) {
     width: 70%;
   }
@@ -82,7 +85,7 @@ html, body {
   font-size: 12px;
 }
 
-h3, span, #search-button, #search-text, .title__desc, .tutorial {
+h3, span, #search-button, #search-text, .title__desc, .tutorial, .lm__name {
   font-family: 'Lato', sans-serif;
 }
 
@@ -124,6 +127,9 @@ tbody.left th {
   border: 1px solid grey;
   border-radius: 5px;
   padding: 3px 3px 3px 4px;
+  @media screen and (min-width: $medium) {
+    width: 97%;
+  }
 }
 
 #search-select {
@@ -170,22 +176,18 @@ tbody.left th {
   }
 
     &__content {
-      display: grid;
-      grid-template-columns: repeat(12, [col-start] 1fr);
-      justify-items: start;
+      display: flex;
       @media screen and (min-width: $medium) {
-        margin-top: -1.5%;
+        margin-top: -1%;
       }
     }
 
       &__text {
         margin-top: auto;
         margin-bottom: auto;
-        margin-left: 15px;
         font-size: 12px;
-        grid-column: col-start 3 / span 10;
+        width: 100%;
         @media screen and (min-width: $medium) {
-          grid-column: col-start 2 / span 10
           font-size: 14px;
         }
       }
@@ -196,8 +198,15 @@ tbody.left th {
 }
 
 .sb__icon, .lg-icon {
-  width: 148%;
-  grid-column: col-start / span 1;
+  min-height: 64px;
+  min-width: 64px;
+  height: 64px;
+  width: 64px;
+  margin-left: -10px;
+  @media screen and (min-width: $medium) {
+    min-height: 96px;
+    min-width: 96px;
+  }
 }
 
 .sb__icon-container {
@@ -207,15 +216,6 @@ tbody.left th {
   @media screeen and (min-width: $medium) {
     grid-column: col-start / span 1;
     text-indent: -11%;
-  }
-}
-
-
-@media only screen and (min-width: $medium) {
-  .sb__icon {
-    min-height: 96px;
-    min-width: 96px;
-    margin-left: -14%;
   }
 }
 
@@ -230,18 +230,23 @@ tbody.left th {
 
 
 
-.cmds {
-  padding: 2px;
+.cmd {
+  display: flex;
+  margin-bottom: 8px;
   font-size: 12px;
   @media screen and (min-width: $medium) {
     font-size: 14px;
   }
-}
 
-.cmd {
-  display: flex;
-  margin-bottom: 0.25rem;
-  align-items: center;
+  &__text {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 11px;
+    width: 100%;
+  }
+    &__effect {
+      margin-top: auto;
+    }
 }
 
 .cmd__icon, .sm-icon {
@@ -249,7 +254,10 @@ tbody.left th {
   min-width: 32px;
   height: 32px;
   width: 32px;
-  margin-right: 10px;
+  margin: 0 6px 0;
+  @media screen and (min-width: $medium) {
+    margin: 0 14px 0;
+  }
 }
 
 @media only screen and (min-width: $medium) {
@@ -261,15 +269,19 @@ tbody.left th {
   }
 }
 
-.cmd__effect {
-  margin-top: auto;
-  margin-bottom: auto;
+.status {
+  &__name {
+    display: inline;
+    font-size: 0.875rem;
+    font-weight: bold;
+  }
 }
 
-.status__name {
-  display: inline;
-  font-size: 0.875rem;
-  font-weight: bold;
+.status, .otherEffects, .lm, .icon-container, .info {
+  font-size: 12px;
+  @media screen and (min-width: $medium) {
+    font-size: 14px;
+  }
 }
 
 .braveMode__desc {
@@ -347,4 +359,10 @@ tbody.left th {
 .error {
   color: red;
   font-family: 'Merriweather', serif;
+}
+
+.easy-autocomplete{
+  @media screen and (min-width: $medium) {
+    width:85% !important;
+  }
 }

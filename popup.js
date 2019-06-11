@@ -579,35 +579,32 @@ function getCharacter(charName) {
  * SB helper
  */
 function getCommands(cmdArr) {
-    let commands = "<div class='cmds border-top'>";
+    let commands = "";
     for(let i = 0; i < cmdArr.length; i++) {
+      commands += "<div class='cmd'>";
       //TODO create container for these so they never overlap
-      commands += "<div class='cmd padding-top padding-bottom'><img class='cmd__icon' src='" + cmdArr[i].imagePath.split('"')[0] + "'/>";
-      commands += `<p class='cmd__effect'>${cmdArr[i].effects}</p></div>`; //TODO SEARCH FOR STATUS
+      commands += "<img class='cmd__icon' src='" + cmdArr[i].imagePath.split('"')[0] + "'/>";
+      commands += `<div class='cmd__text'><p class='cmd__effect'>${cmdArr[i].effects}</p>`; //TODO SEARCH FOR STATUS
 
       //School and Elements
-      commands += "<div class='cmd'>";
+      commands += "<div class='flex'>";
       commands += `<span class='margin-right'><b>Elements:</b> ${formatElements(cmdArr[i])}</span>`;
       commands += `<span><b>School:</b> ${schoolDict[cmdArr[i].school]}</span>`;
 
       commands += "</div>";
 
-      commands += `<div class='cmd'><span class='margin-right'><b>Multiplier:</b> ${cmdArr[i].multiplier}</span>`;
+      commands += `<div class='flex'><span class='margin-right'><b>Multiplier:</b> ${cmdArr[i].multiplier}</span>`;
       commands += `<span><b>Cast Time:</b> ${cmdArr[i].castTime}</span></div>`;
 
       //Multiplier and Cast Time
-      commands += "<div class='cmd";
-      if(i !== cmdArr.length-1) { //Due to uncertainty of number of previous/next elements/features, this is my best solution
-        commands += " border-bottom padding-bottom'>"
-      }
-      else {
-        commands += "'>";
-      }
+      commands += "<div class='flex'>";
 
       commands += `<span class='margin-right'><b>Target:</b> ${targetTypeDict[cmdArr[i].targetType]}</span>`;
-      commands += `<span><b>Type:</b> ${damageFormulaDict[cmdArr[i].damageFormulaType]}</span></div>`;
+      commands += `<span><b>Type:</b> ${damageFormulaDict[cmdArr[i].damageFormulaType]}</span></div></div>`;
+
+      commands += "</div>";
     }
-    commands += "</div>";
+
     return commands;
 }
 
