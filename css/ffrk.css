@@ -8,6 +8,7 @@ html, body {
   top: 0;
   font-size: 100%; }
 
+/* Chrome Extension ONLY */
 /* FFRK Styles */
 .header {
   height: 65px; }
@@ -63,10 +64,10 @@ html, body {
 #search-button, #search-text, .bug {
   font-size: 12px; }
 
-h3, span, #search-button, #search-text, .title__desc, .tutorial, .lm__name {
+h3, span, #search-button, #search-text, .title__desc, .tutorial, .lm__name, .lato {
   font-family: 'Lato', sans-serif; }
 
-p, .cmd span, .braveMode__elements, .braveMode__castTime, .entry__elements, .entry__castTime {
+p, .cmd span, .braveMode__elements, .braveMode__castTime, .entry__elements, .entry__castTime, .merriweather {
   /** TODO change these rules to something simpler */
   font-family: 'Merriweather', serif; }
 
@@ -122,6 +123,14 @@ tbody.left th {
   border-bottom: 1px solid grey;  TODO make border-top on all results except the first
   padding-bottom: 14px;
 }*/
+.request {
+  text-transform: capitalize;
+  font-size: 22px;
+  padding-top: 16px; }
+  @media screen and (min-width: 768px) {
+    .request {
+      font-size: 24px; } }
+
 .sb-result, .result {
   margin-top: 12px; }
 
@@ -141,7 +150,7 @@ tbody.left th {
     display: flex; }
     @media screen and (min-width: 768px) {
       .sb__content {
-        margin-top: -1%; } }
+        margin-top: -4px; } }
   .sb__text {
     margin-top: auto;
     margin-bottom: auto;
@@ -216,8 +225,12 @@ tbody.left th {
 
 .status__name {
   display: inline;
-  font-size: 0.875rem;
-  font-weight: bold; }
+  font-size: 14px;
+  font-weight: bold;
+  font-family: 'Merriweather', serif; }
+  @media screen and (min-width: 768px) {
+    .status__name {
+      font-size: 16px; } }
 
 .status, .otherEffects, .lm, .icon-container, .info {
   font-size: 12px; }
@@ -283,6 +296,23 @@ tbody.left th {
 .error {
   color: red;
   font-family: 'Merriweather', serif; }
+
+.hidden {
+  visibility: hidden; }
+
+.sm-text {
+  font-family: 'Merriweather', sans-serif;
+  font-size: 12px; }
+  @media screen and (min-width: 768px) {
+    .sm-text {
+      font-size: 14px; } }
+
+.text {
+  font-family: 'Merriweather', sans-serif;
+  font-size: 14px; }
+  @media screen and (min-width: 768px) {
+    .text {
+      font-size: 16px; } }
 
 @media screen and (min-width: 768px) {
   .easy-autocomplete {

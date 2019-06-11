@@ -18,6 +18,11 @@ html, body {
   font-size: 100%;
 }
 
+/* Chrome Extension ONLY */
+// #body {
+//   width: 370px;
+// }
+
 /* FFRK Styles */
 
 .header {
@@ -85,11 +90,11 @@ html, body {
   font-size: 12px;
 }
 
-h3, span, #search-button, #search-text, .title__desc, .tutorial, .lm__name {
+h3, span, #search-button, #search-text, .title__desc, .tutorial, .lm__name, .lato {
   font-family: 'Lato', sans-serif;
 }
 
-p, .cmd span, .braveMode__elements, .braveMode__castTime, .entry__elements, .entry__castTime { /** TODO change these rules to something simpler */
+p, .cmd span, .braveMode__elements, .braveMode__castTime, .entry__elements, .entry__castTime, .merriweather { /** TODO change these rules to something simpler */
   font-family: 'Merriweather', serif;
 }
 
@@ -156,6 +161,15 @@ tbody.left th {
   padding-bottom: 14px;
 }*/
 
+.request {
+  text-transform: capitalize;
+  font-size: 22px;
+  padding-top: 16px;
+  @media screen and (min-width: $medium) {
+    font-size: 24px;
+  }
+}
+
 .sb-result, .result {
   margin-top: 12px;
 }
@@ -178,7 +192,7 @@ tbody.left th {
     &__content {
       display: flex;
       @media screen and (min-width: $medium) {
-        margin-top: -1%;
+        margin-top: -4px;
       }
     }
 
@@ -272,8 +286,12 @@ tbody.left th {
 .status {
   &__name {
     display: inline;
-    font-size: 0.875rem;
+    font-size: 14px;
     font-weight: bold;
+    font-family: 'Merriweather', serif;
+    @media screen and (min-width: $medium) {
+      font-size: 16px;
+    }
   }
 }
 
@@ -359,6 +377,26 @@ tbody.left th {
 .error {
   color: red;
   font-family: 'Merriweather', serif;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.sm-text {
+  font-family: 'Merriweather', sans-serif;
+  font-size: 12px;
+  @media screen and (min-width: $medium) {
+    font-size: 14px;
+  }
+}
+
+.text {
+  font-family: 'Merriweather', sans-serif;
+  font-size: 14px;
+  @media screen and (min-width: $medium) {
+    font-size: 16px;
+  }
 }
 
 .easy-autocomplete{
