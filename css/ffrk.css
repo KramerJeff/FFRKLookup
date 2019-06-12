@@ -172,7 +172,15 @@ tbody.left th {
   @media screen and (min-width: 768px) {
     .sb__icon, .lg-icon {
       min-height: 96px;
-      min-width: 96px; } }
+      min-width: 96px;
+      height: 96px;
+      width: 96px; } }
+  @media screen and (min-width: 992px) {
+    .sb__icon, .lg-icon {
+      min-height: 128px;
+      min-width: 128px;
+      height: 128px;
+      width: 128px; } }
 
 .sb__icon-container {
   grid-column: col-start / span 2;
@@ -214,14 +222,18 @@ tbody.left th {
   margin: 0 6px 0; }
   @media screen and (min-width: 768px) {
     .cmd__icon, .sm-icon {
-      margin: 0 14px 0; } }
-
-@media only screen and (min-width: 768px) {
-  .cmd__icon, .sm-icon {
-    min-height: 48px;
-    min-width: 48px;
-    height: 48px;
-    width: 48px; } }
+      margin: 0 14px 0;
+      min-height: 48px;
+      min-width: 48px;
+      height: 48px;
+      width: 48px; } }
+  @media screen and (min-width: 992px) {
+    .cmd__icon, .sm-icon {
+      margin: 0 22px 0;
+      min-height: 64px;
+      min-width: 64px;
+      height: 64px;
+      width: 64px; } }
 
 .status__name {
   display: inline;
@@ -278,7 +290,8 @@ tbody.left th {
 .flex {
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 0.25rem; }
+  margin-bottom: 0.25rem;
+  max-width: 600px; }
 
 .flex:last-child {
   margin-bottom: 0; }

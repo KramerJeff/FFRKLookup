@@ -435,8 +435,9 @@ function getLMsForChar(request) {
   }
   return new Promise(function(resolve, reject) {
     $.getJSON(`${apiBase}/LegendMaterias/Character/${charID}`, function(json) {
-      let LMs = `<div class='sb-result result'><h3 class='character__name'>${json[0].characterName}</h3>`; //get the character name once
       let lmCmd = request[1];
+      let LMs = `<div class='sb-result result'><p class='request lato'><b>Request</b> - ${json[0].characterName} ${lmCmd.toUpperCase()}</p>`; //get the character name once
+
       if(lmCmd.includes('lmr')) {
         json = json.slice(2); //get rid of dive LMs
       }
@@ -469,7 +470,7 @@ function getLMsForChar(request) {
 function getSoulBreak(request) {
   return new Promise(function(resolve,reject) {
     $.getJSON(`${apiBase}/SoulBreaks/Name/${request}`, function(json) {
-      let SBs = "";
+      let SBs = `<p class='request lato'><b>Request</b> - ${request}</p>`
       if(json.length === 0) {
         reject(new Error(`There is no soul break named ${request}`));
       }
@@ -492,7 +493,7 @@ function getAbility(abilityName, abilDict) {
     let id = abilDict[abilName];
     return new Promise(function(resolve,reject) {
       $.getJSON(`${apiBase}/Abilities/${id}`, function(json) {
-        let abil = "";
+        let abil = `<p class='request lato'><b>Request</b> - ${abilName} abil</p>`;
         json.forEach((json) => {
           abil += formatAbilityJSON(json);
         });
@@ -508,7 +509,7 @@ function getAbility(abilityName, abilDict) {
 function getRecordMateria(rmName) {
   return new Promise(function(resolve, reject) {
     $.getJSON(`${apiBase}/RecordMaterias/Name/${rmName}`, function(json) {
-      let RMs = "";
+      let RMs = `<p class='request lato'><b>Request</b> - ${rmName} RM</p>`;
       json.forEach((json) => {
         RMs += formatRMJSON(json);
       });
@@ -520,7 +521,7 @@ function getRecordMateria(rmName) {
 function getStatus(statusName) {
   return new Promise(function(resolve, reject) {
     $.getJSON(`${apiBase}/Statuses/CommonName/${statusName}`, function(json) {
-      let statuses = "";
+      let statuses = `<p class='request lato'><b>Request</b> - ${statusName} Stat</p>`;
       json.forEach((json) => {
         statuses += formatStatusJSON(json);
       });
