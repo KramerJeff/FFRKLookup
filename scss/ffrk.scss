@@ -1,10 +1,10 @@
 $base-font-size: 14px;
 $bg-color: #398CBD;
 
-$small: 576px;
-$medium: 768px;
-$large: 992px;
-$xlarge: 1200px;
+$small: 36em;
+$medium: 48em;
+$large: 62em;
+$xlarge: 75em;
 
 /* UNIVERSAL */
 
@@ -349,14 +349,6 @@ tbody.left th {
   padding-bottom: 8px;
   margin-bottom: 0;
 }
-
-/*.border-bottom {
-  border-bottom: 1px solid gray;
-}*/
-
-/*.border-top {
-  border-top: 1px solid gray;
-}*/
 
 .bold {
   font-weight: bold;

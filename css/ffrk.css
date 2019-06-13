@@ -8,7 +8,6 @@ html, body {
   top: 0;
   font-size: 100%; }
 
-/* Chrome Extension ONLY */
 /* FFRK Styles */
 .header {
   height: 65px; }
@@ -21,7 +20,7 @@ html, body {
     font-size: 18px;
     font-family: 'Lato', sans-serif;
     text-decoration: none; }
-    @media screen and (min-width: 768px) {
+    @media screen and (min-width: 48em) {
       .banner__link {
         font-size: 24px; } }
 
@@ -37,11 +36,11 @@ html, body {
   @media screen and (min-width: 370px) {
     .container {
       width: 87.5%; } }
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 48em) {
     .container {
       width: 70%; } }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 48em) {
   .logo {
     width: auto;
     height: auto; } }
@@ -50,7 +49,7 @@ html, body {
   font-size: 24px;
   font-family: 'Lato', sans-serif;
   margin: 12px 0 12px; }
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 48em) {
     .title {
       font-size: 32px; } }
   .title__desc {
@@ -99,7 +98,7 @@ tbody.left th {
   border: 1px solid grey;
   border-radius: 5px;
   padding: 3px 3px 3px 4px; }
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 48em) {
     #search-text {
       width: 97%; } }
 
@@ -112,7 +111,7 @@ tbody.left th {
   padding: 3px 6px;
   width: 10%;
   min-width: 50px; }
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 48em) {
     #search-button {
       width: 14%; } }
 
@@ -127,7 +126,7 @@ tbody.left th {
   text-transform: capitalize;
   font-size: 22px;
   padding-top: 16px; }
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 48em) {
     .request {
       font-size: 24px; } }
 
@@ -143,12 +142,12 @@ tbody.left th {
     margin-bottom: 0;
     margin-top: 0;
     font-size: 1.2rem; }
-    @media screen and (min-width: 768px) {
+    @media screen and (min-width: 48em) {
       .sb__name {
         margin-bottom: 8px; } }
   .sb__content {
     display: flex; }
-    @media screen and (min-width: 768px) {
+    @media screen and (min-width: 48em) {
       .sb__content {
         margin-top: -4px; } }
   .sb__text {
@@ -156,7 +155,7 @@ tbody.left th {
     margin-bottom: auto;
     font-size: 12px;
     width: 100%; }
-    @media screen and (min-width: 768px) {
+    @media screen and (min-width: 48em) {
       .sb__text {
         font-size: 14px; } }
 
@@ -169,13 +168,13 @@ tbody.left th {
   height: 64px;
   width: 64px;
   margin-left: -10px; }
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 48em) {
     .sb__icon, .lg-icon {
       min-height: 96px;
       min-width: 96px;
       height: 96px;
       width: 96px; } }
-  @media screen and (min-width: 992px) {
+  @media screen and (min-width: 62em) {
     .sb__icon, .lg-icon {
       min-height: 128px;
       min-width: 128px;
@@ -186,7 +185,7 @@ tbody.left th {
   grid-column: col-start / span 2;
   overflow: hidden;
   text-indent: -21%; }
-  @media screeen and (min-width: 768px) {
+  @media screeen and (min-width: 48em) {
     .sb__icon-container {
       grid-column: col-start / span 1;
       text-indent: -11%; } }
@@ -203,7 +202,7 @@ tbody.left th {
   display: flex;
   margin-bottom: 8px;
   font-size: 12px; }
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 48em) {
     .cmd {
       font-size: 14px; } }
   .cmd__text {
@@ -220,14 +219,14 @@ tbody.left th {
   height: 32px;
   width: 32px;
   margin: 0 6px 0; }
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 48em) {
     .cmd__icon, .sm-icon {
       margin: 0 14px 0;
       min-height: 48px;
       min-width: 48px;
       height: 48px;
       width: 48px; } }
-  @media screen and (min-width: 992px) {
+  @media screen and (min-width: 62em) {
     .cmd__icon, .sm-icon {
       margin: 0 22px 0;
       min-height: 64px;
@@ -240,13 +239,13 @@ tbody.left th {
   font-size: 14px;
   font-weight: bold;
   font-family: 'Merriweather', serif; }
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 48em) {
     .status__name {
       font-size: 16px; } }
 
 .status, .otherEffects, .lm, .icon-container, .info {
   font-size: 12px; }
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 48em) {
     .status, .otherEffects, .lm, .icon-container, .info {
       font-size: 14px; } }
 
@@ -278,12 +277,6 @@ tbody.left th {
   padding-bottom: 8px;
   margin-bottom: 0; }
 
-/*.border-bottom {
-  border-bottom: 1px solid gray;
-}*/
-/*.border-top {
-  border-top: 1px solid gray;
-}*/
 .bold {
   font-weight: bold; }
 
@@ -316,17 +309,17 @@ tbody.left th {
 .sm-text {
   font-family: 'Merriweather', sans-serif;
   font-size: 12px; }
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 48em) {
     .sm-text {
       font-size: 14px; } }
 
 .text {
   font-family: 'Merriweather', sans-serif;
   font-size: 14px; }
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 48em) {
     .text {
       font-size: 16px; } }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 48em) {
   .easy-autocomplete {
     width: 85% !important; } }
