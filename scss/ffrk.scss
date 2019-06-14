@@ -86,7 +86,7 @@ html, body {
   margin-left: auto;
 }
 
-#search-button, #search-text, .bug {
+#search-button, .bug {
   font-size: 12px;
 }
 
@@ -132,6 +132,8 @@ tbody.left th {
   border: 1px solid grey;
   border-radius: 5px;
   padding: 3px 3px 3px 4px;
+  height: 25px;
+  font-size: 14px;
   @media screen and (min-width: $medium) {
     width: 97%;
   }
@@ -144,12 +146,12 @@ tbody.left th {
 #search-button {
   border: 1px solid grey;
   border-radius: 5px;
-  padding: 3px 6px;
+  padding: 7px 6px;
   width: 10%;
-  min-width: 50px;
-  @media screen and (min-width: $medium) {
-    width: 14%;
-  }
+  min-width: 60px;
+  background-color: $bg-color;
+  font-size: 14px;
+  color: #FFFFFF;
 }
 
 /**
