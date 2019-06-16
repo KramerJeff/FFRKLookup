@@ -126,12 +126,12 @@ $(function () {
   localStorage.setItem('data', JSON.stringify(dataArray))
   const data = JSON.parse(localStorage.getItem('data'));
   $("#search-text").easyAutocomplete(options);
-
+  $("#search-text").focus();
   let dictSequence = Promise.resolve();
   let abilDict = {};
 
 
-
+  //creates Dictionary of ability names and IDs for quick reference
   createAbilityDict().then(function(data) { abilDict = data; });
   //createCharacterDict().then(function(data) { charDict = data; }); TODO
 	$("#search-button").click(function(e) {
@@ -143,7 +143,7 @@ $(function () {
 
     //grab query
     let query = $("#search-text").val();
-
+    //places query into localStorage for autocomplete
     if(!dataArray.includes(input.value)) { //only update if it isn't a duplicate value
       dataArray.push(input.value);
       localStorage.setItem('data', JSON.stringify(dataArray));
@@ -193,6 +193,7 @@ $(function () {
         $("#results").append(errHTML);
       });
     });
+    
     $('#search-text').focus();
 	});
 });
@@ -800,6 +801,20 @@ function parseElementNumber(elementID) {
     return elementName;
   }
 }
+
+// function animateCSS(element, animationName, callback) {
+//     const node = document.querySelector(element)
+//     node.classList.add('animated', animationName)
+
+//     function handleAnimationEnd() {
+//         node.classList.remove('animated', animationName)
+//         node.removeEventListener('animationend', handleAnimationEnd)
+
+//         if (typeof callback === 'function') callback()
+//     }
+
+//     node.addEventListener('animationend', handleAnimationEnd)
+// }
 
 function formatElements(json) {
   let elements = "";
