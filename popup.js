@@ -1,110 +1,13 @@
+import * as formatter from '/scripts/htmlFormatter.js';
+import * as consts from '/scripts/constants.js';
+
+"use strict";
 //var bgPage = chrome.extension.getBackgroundPage();
 const apiBase = "https://ffrkapi.azurewebsites.net/api/v1.0/";
+const imgBase = "https://dff.sp.mbga.jp/dff/static/lang/image/buddy/";
+const imgEnd = "base_hands_up.png";
 
-const elementDict = {
-  0: "unknown",
-  1: "",
-  2: "-",
-  3: "Dark",
-  4: "Earth",
-  5: "Fire",
-  6: "Holy",
-  7: "Ice",
-  8: "Lightning",
-  9: "NE",
-  10: "Poison",
-  11: "Posion", //typo from the API...
-  12: "Water",
-  13: "Wind",
-  14: "Light.",
-  15: "Earth", //extra type from API
-  16: "Water" //extra type from API
-};
 
-const schoolDict = {
-  0: "Unknown",
-  2: "Bard",
-  3: "Black Magic",
-  4: "Celerity",
-  5: "Combat",
-  6: "Dancer",
-  7: "Darkness",
-  8: "Dragoon",
-  9: "Heavy",
-  10: "Knight",
-  11: "Machinist",
-  12: "Monk",
-  13: "Ninja",
-  14: "Samurai",
-  15: "Sharpshooter",
-  17: "Special",
-  18: "Spellblade",
-  19: "Summoning",
-  20: "Support",
-  21: "Thief",
-  22: "White Magic",
-  23: "Witch"
-};
-
-const targetTypeDict = {
-  0: "Unknown",
-  1: "-",
-  2: "All allies",
-  3: "All enemies",
-  4: "Ally with status",
-  5: "Another ally",
-  6: "Lowest HP% ally",
-  7: "Random ally",
-  8: "Random enemies",
-  9: "Random enemy",
-  10: "Self",
-  11: "Single",
-  12: "Single ally",
-  13: "Single enemy",
-  14: "",
-  15: "ALl enemies",
-  16: "All Allies",
-  17: "?",
-  18: "Single Enemy"
-};
-
-const damageFormulaDict = {
-  0: "Unknown",
-  1: "",
-  2: "Hybrid",
-  3: "Magical",
-  4: "Physical"
-};
-
-const charIDs = {
-  'tyro': 1,'warrior': 2,'knight': 3,'monk': 4,'red mage': 5,'black mage': 6,'magus': 7,'white mage': 8,'devout': 9,'summoner': 10,'samurai': 11,'dragoon': 12,'dark knight': 13,'spellblade': 14,'viking': 15,'berserker': 16,'ranger': 17,'thief (core)': 18,'bard': 19,'ninja': 20,'gladiator': 21,'elarra': 22,'biggs': 23,'wedge': 24,'dr. mog': 25,'warrior of light': 26,'garland': 27,'sarah': 28,'wol': 29,'echo': 30,'master': 31,'matoya': 32,'meia': 33,'thief (i)': 34,'firion': 35,'maria': 36,'guy': 37,'leon': 38,'minwu': 39,'gordon': 40,'leila': 41,'ricard': 42,'josef': 43,'emperor': 44,'hilda': 45,'scott': 46,'luneth': 47,'arc': 48,'refia': 49,'ingus': 50,'desch': 51,'onion knight': 52,'cloud of darkness': 53,'aria': 54,'cecil (dark knight)': 55,'cecil (paladin)': 56,'kain': 57,'rydia': 58,'rosa': 59,'edward': 60,'yang': 61,'palom': 62,'porom': 63,'tellah': 64,'edge': 65,'fusoya': 66,'golbez': 67,'cid (iv)': 68,'ceodore': 69,'rubicante': 70,'ursula': 71,'barbariccia': 72,'lenna': 73,'galuf': 74,'gogo (v)': 75,'gilgamesh': 76,'bartz': 77,'faris': 78,'dorgann': 79,'exdeath': 80,'krile': 81,'xezat': 82,'kelger': 83,'terra': 84,'locke': 85,'celes': 86,'mog': 87,'edgar': 88,'sabin': 89,'shadow': 90,'cyan': 91,'gau': 92,'setzer': 93,'strago': 94,'relm': 95,'gogo (vi)': 96,'umaro': 97,'kefka': 98,'leo': 99,'cloud': 100,'barret': 101,'tifa': 102,'aerith': 103,'red xiii': 104,'yuffie': 105,'cait sith': 106,'vincent': 107,'zack': 108,'sephiroth': 109,'cid (vii)': 110,'reno': 111,'angeal': 112,'rufus': 113,'shelke': 114,'rude': 115,'elena': 116,'squall': 117,'rinoa': 118,'quistis': 119,'zell': 120,'selphie': 121,'irvine': 122,'seifer': 123,'laguna': 124,'edea': 125,'raijin': 126,'fujin': 127,'kiros': 128,'ward': 129,'ultimecia': 130,'zidane': 131,'garnet': 132,'vivi': 133,'steiner': 134,'freya': 135,'quina': 136,'eiko': 137,'amarant': 138,'beatrix': 139,'kuja': 140,'marcus': 141,'tidus': 142,'yuna': 143,'wakka': 144,'lulu': 145,'kimahri': 146,'rikku': 147,'auron': 148,'jecht': 149,'braska': 150,'paine': 151,'seymour': 152,'shantotto': 153,'ayame': 154,'curilla': 155,'prishe': 156,'lion': 157,'aphmau': 158,'zeid': 159,'lilisette': 160,'vaan': 161,'balthier': 162,'fran': 163,'basch': 164,'ashe': 165,'penelo': 166,'gabranth': 167,'larsa': 168,'vayne': 169,'reks': 170,'lightning': 171,'snow': 172,'vanille': 173,'sazh': 174,'hope': 175,'fang': 176,'serah': 177,'cid raines': 178,'noel': 179,'nabaat': 180,"y'shtola": 181,'thancred': 182,'yda': 183,'papalymo': 184,'alphinaud': 185,'minfilia': 186,'cid (xiv)': 187,'ysayle': 188,'haurchefant': 189,'estinien': 190,'noctis': 191,'gladiolus': 192,'ignis': 193,'prompto': 194,'iris': 195,'aranea': 196,'cor': 197,'ramza': 198,'agrias': 199,'delita': 200,'ovelia': 201,'mustadio': 202,'orlandeau': 203,'gaffgarion': 204,'rapha': 205,'marach': 206,'meliadoul': 207,'marche': 208,'montblanc': 209,'alma': 210,'orran': 211,'ace': 212,'deuce': 213,'nine': 214,'machina': 215,'rem': 216,'queen': 217,'king': 218,'cinque': 219,'seven': 220,'sice': 221,'jack': 222,'eight': 223,'cater': 224,'trey': 225,'sora': 226,'riku': 227,'roxas': 228,'axel': 229,'reynn': 230,'lann': 231,'morrow': 232,'aemo': 233,'wrieg': 234,'tama': 235,'enna': 236,'serafie': 237,
-};
-
-const characterAliases = {
-  "onion knight": ["ok", "onion knight", "onion"],
-  "orlandeau": ["tg cid", "tgc"],
-  "cecil (dark knight)": ["decil", "dcecil", "dark knight cecil", "cecil dark knight"],
-  "cecil (paladin)": ["pecil", "pcecil", "paladin cecil", "cecil paladin"],
-  "gilgamesh": "greg",
-  "aerith": "aeris",
-  "cid (iv)": ["cid iv", "cid4", "cid 4"],
-  "cid (xiv)": ["cid xiv", "cid 14", "cid14"],
-  "cid (vii)": ["cid vii", "cid7", "cid 7"],
-  "elarra": "urara",
-  "barbariccia": "barb",
-  "cloud of darkness": "cod",
-  "red xiii": ["nanaki", "red13", "red 13"],
-  "gogo (v)": ["gogo v", "gogo5", "gogo 5"],
-  "gogo (vi)": ["gogo vi", "gogo6", "gogo 6"]
-};
-
-const abilityAliases = {
-  "bahamut (v)": ["bahamut", "bahamut5", "bahamut v"],
-  "bahamut (vi)": ["bahamut6", "bahamut vi"],
-  "voltech": ["vortex"]
-};
-
-const ignoredStatuses = ["Remove", "Reraise", "Haste", "Burst Mode", "Imp", "Attach", "Blink"];
 const sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|GSB\+|FSB|AASB|Glint|Glint\+/gi; //lcsb is caught by the CSB
 const lmRegex = /LM|LMR/gi;
 const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|GSB\+|FSB|AASB|Glint|Glint\+|lm|lmr|abil|ability|rm|stat|char/gi;
@@ -193,7 +96,7 @@ $(function () {
         $("#results").append(errHTML);
       });
     });
-    
+
     $('#search-text').focus();
 	});
 });
@@ -219,12 +122,15 @@ function parseRequests(text) {
   return requests;
 }
 
+/**
+ * Get the parts of the query and make sure it is a proper command
+ */
 function getParts(query) {
   let parts = [];
   let words = query.trim().split(" ");
   let cmd = words.pop().toLowerCase();
   if(cmd.match(cmdRegex)) {
-    parts[0] = searchAliases(characterAliases, words.join(" ").toLowerCase());
+    parts[0] = searchAliases(consts.characterAliases, words.join(" ").toLowerCase());
     parts[1] = cmd;
   }
   else {
@@ -322,38 +228,6 @@ function hasNumber(myString) {
   return /\d/.test(myString);
 }
 
-/**
- * Determines if the specified status is allowed and should be displayed in the text
- * @param statusName - the name of the status to be verified
- * @returns true if the status is allowed, false otherwise
- */
-function statusAllowed(statusName) {
-  let val = true;
-  for(let i = 0; i < ignoredStatuses.length; i++){
-    if(statusName.includes(ignoredStatuses[i])) {
-      val = false;
-      break;
-    }
-  }
-  return val;
-}
-
-//returns an array of status names
-function findStatusInText(text) {
-  let arr = [];
-  if(text.includes("grants")) {
-    arr = text.split("grants")[1].split("to")[0].split(","); //TODO lookout for statuses with commas in them
-    if(arr[arr.length-1].includes('and')) { //if there's an and
-      arr.push(arr[arr.length-1].split('and')[1]); //push last status on end of array
-      arr[arr.length-2] = arr[arr.length-2].split('and')[0]; //fix 2nd to last status
-    }
-    for(let i = 0; i < arr.length; i++) {
-      arr[i] = arr[i].trim(); //get rid of whitespace
-    }
-  }
-  return arr;
-}
-
 //findStatusInEffects
 //Look through statuses in effects and add them to an array
 
@@ -369,6 +243,7 @@ function searchAliases(aliasDict, name) {
   if( name === "WoL" ) { //TODO fix this?
     return "warrior of light";
   }
+  let key;
   for(key in aliasDict) {
     if(aliasDict[key].includes(name.toLowerCase())) {
       name = key;
@@ -383,7 +258,7 @@ function searchAliases(aliasDict, name) {
  * @returns charID - the integer ID of the character, -1 if charName is not in dictionary
  */
 function getCharacterID(charName) {
-  return (charIDs[charName] ? charIDs[charName] : -1);
+  return (consts.charIDs[charName] ? consts.charIDs[charName] : -1);
 }
 
 /**
@@ -397,12 +272,12 @@ function getTierSBsForCharID(charID, cbParams, request) {
       let SBs = `<p class='request lato'><b>Request</b> - ${request[0]} ${request[1].toUpperCase()}</p>`;
       let arr = [];
       if(cbParams.tierID === 0) { //if tierID = 0, get all SBs
-        json.forEach((json) => { SBs += formatSBJSON(json); });
+        json.forEach((json) => { SBs += formatter.formatSBJSON(json); });
       }
       else if(cbParams.index === 0) { //if there is no sb number e.g. cloud usb2
         json.forEach((json) => {
           if(json.soulBreakTier === cbParams.tierID) {
-            SBs += formatSBJSON(json);
+            SBs += formatter.formatSBJSON(json);
           }
         });
       }
@@ -413,7 +288,7 @@ function getTierSBsForCharID(charID, cbParams, request) {
           }
         });
         if(arr.length > cbParams.index-1) { //this should handle array out of bound exception
-          SBs += formatSBJSON(arr[cbParams.index-1]);
+          SBs += formatter.formatSBJSON(arr[cbParams.index-1]);
         }
         else {
           reject(new Error(`${request[0]} does not have ${cbParams.index} ${request[1].replace(/[0-9]/g, '')}s`));
@@ -422,8 +297,8 @@ function getTierSBsForCharID(charID, cbParams, request) {
       resolve(SBs);
     });
   });
-
 }
+
 /**
  * Gets the Legend Materia for the specified character
  * @param request - array containing the character name
@@ -447,7 +322,7 @@ function getLMsForChar(request) {
         let index = lmCmd.substring(numIndex, lmCmd.length);
         lmCmd = lmCmd.substring(0, numIndex);
         if(json.length > index-1) {
-          LMs += formatLMJSON(json[index-1]);
+          LMs += formatter.formatLMJSON(json[index-1]);
         }
         else {
           reject(new Error(`${request[0]} does not have ${index} ${lmCmd}s`));
@@ -455,7 +330,7 @@ function getLMsForChar(request) {
       }
       else {
         json.forEach((json) => {
-          LMs += formatLMJSON(json);
+          LMs += formatter.formatLMJSON(json);
         });
       }
       LMs += "</div>";
@@ -477,7 +352,7 @@ function getSoulBreak(request) {
       }
       else {
         json.forEach((json) => {
-          SBs += formatSBJSON(json);
+          SBs += formatter.formatSBJSON(json);
         });
         resolve(SBs);
       }
@@ -489,14 +364,14 @@ function getSoulBreak(request) {
  * TODO map IdLists to abilities
  */
 function getAbility(abilityName, abilDict) {
-  let abilName = searchAliases(abilityAliases, abilityName.toLowerCase());
+  let abilName = searchAliases(consts.abilityAliases, abilityName.toLowerCase());
   if(abilName in abilDict) {
     let id = abilDict[abilName];
     return new Promise(function(resolve,reject) {
       $.getJSON(`${apiBase}/Abilities/${id}`, function(json) {
         let abil = `<p class='request lato'><b>Request</b> - ${abilName} abil</p>`;
         json.forEach((json) => {
-          abil += formatAbilityJSON(json);
+          abil += formatter.formatAbilityJSON(json);
         });
         resolve(abil);
       });
@@ -512,7 +387,7 @@ function getRecordMateria(rmName) {
     $.getJSON(`${apiBase}/RecordMaterias/Name/${rmName}`, function(json) {
       let RMs = `<p class='request lato'><b>Request</b> - ${rmName} RM</p>`;
       json.forEach((json) => {
-        RMs += formatRMJSON(json);
+        RMs += formatter.formatRMJSON(json);
       });
       resolve(RMs);
     });
@@ -524,7 +399,7 @@ function getStatus(statusName) {
     $.getJSON(`${apiBase}/Statuses/CommonName/${statusName}`, function(json) {
       let statuses = `<p class='request lato'><b>Request</b> - ${statusName} Stat</p>`;
       json.forEach((json) => {
-        statuses += formatStatusJSON(json);
+        statuses += formatter.formatStatusJSON(json);
       });
       resolve(statuses);
     });
@@ -538,24 +413,22 @@ function getCharacter(charName) {
         return Promise.reject(new Error(`${charName} is not a valid character name`));
       }
       $.getJSON(`${apiBase}/Characters/${charID}`, function(json) {
+        let enlirID = json[0].EnlirID;
         let schools = [];
-        let schoolInfo = json[0].SchoolAccessInfos;
+        let schoolInfo = json[0].SchoolAccessInfos.filter(school => school.AccessLevel > 0); //filter out useless schools
         for(let i = 0; i < schoolInfo.length; i++) {
-          if(schoolInfo[i].AccessLevel > 0) {
-            let school = {};
-            school.schoolName = schoolInfo[i].SchoolName;
-            school.accessLevel = schoolInfo[i].AccessLevel;
-            schools.push(school);
-          }
+          let school = {};
+          school.schoolName = schoolInfo[i].SchoolName;
+          school.accessLevel = schoolInfo[i].AccessLevel;
+          schools.push(school);
         }
 
         let html = `<div class='result'><h3 class='result__name'>${json[0].Description}</h3>${formatSchoolTableJSON(schools)}`;
 
         let recordSpheres = [];
         for(let i = 0; i < json[0].RecordSpheres.length; i++) {
-          console.log(`${json[0].RecordSpheres[i].RecordSphereName} Levels: ${json[0].RecordSpheres[i].RecordSphereLevels} Length: ${json[0].RecordSpheres[i].RecordSphereLevels.length}`);
           for(let j = 0; j < json[0].RecordSpheres[i].RecordSphereLevels.length; j++) {
-              if(json[0].RecordSpheres[i].RecordSphereLevels[j].Benefit.includes(String.fromCharCode(9733))) {
+              if(json[0].RecordSpheres[i].RecordSphereLevels[j].Benefit.includes(String.fromCharCode(9733))) { //includes Star character
                  html += `<p>${json[0].RecordSpheres[i].RecordSphereLevels[j].Benefit}</p>`;
               }
           }
@@ -578,133 +451,6 @@ function getCharacter(charName) {
 }
 
 /**
- * SB helper
- */
-function getCommands(cmdArr) {
-    let commands = "";
-    for(let i = 0; i < cmdArr.length; i++) {
-      commands += "<div class='cmd'>";
-      //TODO create container for these so they never overlap
-      commands += "<img class='cmd__icon' src='" + cmdArr[i].imagePath.split('"')[0] + "'/>";
-      commands += `<div class='cmd__text'><p class='cmd__effect'>${cmdArr[i].effects}</p>`; //TODO SEARCH FOR STATUS
-
-      //School and Elements
-      commands += "<div class='flex'>";
-      commands += `<span class='margin-right'><b>Elements:</b> ${formatElements(cmdArr[i])}</span>`;
-      commands += `<span><b>School:</b> ${schoolDict[cmdArr[i].school]}</span>`;
-
-      commands += "</div>";
-
-      commands += `<div class='flex'><span class='margin-right'><b>Multiplier:</b> ${cmdArr[i].multiplier}</span>`;
-      commands += `<span><b>Cast Time:</b> ${cmdArr[i].castTime}</span></div>`;
-
-      //Multiplier and Cast Time
-      commands += "<div class='flex'>";
-
-      commands += `<span class='margin-right'><b>Target:</b> ${targetTypeDict[cmdArr[i].targetType]}</span>`;
-      commands += `<span><b>Type:</b> ${damageFormulaDict[cmdArr[i].damageFormulaType]}</span></div></div>`;
-
-      commands += "</div>";
-    }
-
-    return commands;
-}
-
-function getSBStatuses(statusJson, braveJson, statusArr) {
-    let statuses = "<div class='status'>";
-
-    for(let i = 0; i < statusJson.length; i++) {
-      //List so far: Poison, Minor Resist Dark (Resist?), KO, Instant KO, Protect, Shell, Magical Blink, Astra, Instant Cast
-
-      if(statusJson[i].description === "Brave Mode") {
-        statuses += "<span class='status__name'>" + statusJson[i].description + "</span>";
-
-        if(braveJson[0]) {
-          statuses += "<p class='braveMode__condition'>Condition - " + braveJson[0].braveCondition + "</p>";
-          statuses += "<div class='flex'><span class='margin-right braveMode__castTime'>Cast Time - " + braveJson[0].castTime + "</span>";
-          statuses += "<span class='braveMode__elements'>";
-          statuses += formatElements(braveJson[0]);
-          statuses += "</span></div>";
-          for(let j = 0; j < braveJson.length; j++) {
-            if(j === 0) {
-              statuses += "<p class='braveMode__desc'>" + braveJson[j].braveActionName + "</p>";
-            }
-            statuses += "<p class='braveMode__effects'>" + braveJson[j].braveLevel + " - " + braveJson[j].effects + "</p>";
-          }
-        }
-      }
-      else if(statusAllowed(statusJson[i].description)) { //make sure status is not 'blacklisted'
-        statuses += "<span class='status__name'>" + statusJson[i].description + "</span>";
-        statuses += "<p class='status__effect'>" + statusJson[i].effects + "</p>";
-      }
-    }
-    statuses += "</div>";
-    return statuses;
-}
-
-function getOtherEffects(jsonArr) {
-  let otherEffects = "<div class='otherEffects'>";
-  for(let i = 0; i < jsonArr.length; i++) {
-    if(jsonArr[i].description !== "Attack") {
-      otherEffects += "<span class='status__name'>" + jsonArr[i].description;
-      if(jsonArr[i].elements.length > 0) {
-        otherEffects += " - (";
-        otherEffects += formatElements(jsonArr[i]);
-        otherEffects += ")</span>";
-      }
-      else {
-        otherEffects += "</span>";
-      }
-      otherEffects += "<p class='otherEffects__effect'>" + jsonArr[i].effects + "</p>";
-    }
-  }
-  otherEffects += "</div>";
-  return otherEffects;
-}
-
-/**
- * This function will format the Soul Break JSON into a human-readable result.
- * @param json - the JSON from the API query
- * @returns HTML formatted string to represent the Soul Break
- * TODO add if the relic gives +element? relicName and relicId are provided
- */
-function formatSBJSON(json) {
-  let html = "<div class='sb-result'>";
-  let name = `<div class='sb'><h3 class='sb__name'>${json.description}</h3>`;
-  let icon = "<div class='sb__content'><img class='sb__icon' src='" + json.imagePath.split('"')[0] + "'/>";
-  let effect = `<div class='sb__text'><p class='sb__effect'>${json.effects}</p>`;
-  let entry = `<div class='flex'><span class='margin-right entry__castTime'><b>Element:</b> ${formatElements(json)}</span><span class='entry__elements'></span></div><div class='flex'><span class='margin-right entry__castTime'><b>Multiplier:</b> ${json.multiplier}</span><span class='entry__elements'><b>Cast Time:</b> ${json.castTime}</span></div><div class='flex'><span class='margin-right entry__castTime'><b>Target:</b> ${targetTypeDict[json.targetType]}</span><span class='entry__elements'><b>Type:</b> ${damageFormulaDict[json.damageFormulaType]}</span></div></div></div></div>`;
-
-  let commands = "";
-  let statuses = "";
-  let otherEffects = "";
-  let braveActions = "";
-  if(json.commands.length !== 0) {
-    commands = getCommands(json.commands);
-  }
-  if(json.statuses) {
-    let statusArr = findStatusInText(json.effects);
-    statuses = getSBStatuses(json.statuses, json.braveActions, statusArr);
-  }
-  if(json.otherEffects) {
-    otherEffects = getOtherEffects(json.otherEffects);
-  }
-
-  //braveCondition in braveActions specifies how to increment Brave
-  html += name + icon + effect + entry + statuses + otherEffects + commands + "</div>";
-  return html;
-}
-
-/**
- * TODO figure out what this should look like!
- * This function will format the Character JSON into a human-readable result.
- * @param json - the JSON from the API query
- */
-function formatCharacterJSON(json) {
-
-}
-
-/**
  * @param arr - array of objects containing schoolName and accessLevel
  */
 function formatSchoolTableJSON(arr) {
@@ -719,61 +465,8 @@ function formatSchoolTableJSON(arr) {
 }
 
 /**
- * This function will format the Legend Materia JSON into a human-readable result.
- * @param json - the JSON from the API query
+ * Initializes an ability dictionary in order to prevent multiple lookups for * ability IDs
  */
-function formatLMJSON(json) {
-  let html = "";
-  let name = "<div class='lm'><h4 class='lm__name'>" + json.description + "</h4>";
-  let icon = "<div class='lm__container'><img class='cmd__icon' src='" + json.imagePath.split('"')[0] + "'/>"; //TODO change name of this class
-  let effect = "<p class='lm__effect'>" + json.effect + "</p></div></div>";
-  html += name + icon + effect;
-  return html;
-}
-
-/**
- * This function will format the Record Materia JSON into a human-readable result.
- * @param json - the JSON from the API query
- */
-function formatRMJSON(json) {
-  let start = "<div class='result'>";
-  let name = "<h3 class='result__name'>" + json.recordMateriaName + "</h3>";
-  let icon = "<div class='icon-container'><img class='icon' src='" + json.imagePath.split('"')[0] + "'/>";
-  let effect = "<p class='effect'>" + json.effect + "</p></div>";
-  let unlock = "<p class='info'>Unlock Criteria - " + json.unlockCriteria + "</p>";
-  let end = "</div>";
-  return start + name + icon + effect + unlock +  end;
-}
-
-function formatStatusJSON(json, options) {
-  let start = "<div class='result'>";
-  let name = "<h3 class='result__name'>" + json.commonName + "</h3>";
-  let effect = "<div><p class='effect'>" + json.effects + "</p></div>";
-  let end = "</div>";
-  if(options === "append") {
-    return name + effect;
-  }
-  else {
-    return start + name + effect + end;
-  }
-}
-
-function formatAbilityJSON(json) {
-  let start = "<div class='result'>";
-  let name = "<h3 class='result__name'>" + json.abilityName + "</h3>";
-  let icon = "<div class='icon-container'><img class='icon' src='" + json.imagePath.split('"')[0] + "'/>";
-  let effect = "<p class='effect'>" + json.effects + "</p></div>";
-  let flexDiv = "<div class='flex'>";
-  let castTime = "<span class='margin-right info'><b>Cast Time:</b> " + json.castTime + "</span>";
-  let elements = "<span class='elements info'><b>Elements:</b> " + formatElements(json) + "</span>";
-  let multiplier = "<span class='info'><b>Multiplier:</b> " + json.multiplier + "</span>";
-  let school = "<span class='margin-right info'><b>School:</b> " + schoolDict[json.school] + "</span>";
-  let sbGain = "<span class='margin-right info'><b>SB Gain:</b> " + json.soulBreakPointsGained + "</span>";
-  let target = "<span class='info'><b>Target:</b> " + targetTypeDict[json.targetType] + "</span>";
-  let endDiv = "</div>";
-  return start + name + icon + effect + flexDiv + castTime + elements + endDiv + flexDiv + school + multiplier + endDiv + flexDiv + sbGain + target + endDiv + formatOrbRequirements(json) + endDiv;
-}
-
 function createAbilityDict() {
   let abilDict = {};
   return new Promise(function(resolve,reject) {
@@ -784,80 +477,4 @@ function createAbilityDict() {
       resolve(abilDict);
     });
   });
-}
-
-
-/**
- * This helper function will find the element name to match the ID passed in
- * @param elementID - the element ID
- * @returns human readable element name
- */
-function parseElementNumber(elementID) {
-  let elementName = elementDict[elementID];
-  if(elementName === '-') {
-    return 'NE';
-  }
-  else {
-    return elementName;
-  }
-}
-
-// function animateCSS(element, animationName, callback) {
-//     const node = document.querySelector(element)
-//     node.classList.add('animated', animationName)
-
-//     function handleAnimationEnd() {
-//         node.classList.remove('animated', animationName)
-//         node.removeEventListener('animationend', handleAnimationEnd)
-
-//         if (typeof callback === 'function') callback()
-//     }
-
-//     node.addEventListener('animationend', handleAnimationEnd)
-// }
-
-function formatElements(json) {
-  let elements = "";
-  for (let j = 0; j < json.elements.length; j++) {
-    elements += parseElementNumber(json.elements[j]);
-    if (j !== json.elements.length - 1) {
-      elements += ", ";
-    }
-  }
-  return elements;
-}
-
-function formatOrbRequirements(json) {
-  let orbReqs = "<p class='info'>Hone Requirements</p><table class='info' border='1'><thead>";
-  let headerRow = "<tr><th>Rank</th>";
-  let row1 = "<tbody class='center'><tr><td>R1</td>";
-  let row2 = "<tr><td>R2</td>";
-  let row3 = "<tr><td>R3</td>";
-  let row4 = "<tr><td>R4</td>";
-  let row5 = "<tr><td>R5</td>";
-  for(let i = 0; i < json.orbRequirements.length; i++) {
-    switch(i % 5) {
-      case 0:
-        if(json.orbRequirements[i].orbName !== "Ability Record") {
-          headerRow += "<th>" + json.orbRequirements[i].orbName + "</th>";
-          row1 += "<td>" + json.orbRequirements[i].orbCount + "</td>";
-        }
-        break;
-      case 1:
-        row2 += "<td>" + json.orbRequirements[i].orbCount + "</td>";
-        break;
-      case 2:
-        row3 += "<td>" + json.orbRequirements[i].orbCount + "</td>";
-        break;
-      case 3:
-        row4 += "<td>" + json.orbRequirements[i].orbCount + "</td>";
-        break;
-      case 4:
-        row5 += "<td>" + json.orbRequirements[i].orbCount + "</td>";
-        break;
-    }
-  }
-  headerRow += "</tr></thead>";
-  row5 += "</tbody></table>";
-  return orbReqs + headerRow + row1 + row2 + row3 + row4 + row5;
 }
