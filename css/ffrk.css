@@ -9,6 +9,9 @@ html, body {
   font-size: 100%; }
 
 /* Chrome Extension ONLY */
+#body {
+  width: 370px; }
+
 /* FFRK Styles */
 .header {
   height: 65px; }

@@ -1,20 +1,19 @@
 {
-
   "manifest_version": 2,
   "name": "FFRK Lookup",
   "version": "1.0",
-
   "description": "This extension is used as a quick reference tool for Enlir's FFRK spreadsheet.",
-
   "icons": {
     "48": "tyro-48.png",
     "128": "tyro-128.png"
   },
-
   "browser_action": {
-    "default_icon": "icons/tyro-48.png",
+    "browser_style": true,
+    "default_icon": {
+      "48": "tyro-48.png"
+    },
     "default_title": "FFRK Lookup",
     "default_popup": "index.html"
   },
-
+  "content_security_policy": "script-src 'self' https://*.jquery.com; object-src 'self'"
 }
