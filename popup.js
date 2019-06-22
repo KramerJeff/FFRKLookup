@@ -4,7 +4,7 @@ import * as consts from '/scripts/constants.js';
 "use strict";
 //var bgPage = chrome.extension.getBackgroundPage();
 const apiBase = "https://ffrkapi.azurewebsites.net/api/v1.0/";
-const imgBase = "https://dff.sp.mbga.jp/dff/static/lang/image/buddy/";
+const imgBase = "https://dff.sp.mbga.jp/dff/static/lang/image/buddy";
 const imgEnd = "base_hands_up.png";
 
 
@@ -413,7 +413,7 @@ function getCharacter(charName) {
         return Promise.reject(new Error(`${charName} is not a valid character name`));
       }
       $.getJSON(`${apiBase}/Characters/${charID}`, function(json) {
-        let enlirID = json[0].EnlirID;
+        let enlirID = json[0].EnlirId;
         let schools = [];
         let schoolInfo = json[0].SchoolAccessInfos.filter(school => school.AccessLevel > 0); //filter out useless schools
         for(let i = 0; i < schoolInfo.length; i++) {
@@ -423,7 +423,7 @@ function getCharacter(charName) {
           schools.push(school);
         }
 
-        let html = `<div class='result'><h3 class='result__name'>${json[0].Description}</h3>${formatSchoolTableJSON(schools)}`;
+        let html = `<img src=${imgBase}/${enlirID}/${imgEnd}><div class='result'><h3 class='result__name'>${json[0].Description}</h3>${formatSchoolTableJSON(schools)}`;
 
         let recordSpheres = [];
         for(let i = 0; i < json[0].RecordSpheres.length; i++) {
