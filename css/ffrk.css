@@ -60,11 +60,23 @@ html, body {
     display: inline-block;
     font-size: 13px; }
 
+.title-container {
+  display: flex;
+  align-items: center; }
+  .title-container .social-link {
+    margin-left: 0.5rem; }
+    .title-container .social-link:nth-child(2) {
+      margin-left: auto; }
+
+.social {
+  width: 32px;
+  height: 32px; }
+
 .tutorial {
   font-size: 13px;
   margin-left: auto; }
 
-#search-button, #search-text, .bug {
+#search-button, .bug {
   font-size: 12px; }
 
 h3, span, #search-button, #search-text, .title__desc, .tutorial, .lm__name, .lato {
@@ -101,7 +113,9 @@ tbody.left th {
   width: 95%;
   border: 1px solid grey;
   border-radius: 5px;
-  padding: 3px 3px 3px 4px; }
+  padding: 3px 3px 3px 4px;
+  height: 25px;
+  font-size: 14px; }
   @media screen and (min-width: 48em) {
     #search-text {
       width: 97%; } }
@@ -110,14 +124,14 @@ tbody.left th {
   width: 110px; }
 
 #search-button {
-  border: 1px solid grey;
+  border: 1px solid #398CBD;
   border-radius: 5px;
-  padding: 3px 6px;
+  padding: 7px 6px;
   width: 10%;
-  min-width: 50px; }
-  @media screen and (min-width: 48em) {
-    #search-button {
-      width: 14%; } }
+  min-width: 60px;
+  background-color: #398CBD;
+  font-size: 14px;
+  color: #FFFFFF; }
 
 /**
  * Soul Break Results
@@ -326,4 +340,8 @@ tbody.left th {
 
 @media screen and (min-width: 48em) {
   .easy-autocomplete {
-    width: 85% !important; } }
+    width: 88% !important; } }
+
+@media screen and (min-width: 62em) {
+  .easy-autocomplete {
+    width: 89% !important; } }
