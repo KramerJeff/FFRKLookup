@@ -424,7 +424,7 @@ function getCharacter(charName) {
         }
 
         let html = `<img src=${imgBase}/${enlirID}/${imgEnd}><div class='result'><h3 class='result__name'>${json[0].Description}</h3>${formatSchoolJSON(schools)}`;
-
+        
         let recordSpheres = [];
         for(let i = 0; i < json[0].RecordSpheres.length; i++) {
           for(let j = 0; j < json[0].RecordSpheres[i].RecordSphereLevels.length; j++) {
