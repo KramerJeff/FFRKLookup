@@ -57,6 +57,17 @@ html, body {
     display: inline-block;
     font-size: 13px; }
 
+.social-link {
+  margin-left: auto; }
+
+.social {
+  width: 32px;
+  height: 32px; }
+
+.title-container {
+  display: flex;
+  align-items: center; }
+
 .tutorial {
   font-size: 13px;
   margin-left: auto; }
@@ -325,4 +336,4 @@ tbody.left th {
 
 @media screen and (min-width: 48em) {
   .easy-autocomplete {
-    width: 85% !important; } }
+    width: 89% !important; } }

@@ -80,6 +80,18 @@ html, body {
     font-size: 13px;
   }
 }
+.social-link {
+  margin-left:auto;
+}
+.social {
+  width: 32px;
+  height: 32px;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+}
 
 .tutorial {
   font-size: 13px;
@@ -407,6 +419,6 @@ tbody.left th {
 
 .easy-autocomplete{
   @media screen and (min-width: $medium) {
-    width:85% !important;
+    width:89% !important;
   }
 }
