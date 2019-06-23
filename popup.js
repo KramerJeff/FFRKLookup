@@ -423,7 +423,7 @@ function getCharacter(charName) {
           schools.push(school);
         }
 
-        let html = `<img src=${imgBase}/${enlirID}/${imgEnd}><div class='result'><h3 class='result__name'>${json[0].Description}</h3>${formatSchoolTableJSON(schools)}`;
+        let html = `<img src=${imgBase}/${enlirID}/${imgEnd}><div class='result'><h3 class='result__name'>${json[0].Description}</h3>${formatSchoolJSON(schools)}`;
 
         let recordSpheres = [];
         for(let i = 0; i < json[0].RecordSpheres.length; i++) {
@@ -456,9 +456,37 @@ function getCharacter(charName) {
 function formatSchoolTableJSON(arr) {
   let html = `<table class='info' border='1'><thead><tr><th>School</th><th>Access Level</th></tr></thead><tbody class='center'>`;
   for(let i = 0; i < arr.length; i++) {
-    html += `<tr><td>${arr[i].schoolName}</td><td>${arr[i].accessLevel}</td></tr>`;
+    if(consts.nightmareSchools.includes(arr[i].schoolName) && arr[i].accessLevel === 5) {
+      html += `<tr><td>${arr[i].schoolName}</td><td>6</td></tr>`;
+    }
+    else {
+      html += `<tr><td>${arr[i].schoolName}</td><td>${arr[i].accessLevel}</td></tr>`;
+    }
     if(i === arr.length-1) {
       html += `</tbody></table>`;
+    }
+  }
+  return html;
+}
+
+/**
+ * @param arr - array of objects containing schoolName and accessLevel
+ */
+function formatSchoolJSON(arr) {
+  let html = ``;
+  for(let i = 0; i < arr.length; i++) {
+    if(consts.nightmareSchools.includes(arr[i].schoolName) && arr[i].accessLevel === 5) {
+      html += `<span>${arr[i].schoolName} 6`;
+    }
+    else {
+      html += `<span>${arr[i].schoolName} ${arr[i].accessLevel}`;
+    }
+
+    if(i !== arr.length-1) {
+      html += `, </span>`;
+    }
+    else {
+      html += `</span>`;
     }
   }
   return html;

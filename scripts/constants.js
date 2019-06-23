@@ -102,3 +102,5 @@ export const abilityAliases = {
 };
 
 export const ignoredStatuses = ["Remove", "Reraise", "Haste", "Burst Mode", "Imp", "Attach", "Blink"];
+
+export const nightmareSchools = ["Support", "Combat", "White Magic", "Celerity", "Black Magic", "Summoning"];

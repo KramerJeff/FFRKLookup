@@ -9,7 +9,8 @@ import * as consts from '/scripts/constants.js';
  */
 export function formatSBJSON(json) {
   let html = "<div class='sb-result'>";
-  let name = `<div class='sb'><h3 class='sb__name'>${json.description}</h3>`;
+  let name = `<div class='sb'><h3 class='sb__name'>${json.description}`;
+  name += (json.isInGlobal) ? `</h3>` : ` (JP)</h3>`;
   let icon = "<div class='sb__content'><img class='sb__icon' src='" + json.imagePath.split('"')[0] + "'/>";
   let effect = `<div class='sb__text'><p class='sb__effect'>${json.effects}</p>`;
   let entry = `<div class='flex'><span class='margin-right entry__castTime'><b>Element:</b> ${formatElements(json)}</span><span class='entry__elements'></span></div><div class='flex'><span class='margin-right entry__castTime'><b>Multiplier:</b> ${json.multiplier}</span><span class='entry__elements'><b>Cast Time:</b> ${json.castTime}</span></div><div class='flex'><span class='margin-right entry__castTime'><b>Target:</b> ${consts.targetTypeDict[json.targetType]}</span><span class='entry__elements'><b>Type:</b> ${consts.damageFormulaDict[json.damageFormulaType]}</span></div></div></div></div>`;
@@ -210,7 +211,8 @@ function parseElementNumber(elementID) {
 
 export function formatAbilityJSON(json) {
   let start = "<div class='result'>";
-  let name = "<h3 class='result__name'>" + json.abilityName + "</h3>";
+  let name = `<h3 class='result__name'>${json.abilityName}`;
+  name += (json.isInGlobal) ? `</h3>` : ` (JP)</h3>`;
   let icon = "<div class='icon-container'><img class='icon' src='" + json.imagePath.split('"')[0] + "'/>";
   let effect = "<p class='effect'>" + json.effects + "</p></div>";
   let flexDiv = "<div class='flex'>";
@@ -231,12 +233,7 @@ export function formatAbilityJSON(json) {
 export function formatLMJSON(json) {
   let html = "";
   let name = `<div class='lm'><h4 class='lm__name'>${json.description}`;
-  if(json.isInGlobal) {
-    name += `</h4>`;
-  }
-  else {
-    name += ` (JP)</h4>`;
-  }
+  name += (json.isInGlobal) ? `</h4>` : ` (JP)</h4>`;
   let icon = "<div class='lm__container'><img class='cmd__icon' src='" + json.imagePath.split('"')[0] + "'/>"; //TODO change name of this class
   let effect = "<p class='lm__effect'>" + json.effect + "</p></div></div>";
   html += name + icon + effect;

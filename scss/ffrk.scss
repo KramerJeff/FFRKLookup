@@ -1,9 +1,9 @@
 $base-font-size: 14px;
 $bg-color: #398CBD;
 
-$small: 36em;
-$medium: 48em;
-$large: 62em;
+$small: 36em; //576px
+$medium: 48em; //768px
+$large: 62em; //992px
 $xlarge: 75em;
 
 /* UNIVERSAL */
@@ -427,6 +427,9 @@ tbody.left th {
 
 .easy-autocomplete{
   @media screen and (min-width: $medium) {
+    width:88% !important;
+  }
+  @media screen and (min-width: $large) {
     width:89% !important;
   }
 }

@@ -337,4 +337,8 @@ tbody.left th {
 
 @media screen and (min-width: 48em) {
   .easy-autocomplete {
+    width: 88% !important; } }
+
+@media screen and (min-width: 62em) {
+  .easy-autocomplete {
     width: 89% !important; } }

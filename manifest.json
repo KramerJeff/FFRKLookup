@@ -3,17 +3,17 @@
 
   "name": "FFRK Lookup",
   "short_name": "FFRKLookup",
-  "description": "This extension is used as a quick reference tool for Enlir's FFRK spreadsheet",
-  "version": "1.0.4",
+  "description": "This extension is used as a quick reference tool for the Enlir/Community FFRK spreadsheet",
+  "version": "1.1.0",
   "browser_action": {
-   "default_icon": "tyro.png",
+   "default_icon": "images/tyro.png",
    "default_popup": "index.html"
   },
   "icons": {
-    "16": "tyro-16.png",
-    "48": "tyro-48.png",
-    "128": "tyro-128.png",
-    "256": "tyro.png"
+    "16": "images/tyro-16.png",
+    "48": "images/tyro-48.png",
+    "128": "images/tyro-128.png",
+    "256": "images/tyro.png"
   },
   "content_security_policy": "script-src 'self' https://code.jquery.com/; object-src 'self'",
   "permissions": [
