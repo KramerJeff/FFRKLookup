@@ -230,7 +230,13 @@ export function formatAbilityJSON(json) {
  */
 export function formatLMJSON(json) {
   let html = "";
-  let name = "<div class='lm'><h4 class='lm__name'>" + json.description + "</h4>";
+  let name = `<div class='lm'><h4 class='lm__name'>${json.description}`;
+  if(json.isInGlobal) {
+    name += `</h4>`;
+  }
+  else {
+    name += ` (JP)</h4>`;
+  }
   let icon = "<div class='lm__container'><img class='cmd__icon' src='" + json.imagePath.split('"')[0] + "'/>"; //TODO change name of this class
   let effect = "<p class='lm__effect'>" + json.effect + "</p></div></div>";
   html += name + icon + effect;

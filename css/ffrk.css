@@ -9,9 +9,6 @@ html, body {
   font-size: 100%; }
 
 /* Chrome Extension ONLY */
-#body {
-  width: 370px; }
-
 /* FFRK Styles */
 .header {
   height: 65px; }
@@ -60,16 +57,17 @@ html, body {
     display: inline-block;
     font-size: 13px; }
 
-.social-link {
-  margin-left: auto; }
+.title-container {
+  display: flex;
+  align-items: center; }
+  .title-container .social-link {
+    margin-left: 0.5rem; }
+    .title-container .social-link:nth-child(2) {
+      margin-left: auto; }
 
 .social {
   width: 32px;
   height: 32px; }
-
-.title-container {
-  display: flex;
-  align-items: center; }
 
 .tutorial {
   font-size: 13px;

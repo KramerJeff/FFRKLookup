@@ -19,9 +19,9 @@ html, body {
 }
 
 /* Chrome Extension ONLY */
-#body {
-  width: 370px;
-}
+// #body {
+//   width: 800px;
+// }
 
 /* FFRK Styles */
 
@@ -80,8 +80,17 @@ html, body {
     font-size: 13px;
   }
 }
-.social-link {
-  margin-left:auto;
+
+.title-container {
+  display: flex;
+  align-items: center;
+  & .social-link {
+    margin-left: 0.5rem;
+    &:nth-child(2) {
+      margin-left: auto;
+    }
+  }
+
 }
 .social {
   width: 32px;
@@ -89,8 +98,7 @@ html, body {
 }
 
 .title-container {
-  display: flex;
-  align-items: center;
+
 }
 
 .tutorial {
