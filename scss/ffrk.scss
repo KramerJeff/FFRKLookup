@@ -1,9 +1,9 @@
 $base-font-size: 14px;
 $bg-color: #398CBD;
 
-$small: 36em;
-$medium: 48em;
-$large: 62em;
+$small: 36em; //576px
+$medium: 48em; //768px
+$large: 62em; //992px
 $xlarge: 75em;
 
 /* UNIVERSAL */
@@ -16,11 +16,6 @@ html, body {
   left: 0;
   top: 0;
   font-size: 100%;
-}
-
-/* Chrome Extension ONLY */
-#body {
-  width: 370px;
 }
 
 /* FFRK Styles */
@@ -79,6 +74,26 @@ html, body {
     display: inline-block;
     font-size: 13px;
   }
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  & .social-link {
+    margin-left: 0.5rem;
+    &:nth-child(2) {
+      margin-left: auto;
+    }
+  }
+
+}
+.social {
+  width: 32px;
+  height: 32px;
+}
+
+.title-container {
+
 }
 
 .tutorial {
@@ -407,6 +422,9 @@ tbody.left th {
 
 .easy-autocomplete{
   @media screen and (min-width: $medium) {
-    width:85% !important;
+    width:88% !important;
+  }
+  @media screen and (min-width: $large) {
+    width:89% !important;
   }
 }

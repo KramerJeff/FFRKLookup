@@ -8,10 +8,6 @@ html, body {
   top: 0;
   font-size: 100%; }
 
-/* Chrome Extension ONLY */
-#body {
-  width: 370px; }
-
 /* FFRK Styles */
 .header {
   height: 65px; }
@@ -59,6 +55,18 @@ html, body {
   .title__desc {
     display: inline-block;
     font-size: 13px; }
+
+.title-container {
+  display: flex;
+  align-items: center; }
+  .title-container .social-link {
+    margin-left: 0.5rem; }
+    .title-container .social-link:nth-child(2) {
+      margin-left: auto; }
+
+.social {
+  width: 32px;
+  height: 32px; }
 
 .tutorial {
   font-size: 13px;
@@ -328,4 +336,8 @@ tbody.left th {
 
 @media screen and (min-width: 48em) {
   .easy-autocomplete {
-    width: 85% !important; } }
+    width: 88% !important; } }
+
+@media screen and (min-width: 62em) {
+  .easy-autocomplete {
+    width: 89% !important; } }
