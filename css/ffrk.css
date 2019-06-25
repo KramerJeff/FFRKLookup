@@ -292,6 +292,9 @@ tbody.left th {
 .margin-right {
   margin-right: auto; }
 
+.col-2 {
+  max-width: 50%; }
+
 .padding-top {
   padding-top: 8px; }
 
