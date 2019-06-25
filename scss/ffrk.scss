@@ -357,6 +357,16 @@ tbody.left th {
 }
 
 
+/** CHARACTER **/
+.char-title {
+  display: flex;
+  align-items: center;
+  &__img {
+    width: 72px;
+    height: 72px;
+  }
+}
+
 /** HELPERS **/
 .margin-right {
   margin-right: auto;

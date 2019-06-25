@@ -92,7 +92,8 @@ export const characterAliases = {
   "cloud of darkness": "cod",
   "red xiii": ["nanaki", "red13", "red 13"],
   "gogo (v)": ["gogo v", "gogo5", "gogo 5"],
-  "gogo (vi)": ["gogo vi", "gogo6", "gogo 6"]
+  "gogo (vi)": ["gogo vi", "gogo6", "gogo 6"],
+  "enna": ["enna kros"]
 };
 
 export const abilityAliases = {

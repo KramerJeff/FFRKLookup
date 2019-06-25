@@ -279,6 +279,71 @@ export function formatStatusJSON(json, options) {
 }
 
 /**
+ * @param arr - array of objects containing schoolName and accessLevel
+ */
+export function formatSchoolJSON(arr) {
+  let html = `<p><b>Abilities: </b>`;
+  for(let i = 0; i < arr.length; i++) {
+    if(consts.nightmareSchools.includes(arr[i].schoolName) && arr[i].accessLevel === 5) {
+      html += `${arr[i].schoolName}&nbsp;6`;
+    }
+    else {
+      html += `${arr[i].schoolName}&nbsp;${arr[i].accessLevel}`;
+    }
+
+    if(i !== arr.length-1) {
+      html += `, `;
+    }
+    else {
+      html += `</p>`;
+    }
+  }
+  return html;
+}
+
+export function formatWeaponsJSON(arr) {
+  let html = `<p><b>Weapons: </b>`;
+  console.log(arr.length + ' ' + arr[0]);
+  for(let i = 0; i < arr.length; i++) {
+    if(i !== arr.length-1) {
+      html += `${arr[i].EquipmentName}, `;
+    }
+    else {
+      html += `${arr[i].EquipmentName}`;
+    }
+  }
+  html += `</p>`;
+  return html;
+}
+
+export function formatRecordSphereAbilJSON(arr, charName) {
+  let html = `<p><b>Dive Abilities: </b>`;
+  for(let i = 0; i < arr.length; i++) {
+    //html += (i !== arr.length-1) ? `${arr[i]}, ` : `${arr[i]}` ;
+    if(arr[i].includes('->')) {
+      let splitArr = arr[i].split(' -> ');
+      if(charName === 'Onion Knight' && (splitArr[0].slice(0, -3) !== 'Ninja')) {
+        html += `${splitArr[0].slice(0, -3)} 6`;
+      }
+      else {
+        html += `${splitArr[0].slice(0, -3)} ${splitArr[1].slice(0, -1)}`;
+      }
+    }
+    else if(arr[i].includes('Enable')) {
+      let splitArr = arr[i].split(' ');
+      html += `${splitArr[1]} ${splitArr[2].slice(0, -1)}`;
+    }
+
+    if(i !== arr.length-1) {
+      html += `, `;
+    }
+
+  }
+  html += `</p>`;
+  return html;
+}
+
+/**
  * TODO figure out what this should look like!
  * This function will format the Character JSON into a human-readable result.
  * @param json - the JSON from the API query

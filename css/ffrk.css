@@ -284,6 +284,14 @@ tbody.left th {
 .character__name, .result__name {
   margin: 0 0 8px 0; }
 
+/** CHARACTER **/
+.char-title {
+  display: flex;
+  align-items: center; }
+  .char-title__img {
+    width: 72px;
+    height: 72px; }
+
 /** HELPERS **/
 .margin-right {
   margin-right: auto; }

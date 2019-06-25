@@ -422,18 +422,24 @@ function getCharacter(charName) {
           school.accessLevel = schoolInfo[i].AccessLevel;
           schools.push(school);
         }
+        let weaponAccess = json[0].EquipmentAccessInfos.filter(weapon => weapon.CanAccess === true);
+        let html = `<div class='result'>
+          <div class='char-title'>
+            <img src=${imgBase}/${enlirID}/${imgEnd} class='char-title__img'>
+            <h3 class='result__name'>${json[0].Description}</h3>
+          </div>`;
+        html += `${formatter.formatWeaponsJSON(weaponAccess)}`;
+        html += `${formatter.formatSchoolJSON(schools)}`;
 
-        let html = `<img src=${imgBase}/${enlirID}/${imgEnd}><div class='result'><h3 class='result__name'>${json[0].Description}</h3>${formatSchoolJSON(schools)}`;
-        
         let recordSpheres = [];
         for(let i = 0; i < json[0].RecordSpheres.length; i++) {
           for(let j = 0; j < json[0].RecordSpheres[i].RecordSphereLevels.length; j++) {
               if(json[0].RecordSpheres[i].RecordSphereLevels[j].Benefit.includes(String.fromCharCode(9733))) { //includes Star character
-                 html += `<p>${json[0].RecordSpheres[i].RecordSphereLevels[j].Benefit}</p>`;
+                recordSpheres.push(json[0].RecordSpheres[i].RecordSphereLevels[j].Benefit);
               }
           }
         }
-
+        html += `${formatter.formatRecordSphereAbilJSON(recordSpheres, json[0].Description)}`
         html += '</div>';
         //recordSpheres[0].recordSphereLevels[0].benefit contains ->
         // split (★)[1].lastChar
@@ -464,29 +470,6 @@ function formatSchoolTableJSON(arr) {
     }
     if(i === arr.length-1) {
       html += `</tbody></table>`;
-    }
-  }
-  return html;
-}
-
-/**
- * @param arr - array of objects containing schoolName and accessLevel
- */
-function formatSchoolJSON(arr) {
-  let html = ``;
-  for(let i = 0; i < arr.length; i++) {
-    if(consts.nightmareSchools.includes(arr[i].schoolName) && arr[i].accessLevel === 5) {
-      html += `<span>${arr[i].schoolName} 6`;
-    }
-    else {
-      html += `<span>${arr[i].schoolName} ${arr[i].accessLevel}`;
-    }
-
-    if(i !== arr.length-1) {
-      html += `, </span>`;
-    }
-    else {
-      html += `</span>`;
     }
   }
   return html;
