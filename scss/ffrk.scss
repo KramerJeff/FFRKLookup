@@ -18,6 +18,10 @@ html, body {
   font-size: 100%;
 }
 
+#body {
+  width: 370px;
+}
+
 /* FFRK Styles */
 .header {
   height: 65px;
@@ -180,7 +184,6 @@ tbody.left th {
 .request {
   text-transform: capitalize;
   font-size: 22px;
-  padding-top: 16px;
   @media screen and (min-width: $medium) {
     font-size: 24px;
   }

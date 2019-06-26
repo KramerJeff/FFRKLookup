@@ -8,6 +8,9 @@ html, body {
   top: 0;
   font-size: 100%; }
 
+#body {
+  width: 370px; }
+
 /* FFRK Styles */
 .header {
   height: 65px; }
@@ -138,8 +141,7 @@ tbody.left th {
 }*/
 .request {
   text-transform: capitalize;
-  font-size: 22px;
-  padding-top: 16px; }
+  font-size: 22px; }
   @media screen and (min-width: 48em) {
     .request {
       font-size: 24px; } }

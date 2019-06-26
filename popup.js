@@ -269,7 +269,7 @@ function getCharacterID(charName) {
 function getTierSBsForCharID(charID, cbParams, request) {
   return new Promise(function(resolve, reject) {
     $.getJSON(apiBase + "/SoulBreaks/Character/" + charID, function(json) {
-      let SBs = `<p class='request lato'><b>Request</b> - ${request[0]} ${request[1].toUpperCase()}</p>`;
+      let SBs = `<div class='result'><p class='request lato'><b>Request</b> - ${request[0]} ${request[1].toUpperCase()}</p>`;
       let arr = [];
       if(cbParams.tierID === 0) { //if tierID = 0, get all SBs
         json.forEach((json) => { SBs += formatter.formatSBJSON(json); });
@@ -294,6 +294,7 @@ function getTierSBsForCharID(charID, cbParams, request) {
           reject(new Error(`${request[0]} does not have ${cbParams.index} ${request[1].replace(/[0-9]/g, '')}s`));
         }
       }
+      SBs += '</div>';
       resolve(SBs);
     });
   });
@@ -425,8 +426,8 @@ function getCharacter(charName) {
         let weaponAccess = json[0].EquipmentAccessInfos.filter(weapon => weapon.CanAccess === true);
         let html = `<div class='result'>
           <div class='char-title'>
+            <p class='request lato'><b>Request</b> - ${json[0].Description} char</p>
             <img src=${imgBase}/${enlirID}/${imgEnd} class='char-title__img'>
-            <h3 class='result__name'>${json[0].Description}</h3>
           </div>`;
         html += `${formatter.formatWeaponsJSON(weaponAccess)}`;
         html += `${formatter.formatSchoolJSON(schools)}`;
