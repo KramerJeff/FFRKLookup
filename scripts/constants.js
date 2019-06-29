@@ -105,3 +105,7 @@ export const abilityAliases = {
 export const ignoredStatuses = ["Remove", "Reraise", "Haste", "Burst Mode", "Imp", "Attach", "Blink"];
 
 export const nightmareSchools = ["Support", "Combat", "White Magic", "Celerity", "Black Magic", "Summoning"];
+
+export const fiveStarBaseURL = "https://vignette.wikia.nocookie.net/finalfantasy/images";
+
+export const fiveStarMotes = {"Dexterity": "3/3c/FFRK_Dexterity_Mote_5.png","Vitality": "7/72/FFRK_Vitality_Mote_5.png","Spirit": "e/e2/FFRK_Spirit_Mote_5.png", "Bravery": "c/c7/FFRK_Bravery_Mote_5.png", "Wisdom": "4/4f/FFRK_Wisdom_Mote_5.png"};
