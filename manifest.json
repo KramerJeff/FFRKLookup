@@ -14,6 +14,5 @@
     },
     "default_title": "FFRK Lookup",
     "default_popup": "index.html"
-  },
-  "content_security_policy": "script-src 'self' https://*.jquery.com; object-src 'self'"
+  }
 }

@@ -10,7 +10,7 @@ const imgEnd = "base_hands_up.png";
 
 const sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|GSB\+|FSB|AASB|Glint|Glint\+/gi; //lcsb is caught by the CSB
 const lmRegex = /LM|LMR/gi;
-const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|GSB\+|FSB|AASB|Glint|Glint\+|lm|lmr|abil|ability|rm|stat|char/gi;
+const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|GSB|GSB\+|FSB|AASB|Glint|Glint\+|lm|lmr|abil|ability|rm|stat|char|rd|ld|rdive|ldive/gi;
 
 
 $(function () {
@@ -269,7 +269,7 @@ function getCharacterID(charName) {
 function getTierSBsForCharID(charID, cbParams, request) {
   return new Promise(function(resolve, reject) {
     $.getJSON(apiBase + "/SoulBreaks/Character/" + charID, function(json) {
-      let SBs = `<p class='request lato'><b>Request</b> - ${request[0]} ${request[1].toUpperCase()}</p>`;
+      let SBs = `<div class='result'><p class='request lato'><b>Request</b> - ${request[0]} ${request[1].toUpperCase()}</p>`;
       let arr = [];
       if(cbParams.tierID === 0) { //if tierID = 0, get all SBs
         json.forEach((json) => { SBs += formatter.formatSBJSON(json); });
@@ -294,6 +294,7 @@ function getTierSBsForCharID(charID, cbParams, request) {
           reject(new Error(`${request[0]} does not have ${cbParams.index} ${request[1].replace(/[0-9]/g, '')}s`));
         }
       }
+      SBs += '</div>';
       resolve(SBs);
     });
   });
@@ -422,18 +423,24 @@ function getCharacter(charName) {
           school.accessLevel = schoolInfo[i].AccessLevel;
           schools.push(school);
         }
+        let weaponAccess = json[0].EquipmentAccessInfos.filter(weapon => weapon.CanAccess === true);
+        let html = `<div class='result'>
+          <div class='char-title'>
+            <p class='request lato'><b>Request</b> - ${json[0].Description} char</p>
+            <img src=${imgBase}/${enlirID}/${imgEnd} class='char-title__img'>
+          </div>`;
+        html += `${formatter.formatWeaponsJSON(weaponAccess)}`;
+        html += `${formatter.formatSchoolJSON(schools)}`;
 
-        let html = `<img src=${imgBase}/${enlirID}/${imgEnd}><div class='result'><h3 class='result__name'>${json[0].Description}</h3>${formatSchoolJSON(schools)}`;
-        
         let recordSpheres = [];
         for(let i = 0; i < json[0].RecordSpheres.length; i++) {
           for(let j = 0; j < json[0].RecordSpheres[i].RecordSphereLevels.length; j++) {
               if(json[0].RecordSpheres[i].RecordSphereLevels[j].Benefit.includes(String.fromCharCode(9733))) { //includes Star character
-                 html += `<p>${json[0].RecordSpheres[i].RecordSphereLevels[j].Benefit}</p>`;
+                recordSpheres.push(json[0].RecordSpheres[i].RecordSphereLevels[j].Benefit);
               }
           }
         }
-
+        html += `${formatter.formatRecordSphereAbilJSON(recordSpheres, json[0].Description)}`
         html += '</div>';
         //recordSpheres[0].recordSphereLevels[0].benefit contains ->
         // split (★)[1].lastChar
@@ -464,29 +471,6 @@ function formatSchoolTableJSON(arr) {
     }
     if(i === arr.length-1) {
       html += `</tbody></table>`;
-    }
-  }
-  return html;
-}
-
-/**
- * @param arr - array of objects containing schoolName and accessLevel
- */
-function formatSchoolJSON(arr) {
-  let html = ``;
-  for(let i = 0; i < arr.length; i++) {
-    if(consts.nightmareSchools.includes(arr[i].schoolName) && arr[i].accessLevel === 5) {
-      html += `<span>${arr[i].schoolName} 6`;
-    }
-    else {
-      html += `<span>${arr[i].schoolName} ${arr[i].accessLevel}`;
-    }
-
-    if(i !== arr.length-1) {
-      html += `, </span>`;
-    }
-    else {
-      html += `</span>`;
     }
   }
   return html;

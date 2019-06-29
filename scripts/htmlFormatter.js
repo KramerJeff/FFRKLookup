@@ -49,19 +49,19 @@ function getCommands(cmdArr) {
 
       //School and Elements
       commands += "<div class='flex'>";
-      commands += `<span class='margin-right'><b>Elements:</b> ${formatElements(cmdArr[i])}</span>`;
-      commands += `<span><b>School:</b> ${consts.schoolDict[cmdArr[i].school]}</span>`;
+      commands += `<span class='margin-right col-2'><b>Elements:</b> ${formatElements(cmdArr[i])}</span>`;
+      commands += `<span class='col-2'><b>School:</b> ${consts.schoolDict[cmdArr[i].school]}</span>`;
 
       commands += "</div>";
 
-      commands += `<div class='flex'><span class='margin-right'><b>Multiplier:</b> ${cmdArr[i].multiplier}</span>`;
-      commands += `<span><b>Cast Time:</b> ${cmdArr[i].castTime}</span></div>`;
+      commands += `<div class='flex'><span class='margin-right col-2'><b>Multiplier:</b> ${cmdArr[i].multiplier}</span>`;
+      commands += `<span class='col-2'><b>Cast Time:</b> ${cmdArr[i].castTime}</span></div>`;
 
       //Multiplier and Cast Time
       commands += "<div class='flex'>";
 
-      commands += `<span class='margin-right'><b>Target:</b> ${consts.targetTypeDict[cmdArr[i].targetType]}</span>`;
-      commands += `<span><b>Type:</b> ${consts.damageFormulaDict[cmdArr[i].damageFormulaType]}</span></div></div>`;
+      commands += `<span class='margin-right col-2'><b>Target:</b> ${consts.targetTypeDict[cmdArr[i].targetType]}</span>`;
+      commands += `<span class='col-2'><b>Type:</b> ${consts.damageFormulaDict[cmdArr[i].damageFormulaType]}</span></div></div>`;
 
       commands += "</div>";
     }
@@ -276,6 +276,74 @@ export function formatStatusJSON(json, options) {
   else {
     return start + name + effect + end;
   }
+}
+
+/**
+ * @param arr - array of objects containing schoolName and accessLevel
+ */
+export function formatSchoolJSON(arr) {
+  let html = `<p><b>Abilities: </b>`;
+  for(let i = 0; i < arr.length; i++) {
+    if(consts.nightmareSchools.includes(arr[i].schoolName) && arr[i].accessLevel === 5) {
+      html += `${arr[i].schoolName}&nbsp;6`;
+    }
+    else {
+      html += `${arr[i].schoolName}&nbsp;${arr[i].accessLevel}`;
+    }
+
+    if(i !== arr.length-1) {
+      html += `, `;
+    }
+    else {
+      html += `</p>`;
+    }
+  }
+  return html;
+}
+
+export function formatWeaponsJSON(arr) {
+  let html = `<p><b>Weapons: </b>`;
+  console.log(arr.length + ' ' + arr[0]);
+  for(let i = 0; i < arr.length; i++) {
+    if(i !== arr.length-1) {
+      html += `${arr[i].EquipmentName}, `;
+    }
+    else {
+      html += `${arr[i].EquipmentName}`;
+    }
+  }
+  html += `</p>`;
+  return html;
+}
+
+export function formatRecordSphereAbilJSON(arr, charName) {
+  if(arr.length < 1) {
+    return '';
+  }
+  let html = `<p><b>Dive Abilities: </b>`;
+  for(let i = 0; i < arr.length; i++) {
+    //html += (i !== arr.length-1) ? `${arr[i]}, ` : `${arr[i]}` ;
+    if(arr[i].includes('->')) {
+      let splitArr = arr[i].split(' -> ');
+      if(charName === 'Onion Knight' && (splitArr[0].slice(0, -3) !== 'Ninja')) {
+        html += `${splitArr[0].slice(0, -3)} 6`;
+      }
+      else {
+        html += `${splitArr[0].slice(0, -3)} ${splitArr[1].slice(0, -1)}`;
+      }
+    }
+    else if(arr[i].includes('Enable')) {
+      let splitArr = arr[i].split(' ');
+      html += `${splitArr[1]} ${splitArr[2].slice(0, -1)}`;
+    }
+
+    if(i !== arr.length-1) {
+      html += `, `;
+    }
+
+  }
+  html += `</p>`;
+  return html;
 }
 
 /**
