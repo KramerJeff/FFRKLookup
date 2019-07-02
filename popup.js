@@ -47,10 +47,8 @@ $(function () {
     //grab query
     let query = $("#search-text").val();
     //places query into localStorage for autocomplete
-    if(!dataArray.includes(input.value)) { //only update if it isn't a duplicate value
-      dataArray.push(input.value);
-      localStorage.setItem('data', JSON.stringify(dataArray));
-    }
+    let search = input.value;
+
     input.value = '';
     options = {
       data: dataArray,
@@ -86,11 +84,22 @@ $(function () {
         else if(request.length > 1 && request[1] === "char") {
           return getCharacter(request[0]);
         }
+        else if(request.length > 1 && request[1] === "ldive") {
+          return getLegendDive(request[0]);
+        }
+        else if(request.length > 1 && request[1] === "rdive") {
+          return getRecordDive(request[0]);
+        }
         else {
           return getSoulBreak(request);
         }
       }).then(function(HTML) {
         $("#results").append(HTML);
+        if(!dataArray.includes(query)) { //only update if it isn't a duplicate value, TODO make sure this accounts for all errors
+          dataArray.push(query);
+          localStorage.setItem('data', JSON.stringify(dataArray));
+        }
+
       }).catch(function(err) {
         let errHTML = `<div class='sb-result result'><span class='error'>${err}</span></div>`;
         $("#results").append(errHTML);
@@ -455,6 +464,36 @@ function getCharacter(charName) {
   //abilityAccess
   //LMs
   //Record Materia
+}
+
+function getLegendDive(charName) {
+  return new Promise(function(resolve, reject) {
+      let charID = getCharacterID(charName);
+      if(charID === -1) {
+        return Promise.reject(new Error(`${charName} is not a valid character name`));
+      }
+      $.getJSON(`${apiBase}/Characters/${charID}`, function(json) {
+        let html = `<div class='result'><p class='request lato'><b>Request</b> - ${json[0].Description} Legend Dive</p>`;
+        html += formatter.formatLegendDiveJSON(json[0].StatIncrementsForLegendSpheres);
+        html += `</div>`;
+        resolve(html);
+      });
+  });
+}
+
+function getRecordDive(charName) {
+  return new Promise(function(resolve, reject) {
+      let charID = getCharacterID(charName);
+      if(charID === -1) {
+        return Promise.reject(new Error(`${charName} is not a valid character name`));
+      }
+      $.getJSON(`${apiBase}/Characters/${charID}`, function(json) {
+        let html = `<div class='result'><p class='request lato'><b>Request</b> - ${json[0].Description} Record Dive</p>`;
+        html += formatter.formatRecordDiveJSON(json[0].StatIncrementsForRecordSpheres);
+        html += `</div>`;
+        resolve(html);
+      });
+  });
 }
 
 /**

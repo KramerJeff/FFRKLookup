@@ -352,5 +352,35 @@ export function formatRecordSphereAbilJSON(arr, charName) {
  * @param json - the JSON from the API query
  */
 export function formatCharacterJSON(json) {
+  let html = ``;
+  return html;
 
+}
+
+export function formatLegendDiveJSON(json) {
+  let HP = (json.HitPoints > 0) ? `<p>HP: ${json.HitPoints}</p>` : ``;
+  let attack = (json.Attack > 0) ? `<p>ATK: ${json.Attack}</p>` : ``;
+  let defense = (json.Defense > 0) ? `<p>DEF: ${json.Defense}</p>` : ``;
+  let magic = (json.Magic > 0) ? `<p>MAG: ${json.Magic}</p>` : ``;
+  let resistance = (json.Resistance > 0) ? `<p>RES: ${json.Resistance}</p>` : ``;
+  let mind = (json.Mind > 0) ? `<p>MND: ${json.Mind}</p>` : ``;
+  let accuracy = (json.Accuracy > 0) ? `<p>ACC: ${json.Accuracy}</p>` : ``;
+  let evasion = (json.Evasion > 0) ? `<p>EVA: ${json.Evasion}</p>` : ``;
+  let speed = (json.Speed > 0) ? `<p>SPD: ${json.Speed}</p>` : ``;
+  let html = HP + attack + defense + magic + resistance + mind + accuracy + evasion + speed;
+  return html;
+}
+
+export function formatRecordDiveJSON(json) {
+  let HP = (json.HitPoints > 0) ? `<p>HP: ${json.HitPoints}</p>` : ``;
+  let attack = (json.Attack > 0) ? `<p>ATK: ${json.Attack}</p>` : ``;
+  let defense = (json.Defense > 0) ? `<p>DEF: ${json.Defense}</p>` : ``;
+  let magic = (json.Magic > 0) ? `<p>MAG: ${json.Magic}</p>` : ``;
+  let resistance = (json.Resistance > 0) ? `<p>RES: ${json.Resistance}</p>` : ``;
+  let mind = (json.Mind > 0) ? `<p>MND: ${json.Mind}</p>` : ``;
+  let accuracy = (json.Accuracy > 0) ? `<p>ACC: ${json.Accuracy}</p>` : ``;
+  let evasion = (json.Evasion > 0) ? `<p>EVA: ${json.Evasion}</p>` : ``;
+  let speed = (json.Speed > 0) ? `<p>SPD: ${json.Speed}</p>` : ``;
+  let html = HP + attack + defense + magic + resistance + mind + accuracy + evasion + speed;
+  return html;
 }
