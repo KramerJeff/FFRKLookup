@@ -473,7 +473,11 @@ function getLegendDive(charName) {
         return Promise.reject(new Error(`${charName} is not a valid character name`));
       }
       $.getJSON(`${apiBase}/Characters/${charID}`, function(json) {
-        let html = `<div class='result'><p class='request lato'><b>Request</b> - ${json[0].Description} Legend Dive</p>`;
+        let html = `<div class='result'>
+          <div class='char-title'>
+            <p class='request lato'><b>Request</b> - ${json[0].Description} Legend Dive</p>
+            <img src=${imgBase}/${json[0].EnlirId}/${imgEnd} class='char-title__img'>
+          </div>`;
         html += formatter.formatLegendDiveJSON(json[0].StatIncrementsForLegendSpheres);
         html += `</div>`;
         resolve(html);
@@ -488,7 +492,11 @@ function getRecordDive(charName) {
         return Promise.reject(new Error(`${charName} is not a valid character name`));
       }
       $.getJSON(`${apiBase}/Characters/${charID}`, function(json) {
-        let html = `<div class='result'><p class='request lato'><b>Request</b> - ${json[0].Description} Record Dive</p>`;
+        let html = `<div class='result'>
+          <div class='char-title'>
+          <p class='request lato'><b>Request</b> - ${json[0].Description} Record Dive</p>
+          <img src=${imgBase}/${json[0].EnlirId}/${imgEnd} class='char-title__img'>
+          </div>`;
         html += formatter.formatRecordDiveJSON(json[0].StatIncrementsForRecordSpheres);
         html += `</div>`;
         resolve(html);
