@@ -1,4 +1,4 @@
-import * as consts from '/scripts/constants.js';
+import * as consts from './constants.js';
 "use strict";
 
 /**
@@ -19,8 +19,8 @@ export function formatSBJSON(json) {
   let statuses = "";
   let otherEffects = "";
   let braveActions = "";
-  if(json.commands.length !== 0) {
-    commands = getCommands(json.commands);
+  if(json.bursts.length !== 0) {
+    commands = getCommands(json.bursts);
   }
   if(json.statuses) {
     let statusArr = findStatusInText(json.effects);
