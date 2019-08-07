@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/KramerJeff/FFRKLookup#readme",
   "dependencies": {
+    "lodash": "^4.17.15",
     "node-sass": "^4.12.0"
   }
 }
