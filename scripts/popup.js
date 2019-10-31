@@ -281,7 +281,7 @@ function getCharacterID(charName) {
 function getTierSBsForCharID(charID, cbParams, request) {
   return new Promise(function(resolve, reject) {
     $.getJSON(apiBase + "/SoulBreaks/Character/" + charID, function(json) {
-      let SBs = `<div class='result'><p class='request lato'><b>Request</b> - ${request[0]} ${request[1].toUpperCase()}</p>`;
+      let SBs = `<div class='result'><p class='request lato'><b>Request:</b> ${request[0]} ${request[1].toUpperCase()}</p>`;
       let arr = [];
       if(cbParams.tierID === 0) { //if tierID = 0, get all SBs
         json.forEach((json) => { SBs += formatter.formatSBJSON(json); });

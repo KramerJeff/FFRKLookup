@@ -11,9 +11,15 @@ export function formatSBJSON(json) {
   let html = "<div class='sb-result'>";
   let name = `<div class='sb'><h3 class='sb__name'>${json.description}`;
   name += (json.isInGlobal) ? `</h3>` : ` (JP)</h3>`;
+  let relic = `<h3 class='sb__relic'>Relic: ${json.relicName}</h3>`;
   let icon = "<div class='sb__content'><img class='sb__icon' src='" + json.imagePath.split('"')[0] + "'/>";
   let effect = `<div class='sb__text'><p class='sb__effect'>${json.effects}</p>`;
-  let entry = `<div class='flex'><span class='margin-right entry__castTime'><b>Element:</b> ${formatElements(json)}</span><span class='entry__elements'></span></div><div class='flex'><span class='margin-right entry__castTime'><b>Multiplier:</b> ${json.multiplier}</span><span class='entry__elements'><b>Cast Time:</b> ${json.castTime}</span></div><div class='flex'><span class='margin-right entry__castTime'><b>Target:</b> ${consts.targetTypeDict[json.targetType]}</span><span class='entry__elements'><b>Type:</b> ${consts.damageFormulaDict[json.damageFormulaType]}</span></div></div></div></div>`;
+  let type = '';
+  if(consts.damageFormulaDict[json.damageFormulaType]) {
+    type = `<b>Type:</b> ${consts.damageFormulaDict[json.damageFormulaType]}`;
+  }
+
+  let entry = `<div class='flex'><span class='margin-right entry__castTime'><b>Element:</b> ${formatElements(json)}</span><span class='entry__elements'></span></div><div class='flex'><span class='margin-right entry__castTime'><b>Multiplier:</b> ${json.multiplier}</span><span class='entry__elements'><b>Cast Time:</b> ${json.castTime}</span></div><div class='flex'><span class='margin-right entry__castTime'><b>Target:</b> ${consts.targetTypeDict[json.targetType]}</span><span class='entry__elements'>${type}</span></div></div></div></div>`;
 
   let commands = "";
   let statuses = "";
@@ -31,7 +37,7 @@ export function formatSBJSON(json) {
   }
 
   //braveCondition in braveActions specifies how to increment Brave
-  html += name + icon + effect + entry + statuses + otherEffects + commands + "</div>";
+  html += name + relic + icon + effect + entry + statuses + otherEffects + commands + "</div>";
   return html;
 }
 
