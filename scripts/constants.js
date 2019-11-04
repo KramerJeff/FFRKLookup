@@ -99,7 +99,8 @@ export const characterAliases = {
 export const abilityAliases = {
   "bahamut (v)": ["bahamut", "bahamut5", "bahamut v"],
   "bahamut (vi)": ["bahamut6", "bahamut vi"],
-  "voltech": ["vortex"]
+  "voltech": ["vortex"],
+  "ripper plasma": ["ripping plasma"]
 };
 
 export const ignoredStatuses = ["Remove", "Reraise", "Haste", "Burst Mode", "Imp", "Attach", "Blink"];

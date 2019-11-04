@@ -314,6 +314,12 @@ tbody.left th {
     }
   }
 
+  &__relic {
+    margin-bottom: 0;
+    margin-top: 1rem;
+    font-size: 1.2rem;
+  }
+
     &__content {
       display: flex;
       @media screen and (min-width: $medium) {
