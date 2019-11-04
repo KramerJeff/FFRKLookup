@@ -37,7 +37,7 @@ export function formatSBJSON(json) {
   }
 
   //braveCondition in braveActions specifies how to increment Brave
-  html += name + relic + icon + effect + entry + statuses + otherEffects + commands + "</div>";
+  html += name + icon + effect + entry + statuses + otherEffects + commands + "</div>";
   return html;
 }
 
