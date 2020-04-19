@@ -3,7 +3,7 @@ import * as consts from './constants.js';
 
 "use strict";
 //var bgPage = chrome.extension.getBackgroundPage();
-const apiBase = "https://ffrkapi.azurewebsites.net/api/v1.0/";
+const apiBase = "https://www.ffrktoolkit.com/ffrk-api/api/v1.0";
 const imgBase = "https://dff.sp.mbga.jp/dff/static/lang/image/buddy";
 const imgEnd = "base_hands_up.png";
 
@@ -532,9 +532,9 @@ function formatSchoolTableJSON(arr) {
 function createAbilityDict() {
   let abilDict = {};
   return new Promise(function(resolve,reject) {
-    $.getJSON(apiBase + "IdLists/Ability", function(abilJSON) {
+    $.getJSON(apiBase + "/IdLists/Ability", function(abilJSON) {
       abilJSON.forEach((json) => {
-        abilDict[json.value.toLowerCase()] = json.key;
+        abilDict[json.Value.toLowerCase()] = json.Key;
       });
       resolve(abilDict);
     });

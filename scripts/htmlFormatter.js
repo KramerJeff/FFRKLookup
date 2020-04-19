@@ -25,8 +25,8 @@ export function formatSBJSON(json) {
   let statuses = "";
   let otherEffects = "";
   let braveActions = "";
-  if(json.bursts.length !== 0) {
-    commands = getCommands(json.bursts);
+  if(json.commands.length !== 0) {
+    commands = getCommands(json.commands);
   }
   if(json.statuses) {
     let statusArr = findStatusInText(json.effects);
