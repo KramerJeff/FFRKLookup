@@ -67,7 +67,7 @@ export const targetTypeDict = {
 
 export const damageFormulaDict = {
   0: "Unknown",
-  1: "",
+  1: "None",
   2: "Hybrid",
   3: "Magical",
   4: "Physical"

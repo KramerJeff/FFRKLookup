@@ -8,9 +8,9 @@ const imgBase = "https://dff.sp.mbga.jp/dff/static/lang/image/buddy";
 const imgEnd = "base_hands_up.png";
 
 
-const sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|SASB|GSB|GSB\+|FSB|AASB|Glint|Glint\+/gi; //lcsb is caught by the CSB
+const sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|SASB|sync|GSB|GSB\+|FSB|AASB|Glint|Glint\+/gi; //lcsb is caught by the CSB
 const lmRegex = /LM|LMR/gi;
-const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|SASB|GSB|GSB\+|FSB|AASB|Glint|Glint\+|lm|lmr|abil|ability|rm|stat|char|rdive|ldive/gi;
+const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|SASB|sync|GSB|GSB\+|FSB|AASB|Glint|Glint\+|lm|lmr|abil|ability|rm|stat|char|rdive|ldive/gi;
 
 
 $(function () {
@@ -69,7 +69,7 @@ $(function () {
         if(request.length > 1 && request[1].match(sbRegex)) {
           return parseSBRequest(request);
         }
-        else if(request.length > 1 && request[1].match(lmRegex)) { //if i did contains.("lm") that would be too generic
+        else if(request.length > 1 && request[1].match(lmRegex)) { //if I did contains.("lm") that would be too generic
           return getLMsForChar(request);
         }
         else if(request.length > 1 && request[1] === "abil" || request[1] === "ability") {
@@ -225,6 +225,7 @@ function filterSBTier(sbString) {
       format.tierID = 13;
       break;
     case "sasb":
+    case "sync":
       format.tierID = 14;
       break;
   }
