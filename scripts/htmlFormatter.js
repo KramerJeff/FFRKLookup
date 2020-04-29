@@ -25,8 +25,12 @@ export function formatSBJSON(json) {
   let statuses = "";
   let otherEffects = "";
   let braveActions = "";
-  if(json.bursts.length !== 0) {
-    commands = getCommands(json.bursts);
+  let synchroCommands = "";
+  if(json.commands.length !== 0) {
+    commands = getCommands(json.commands);
+  }
+  if(json.synchroCommands.length !== 0) {
+    synchroCommands = getCommands(json.synchroCommands);
   }
   if(json.statuses) {
     let statusArr = findStatusInText(json.effects);
@@ -37,39 +41,39 @@ export function formatSBJSON(json) {
   }
 
   //braveCondition in braveActions specifies how to increment Brave
-  html += name + icon + effect + entry + statuses + otherEffects + commands + "</div>";
+  html += name + icon + effect + entry + statuses + otherEffects + commands + synchroCommands + "</div>";
   return html;
 }
 
 /**
- * Formats the HTML for the BSB commands
- * @param cmdArr - the array containing the JSON for the BSB commands
+ * Formats the HTML for the BSB and Synchro commands
+ * @param cmdArr - the array containing the JSON for the BSB/Synchro commands
  */
 function getCommands(cmdArr) {
     let commands = "";
     for(let i = 0; i < cmdArr.length; i++) {
       commands += "<div class='cmd'>";
       //TODO create container for these so they never overlap
-      commands += "<img class='cmd__icon' src='" + cmdArr[i].imagePath.split('"')[0] + "'/>";
+      commands += `<img class='cmd__icon' src='${cmdArr[i].imagePath.split('"')[0]}'/>`;
       commands += `<div class='cmd__text'><p class='cmd__effect'>${cmdArr[i].effects}</p>`; //TODO SEARCH FOR STATUS
 
       //School and Elements
-      commands += "<div class='flex'>";
+      commands += `<div class='flex'>`;
       commands += `<span class='margin-right col-2'><b>Elements:</b> ${formatElements(cmdArr[i])}</span>`;
       commands += `<span class='col-2'><b>School:</b> ${consts.schoolDict[cmdArr[i].school]}</span>`;
 
-      commands += "</div>";
+      commands += `</div>`;
 
       commands += `<div class='flex'><span class='margin-right col-2'><b>Multiplier:</b> ${cmdArr[i].multiplier}</span>`;
       commands += `<span class='col-2'><b>Cast Time:</b> ${cmdArr[i].castTime}</span></div>`;
 
       //Multiplier and Cast Time
-      commands += "<div class='flex'>";
+      commands += `<div class='flex'>`;
 
       commands += `<span class='margin-right col-2'><b>Target:</b> ${consts.targetTypeDict[cmdArr[i].targetType]}</span>`;
       commands += `<span class='col-2'><b>Type:</b> ${consts.damageFormulaDict[cmdArr[i].damageFormulaType]}</span></div></div>`;
 
-      commands += "</div>";
+      commands += `</div>`;
     }
 
     return commands;
@@ -79,7 +83,7 @@ function getCommands(cmdArr) {
 function findStatusInText(text) {
   let arr = [];
   if(text.includes("grants")) {
-    arr = text.split("grants")[1].split("to")[0].split(","); //TODO lookout for statuses with commas in them
+    arr = text.split("grants")[1].split("to")[0].split(","); //TODO reminder to lookout for statuses with commas in them
     if(arr[arr.length-1].includes('and')) { //if there's an and
       arr.push(arr[arr.length-1].split('and')[1]); //push last status on end of array
       arr[arr.length-2] = arr[arr.length-2].split('and')[0]; //fix 2nd to last status
@@ -248,10 +252,15 @@ export function formatLMJSON(json) {
 
 export function formatElements(json) {
   let elements = "";
-  for (let j = 0; j < json.elements.length; j++) {
-    elements += parseElementNumber(json.elements[j]);
-    if (j !== json.elements.length - 1) {
-      elements += ", ";
+  if(json.elements.length === 0) {
+    return "None";
+  }
+  else {
+    for (let j = 0; j < json.elements.length; j++) {
+      elements += parseElementNumber(json.elements[j]);
+      if (j !== json.elements.length - 1) {
+        elements += ", ";
+      }
     }
   }
   return elements;
