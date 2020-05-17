@@ -54,7 +54,7 @@ function getCommands(cmdArr) {
     for(let i = 0; i < cmdArr.length; i++) {
       commands += "<div class='cmd'>";
       //TODO create container for these so they never overlap
-      commands += `<img class='cmd__icon' src='${cmdArr[i].imagePath.split('"')[0]}'/>`;
+      commands += `<img class='cmd__icon' src='${getImgPath(cmdArr[i])}'/>`;
       commands += `<div class='cmd__text'><p class='cmd__effect'>${cmdArr[i].effects}</p>`; //TODO SEARCH FOR STATUS
 
       //School and Elements
@@ -77,6 +77,11 @@ function getCommands(cmdArr) {
     }
 
     return commands;
+}
+
+//This function is to fix the issues with Synchro command images
+function getImgPath(cmdArr) {
+  return (cmdArr.synchroConditionId ? `${cmdArr.imagePath.split('"')[0]}/${cmdArr.synchroConditionId}.png` : cmdArr.imagePath.split('"')[0]);
 }
 
 //returns an array of status names

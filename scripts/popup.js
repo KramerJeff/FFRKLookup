@@ -32,11 +32,11 @@ $(function () {
   $("#search-text").focus();
   let dictSequence = Promise.resolve();
   let abilDict = {};
-
+  let charDict = {};
 
   //creates Dictionary of ability names and IDs for quick reference
   createAbilityDict().then(function(data) { abilDict = data; });
-  //createCharacterDict().then(function(data) { charDict = data; }); TODO
+  //createCharacterDict().then(function(data) { charDict = data; }); //TODO
 	$("#search-button").click(function(e) {
     e.preventDefault();
     //based on command, send data to correct function
@@ -540,4 +540,19 @@ function createAbilityDict() {
       resolve(abilDict);
     });
   });
+}
+
+/**
+ * Initializes a character dictionary in order to prevent character mismatches when updates occur
+ */
+function createCharacterDict() {
+  let charDict = {};
+  return new Promise(function (resolve, reject) {
+    $.getJSON(apiBase + "/IdLists/Character", function (charJSON) {
+      charJSON.forEach((json) => {
+        charDict[json.Value.toLowerCase()] = json.Key;
+      });
+      resolve(charDict);
+    });
+  });  
 }
