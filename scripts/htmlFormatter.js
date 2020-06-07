@@ -5,7 +5,8 @@ import * as consts from './constants.js';
  * This function will format the Soul Break JSON into a human-readable result.
  * @param json - the JSON from the API query
  * @returns HTML formatted string to represent the Soul Break
- * TODO add if the relic gives +element? relicName and relicId are provided
+ * TODO add if the relic gives +element? relicName and relicId are provided, however --- this would require another request from the API as the +element is only in the relics endpoint
+ * See 'Sword Saint' for Orlandeau, relic - Excalibur Trueblade
  */
 export function formatSBJSON(json) {
   let html = "<div class='sb-result'>";
