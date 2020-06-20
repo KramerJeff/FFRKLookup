@@ -1,14 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
+import {TableRow, TableHead, TableBody, TableCell, Avatar, Collapse} from '@material-ui/core';
 
 const SoulBreak = ({soulBreak}) => {
+    const [open, setOpen] = useState(false);
     return (
-        <div>
-            <h1>Name: {soulBreak.description}</h1>
-            <h3>Character: {soulBreak.characterName}</h3>
-            <p>Effect: {soulBreak.effects}</p>
-            {soulBreak.imagePath && <img src={soulBreak.imagePath.split('"')[0]} alt={soulBreak.description}></img>}  
-        </div>
+        <TableRow>
+            <TableCell>
+                <Avatar src={soulBreak.imagePath.split('"')[0]} alt={soulBreak.description}></Avatar>
+            </TableCell>
+            <TableCell>{soulBreak.description}</TableCell>
+            <TableCell>{soulBreak.characterName}</TableCell>
+            <TableCell>{soulBreak.soulBreakTier}</TableCell>
+        </TableRow>
     );
 };
 
