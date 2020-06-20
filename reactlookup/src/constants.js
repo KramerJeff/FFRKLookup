@@ -1,0 +1,1 @@
+export const API_URL_BASE = 'https://ffrktoolkit.com/ffrk-api/api/v1.0';
