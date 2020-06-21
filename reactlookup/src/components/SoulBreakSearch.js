@@ -11,22 +11,25 @@ const SoulBreakSearch = () => {
 
     // Lift state and onChange to SoulBreakSearch
     const [tiers, setTiers] = useState({
-        Default: true,
-        SB: true,
-        SSB: true,
-        BSB: true,
-        OSB: true,
-        USB: true,
-        Glint: true,
-        GlintP: true,
-        AOSB: true,
-        AASB: true,
-        SASB: true,
-        CSB: true,
+        1: false,
+        4: false,
+        5: false,
+        6: false,
+        7: false,
+        8: true,
+        9: true,
+        10: true,
+        11: true,
+        12: true,
+        13: true,
+        14: true,
     });
 
-    const handleChange = (event) => {
+
+
+    const handleTierChange = (event) => {
         setTiers({ ...tiers, [event.target.name]: event.target.checked });
+        //setSoulBreaks(soulBreaks.filter(soulBreak => soulBreak.soulBreakTier));
     };
 
     useEffect(() => {
@@ -56,7 +59,7 @@ const SoulBreakSearch = () => {
                 <Grid item xs={3}>
                     <SoulBreakFilters
                         tiers={tiers}
-                        onCheckboxChange={handleChange}
+                        onTierChange={handleTierChange}
                     />
                 </Grid>
                 <Grid item xs={9}>                
