@@ -9,7 +9,25 @@ const SoulBreakSearch = () => {
     const [soulBreaks, setSoulBreaks] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
 
-    //const emptyRows = rowsPerPage - Math.min(rowsPerPage, soulBreaks.length - page * rowsPerPage);
+    // Lift state and onChange to SoulBreakSearch
+    const [tiers, setTiers] = useState({
+        Default: true,
+        SB: true,
+        SSB: true,
+        BSB: true,
+        OSB: true,
+        USB: true,
+        Glint: true,
+        GlintP: true,
+        AOSB: true,
+        AASB: true,
+        SASB: true,
+        CSB: true,
+    });
+
+    const handleChange = (event) => {
+        setTiers({ ...tiers, [event.target.name]: event.target.checked });
+    };
 
     useEffect(() => {
         fetch(`${constants.API_URL_BASE}/SoulBreaks`)
@@ -18,7 +36,6 @@ const SoulBreakSearch = () => {
                 (result) => {
                     setIsLoaded(true);
                     setSoulBreaks(result);
-                    
                 },
                 (error) => {
                     setIsLoaded(true);
@@ -37,7 +54,10 @@ const SoulBreakSearch = () => {
         return (
             <Grid container spacing={3}>
                 <Grid item xs={3}>
-                    <SoulBreakFilters/>
+                    <SoulBreakFilters
+                        tiers={tiers}
+                        onCheckboxChange={handleChange}
+                    />
                 </Grid>
                 <Grid item xs={9}>                
                     <SoulBreakTable soulBreaks={soulBreaks}/>

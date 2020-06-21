@@ -1,81 +1,70 @@
-import React, { useEffect, useState } from 'react';
-import {FormGroup, FormControlLabel, Checkbox, CheckboxIcon} from '@material-ui/core';
-const SoulBreakFilters = () => {
-
-    // Lift state and onChange to SoulBreakSearch
-    const [state, setState] = React.useState({
-        Default: true,
-        SB: true,
-        SSB: true,
-        BSB: true,
-        OSB: true,
-        USB: true,
-        Glint: true,
-        GlintP: true,
-        AOSB: true,
-        AASB: true,
-        SASB: true,
-        CSB: true,
-    });
-
-    const handleChange = (event) => {
-        setState({...state, [event.target.name]: event.target.checked});
-    };
+import React from 'react';
+import PropTypes from 'prop-types';
+import {FormGroup, FormControlLabel, Checkbox} from '@material-ui/core';
+const SoulBreakFilters = ({
+    tiers: {Default, SB, SSB, BSB, OSB, USB, Glint, GlintP, AOSB, AASB, SASB, CSB},
+    onCheckboxChange
+}) => {
 
     return (
         <FormGroup column>
             {/* Refactor to use map function you dingus */}
             <FormControlLabel
-                control={<Checkbox checked={state.Default} onChange={handleChange} name="Default" />}
+                control={<Checkbox checked={Default} onChange={onCheckboxChange} name="Default" />}
                 label="Default"
             />
             <FormControlLabel
-                control={<Checkbox checked={state.SB} onChange={handleChange} name="SB" />}
+                control={<Checkbox checked={SB} onChange={onCheckboxChange} name="SB" />}
                 label="SB"
             />
             <FormControlLabel
-                control={<Checkbox checked={state.SSB} onChange={handleChange} name="SSB"/>}
+                control={<Checkbox checked={SSB} onChange={onCheckboxChange} name="SSB"/>}
                 label="SSB"
             />
             <FormControlLabel
-                control={<Checkbox checked={state.BSB} onChange={handleChange} name="BSB" />}
+                control={<Checkbox checked={BSB} onChange={onCheckboxChange} name="BSB" />}
                 label="BSB"
             />
             <FormControlLabel
-                control={<Checkbox checked={state.OSB} onChange={handleChange} name="OSB" />}
+                control={<Checkbox checked={OSB} onChange={onCheckboxChange} name="OSB" />}
                 label="OSB"
             />
             <FormControlLabel
-                control={<Checkbox checked={state.USB} onChange={handleChange} name="USB" />}
+                control={<Checkbox checked={USB} onChange={onCheckboxChange} name="USB" />}
                 label="USB"
             />
             <FormControlLabel
-                control={<Checkbox checked={state.Glint} onChange={handleChange} name="Glint" />}
+                control={<Checkbox checked={Glint} onChange={onCheckboxChange} name="Glint" />}
                 label="Glint"
             />
             <FormControlLabel
-                control={<Checkbox checked={state.GlintP} onChange={handleChange} name="GlintP" />}
+                control={<Checkbox checked={GlintP} onChange={onCheckboxChange} name="GlintP" />}
                 label="Glint+"
             />
             <FormControlLabel
-                control={<Checkbox checked={state.AOSB} onChange={handleChange} name="AOSB" />}
+                control={<Checkbox checked={AOSB} onChange={onCheckboxChange} name="AOSB" />}
                 label="AOSB"
             />
             <FormControlLabel
-                control={<Checkbox checked={state.AASB} onChange={handleChange} name="AASB" />}
+                control={<Checkbox checked={AASB} onChange={onCheckboxChange} name="AASB" />}
                 label="AASB"
             />
             <FormControlLabel
-                control={<Checkbox checked={state.SASB} onChange={handleChange} name="SASB" />}
+                control={<Checkbox checked={SASB} onChange={onCheckboxChange} name="SASB" />}
                 label="SASB"
             />
             <FormControlLabel
-                control={<Checkbox checked={state.CSB} onChange={handleChange} name="CSB" />}
+                control={<Checkbox checked={CSB} onChange={onCheckboxChange} name="CSB" />}
                 label="CSB"
             />
 
         </FormGroup>
     );
 };
+
+SoulBreakFilters.propTypes = {
+    tiers: PropTypes.object,
+    onCheckboxChange: PropTypes.func.isRequired,
+}
 
 export default SoulBreakFilters;
