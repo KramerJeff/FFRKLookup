@@ -1,13 +1,29 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import './components/SoulBreakSearch';
 import SoulBreakSearch from './components/SoulBreakSearch';
-
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import MenuIcon from '@material-ui/icons/Menu';
+import IconButton from '@material-ui/core/IconButton';
+import Grid from '@material-ui/core/Grid';
 function App() {
   return (
     <div className="App">
-      <SoulBreakSearch/>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton edge="start" color="inherit" aria-label="menu">
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6">
+              FFRK Lookup
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Grid container xs={12} lg={11}>
+          <SoulBreakSearch/>
+        </Grid>
     </div>
   );
 }
