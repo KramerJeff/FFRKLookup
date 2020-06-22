@@ -21,7 +21,8 @@ function App() {
             </Typography>
           </Toolbar>
         </AppBar>
-        <Grid container xs={12} lg={11}>
+        {/* This is where the content is, shouldn't it have spacing? */}
+        <Grid container xs={12}> 
           <SoulBreakSearch/>
         </Grid>
     </div>

@@ -51,8 +51,30 @@ const SoulBreakSearch = () => {
         setTiers({ ...tiers, [event.target.name]: event.target.checked });
     };
 
+    const handleTierAllToggle = (event) => {
+        let newState = {};
+        if (Object.values(tiers).includes(true)) {
+            Object.keys(tiers).map(key => newState[key] = false);
+        }
+        else {
+            Object.keys(tiers).map(key => newState[key] = true);
+        }
+        setTiers(newState);
+    }
+
     const handleRealmChange = (event) => {
         setRealms({ ...realms, [event.target.name] : event.target.checked });
+    }
+
+    const handleRealmAllToggle = (event) => {
+        let newState = {};
+        if(Object.values(realms).includes(true)) {
+            Object.keys(realms).map(key => newState[key] = false);
+        }
+        else {
+            Object.keys(realms).map(key => newState[key] = true);
+        }
+        setRealms(newState);
     }
 
     //initial mount useEffect, does all soul breaks need to be set in state?
@@ -85,19 +107,24 @@ const SoulBreakSearch = () => {
     }
     else {
         return (
-            <Grid container spacing={3}>
+            <React.Fragment>
                 <Grid item xs={3}>
                     <SoulBreakFilters
                         tiers={tiers}
                         realms={realms}
                         onTierChange={handleTierChange}
+                        onTierAllToggle={handleTierAllToggle}
                         onRealmChange={handleRealmChange}
+                        onRealmAllToggle={handleRealmAllToggle}
                     />
+                    {/* Tier Filters */}
+                    {/* Realm Filters */}
+                    {/* Element Filters */}
                 </Grid>
                 <Grid item xs={9}>                
                     <SoulBreakTable soulBreaks={soulBreaks}/>
                 </Grid>
-            </Grid>
+            </React.Fragment>
         );
     }
 };
