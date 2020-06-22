@@ -9,8 +9,6 @@ const SoulBreakSearch = () => {
     const [allSoulBreaks, setAllSoulBreaks] = useState([]);
     const [soulBreaks, setSoulBreaks] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
-
-    // Lift state and onChange to SoulBreakSearch
     const [tiers, setTiers] = useState({
         1: false,
         4: false,
@@ -26,9 +24,36 @@ const SoulBreakSearch = () => {
         14: true,
     });
 
+    const [realms, setRealms] = useState({
+        1: true,
+        2: true,
+        3: true,
+        4: true,
+        5: true,
+        6: true,
+        7: true,
+        8: true,
+        9: true,
+        10: true,
+        11: true,
+        12: true,
+        13: true,
+        14: true,
+        15: true,
+        16: true,
+        17: true,
+        18: true,
+        19: true,
+        20: true,
+    });
+
     const handleTierChange = (event) => {
         setTiers({ ...tiers, [event.target.name]: event.target.checked });
     };
+
+    const handleRealmChange = (event) => {
+        setRealms({ ...realms, [event.target.name] : event.target.checked });
+    }
 
     //initial mount useEffect, does all soul breaks need to be set in state?
     useEffect(() => {
@@ -47,8 +72,10 @@ const SoulBreakSearch = () => {
     }, []);  
     
     useEffect(() => {
-        setSoulBreaks(allSoulBreaks.filter(soulBreak => tiers[soulBreak.soulBreakTier]));
-    }, [allSoulBreaks, tiers]);
+        setSoulBreaks(allSoulBreaks.filter(soulBreak => {
+            return (tiers[soulBreak.soulBreakTier] && realms[soulBreak.realm]);
+        }));
+    }, [allSoulBreaks, tiers, realms]);
 
     if(error) {
         return(<p>Error: {error.message}</p>);
@@ -62,7 +89,9 @@ const SoulBreakSearch = () => {
                 <Grid item xs={3}>
                     <SoulBreakFilters
                         tiers={tiers}
+                        realms={realms}
                         onTierChange={handleTierChange}
+                        onRealmChange={handleRealmChange}
                     />
                 </Grid>
                 <Grid item xs={9}>                
