@@ -6,6 +6,7 @@ import {Grid} from '@material-ui/core';
 
 const SoulBreakSearch = () => {
     const [error, setError] = useState(null);
+    const [allSoulBreaks, setAllSoulBreaks] = useState([]);
     const [soulBreaks, setSoulBreaks] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
 
@@ -25,27 +26,29 @@ const SoulBreakSearch = () => {
         14: true,
     });
 
-
-
     const handleTierChange = (event) => {
         setTiers({ ...tiers, [event.target.name]: event.target.checked });
-        //setSoulBreaks(soulBreaks.filter(soulBreak => soulBreak.soulBreakTier));
     };
 
+    //initial mount useEffect, does all soul breaks need to be set in state?
     useEffect(() => {
         fetch(`${constants.API_URL_BASE}/SoulBreaks`)
             .then(response => response.json())
             .then(
                 (result) => {
                     setIsLoaded(true);
-                    setSoulBreaks(result);
+                    setAllSoulBreaks(result);
                 },
                 (error) => {
                     setIsLoaded(true);
                     setError(error);
                 }
             )
-    }, []);   
+    }, []);  
+    
+    useEffect(() => {
+        setSoulBreaks(allSoulBreaks.filter(soulBreak => tiers[soulBreak.soulBreakTier]));
+    }, [allSoulBreaks, tiers]);
 
     if(error) {
         return(<p>Error: {error.message}</p>);
