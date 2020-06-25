@@ -66,6 +66,7 @@ const SoulBreakSearch = () => {
         setRealms({ ...realms, [event.target.name] : event.target.checked });
     }
 
+    //TODO do I make it so if any values are selected that it unselects?
     const handleRealmAllToggle = (event) => {
         let newState = {};
         if(Object.values(realms).includes(true)) {

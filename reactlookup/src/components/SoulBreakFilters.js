@@ -8,7 +8,7 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 const SoulBreakFilters = ({tiers, realms, onTierChange, onTierAllToggle, onRealmChange, onRealmAllToggle}) => {
     const [open, setOpen] = useState(true);
     const [tierOpen, setTierOpen] = useState(true);
-    
+
     function toggleAll() {
         //do nothing
     }
@@ -21,7 +21,7 @@ const SoulBreakFilters = ({tiers, realms, onTierChange, onTierAllToggle, onRealm
                 </IconButton>
             </Box>
             <Collapse in={tierOpen} timeout="auto" unmountOnExit>
-                <Link display="flex" href='#' onClick={() => onTierAllToggle()}>Select All</Link>
+                <Link display="flex" href='#' onClick={onTierAllToggle}>Select/Unselect All</Link>
                 <FormGroup column>
                     {Object.entries(tiers).map(([tier, value]) => {
                         return ( <FormControlLabel 
@@ -39,7 +39,7 @@ const SoulBreakFilters = ({tiers, realms, onTierChange, onTierAllToggle, onRealm
                 </IconButton>
             </Box>
             <Collapse in={open} timeout="auto" unmountOnExit>
-                <Link display="flex" href='#' onClick={() => onRealmAllToggle()}>Select All</Link>
+                <Link display="flex" href='#' onClick={onRealmAllToggle}>Select/Unselect All</Link>
                 <FormGroup column>
                     {Object.entries(realms).map(([realm, value]) => {
                         return (<FormControlLabel
