@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
-import {TableRow, TableHead, TableBody, TableCell, Avatar, Collapse} from '@material-ui/core';
+import {TableRow, TableCell, Avatar, Collapse} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';

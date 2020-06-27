@@ -52,7 +52,7 @@ const SoulBreakTable = ({soulBreaks}) => {
 };
 
 SoulBreakTable.propTypes = {
-    soulBreaks: PropTypes.object.isRequired,
+    soulBreaks: PropTypes.array.isRequired,
 };
 
 export default SoulBreakTable;
