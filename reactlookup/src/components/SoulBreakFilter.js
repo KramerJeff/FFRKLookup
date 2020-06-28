@@ -3,6 +3,13 @@ import PropTypes from 'prop-types';
 import {FormGroup, FormControlLabel, Checkbox, Collapse, Typography, IconButton, Box, Link} from '@material-ui/core';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import styled from "styled-components";
+
+const SBCheckboxLabel = styled(FormControlLabel)`
+    & * span {
+        color: #398CBD;
+    }
+`;
 
 const SoulBreakFilter = ({filterName, filters, toggleAll, onChange, onToggleAll}) => {
     const [open, setOpen] = useState(true);
@@ -19,7 +26,7 @@ const SoulBreakFilter = ({filterName, filters, toggleAll, onChange, onToggleAll}
             <Link display="flex" href='#' onClick={onToggleAll}>{toggleAll ? 'Uncheck All' : 'Check All'}</Link>
                 <FormGroup column>
                     {Object.values(filters).map(filter => {
-                        return (<FormControlLabel
+                        return (<SBCheckboxLabel
                             control={<Checkbox checked={filter.checked} onChange={onChange} name={filter.id} />}
                             label={filter.name}
                         />);
