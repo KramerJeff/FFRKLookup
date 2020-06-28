@@ -11,6 +11,8 @@ const SoulBreakSearch = () => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [toggleTiers, setToggleAllTiers] = useState(true);
     const [toggleRealms, setToggleAllRealms] = useState(true);
+    const [toggleElements, setToggleAllElements] = useState(true);
+
     const [tiers, setTiers] = useState({
         1: {id: 1, name: 'Default', checked: false},
         4: {id: 4, name: 'SB', checked: false},
@@ -47,6 +49,20 @@ const SoulBreakSearch = () => {
         19: {id: 19, name: 'KH', checked: true},
         20: {id: 20, name: 'Core', checked: true},
     });
+    const [elements, setElements] = useState({
+        2: { id: 2, name: 'No Element', checked: true},
+        3: { id: 3, name: 'Dark', checked: true },
+        4: { id: 4, name: 'Earth', checked: true },
+        5: { id: 5, name: 'Fire', checked: true },
+        6: { id: 6, name: 'Holy', checked: true },
+        7: { id: 7, name: 'Ice', checked: true },
+        8: { id: 8, name: 'Lightning', checked: true },
+        9: { id: 9, name: 'NE', checked: true },
+        10: { id: 10, name: 'Poison', checked: true },
+        12: { id: 12, name: 'Water', checked: true },
+        13: { id: 13, name: 'Wind', checked: true },
+        
+    });    
 
     const handleFilterChange = (event, state, setState) => {
         const id = event.target.name;
@@ -81,13 +97,28 @@ const SoulBreakSearch = () => {
     useEffect(() => {
         setSoulBreaks(allSoulBreaks.filter(soulBreak => {
             if(tiers[soulBreak.soulBreakTier] && realms[soulBreak.realm]) {
-                return (tiers[soulBreak.soulBreakTier].checked && realms[soulBreak.realm].checked);
+                //loop through elements
+                let elementIsChecked = true;
+                // let elementIsChecked = false;
+                // if(soulBreak.elements.length > 0) {
+                //     soulBreak.elements.forEach(function(element) { //if element is in element state object...
+                //         for(const value of Object.values(elements)) {
+                //             if(element === value.id && value.checked) {
+                //                 elementIsChecked = true;
+                //             }
+                //         }
+                //     });
+                // }
+                // else { elementIsChecked = true; } //combo this with 'No Element'
+
+                areElementsInSB(elements, soulBreak);
+                return (tiers[soulBreak.soulBreakTier].checked && realms[soulBreak.realm].checked && elementIsChecked);
             }
             else {
                 return false;
             }
         }));
-    }, [allSoulBreaks, tiers, realms]);
+    }, [allSoulBreaks, tiers, realms, elements]);
 
     if(error) {
         return(<p>Error: {error.message}</p>);
@@ -113,6 +144,13 @@ const SoulBreakSearch = () => {
                         onChange={(event) => handleFilterChange(event, realms, setRealms)} 
                         onAllToggle={() => handleToggleAll(realms, toggleRealms, setRealms, setToggleAllRealms)}
                     />
+                    <SoulBreakFilter
+                        filterName='Elements'
+                        filters={elements}
+                        toggleAll={toggleElements}
+                        onChange={(event) => handleFilterChange(event, elements, setElements)}
+                        onAllToggle={() => handleToggleAll(elements, toggleElements, setElements, setToggleAllElements)}
+                    />
                     {/* Element Filters */}
                 </Grid>
                 <Grid item xs={9}>                
@@ -122,5 +160,28 @@ const SoulBreakSearch = () => {
         );
     }
 };
+
+function helloWorld() {
+    console.log('hello world');
+}
+
+function areElementsInSB(elements, soulBreak) {
+    soulBreak.elements.forEach(function (element) {
+       console.log(`these are my elements ${element}`); 
+    });
+    for (const [key, value] of Object.entries(elements)) {
+        console.log(`${key} ${value.id} ${value.name} ${value.checked}`);
+    }
+                    // if(soulBreak.elements.length > 0) {
+                //     soulBreak.elements.forEach(function(element) { //if element is in element state object...
+                //         for(const value of Object.values(elements)) {
+                //             if(element === value.id && value.checked) {
+                //                 elementIsChecked = true;
+                //             }
+                //         }
+                //     });
+                // }
+                // else { elementIsChecked = true; } //combo this with 'No Element'
+}
 
 export default SoulBreakSearch;
