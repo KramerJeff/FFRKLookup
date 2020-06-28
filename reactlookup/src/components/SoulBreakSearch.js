@@ -142,14 +142,14 @@ const SoulBreakSearch = () => {
                         filters={realms} 
                         toggleAll={toggleRealms} 
                         onChange={(event) => handleFilterChange(event, realms, setRealms)} 
-                        onAllToggle={() => handleToggleAll(realms, toggleRealms, setRealms, setToggleAllRealms)}
+                        onToggleAll={() => handleToggleAll(realms, toggleRealms, setRealms, setToggleAllRealms)}
                     />
                     <SoulBreakFilter
                         filterName='Elements'
                         filters={elements}
                         toggleAll={toggleElements}
                         onChange={(event) => handleFilterChange(event, elements, setElements)}
-                        onAllToggle={() => handleToggleAll(elements, toggleElements, setElements, setToggleAllElements)}
+                        onToggleAll={() => handleToggleAll(elements, toggleElements, setElements, setToggleAllElements)}
                     />
                     {/* Element Filters */}
                 </Grid>
