@@ -5,7 +5,7 @@ import { Table, TableHead, TableBody, TableCell, TableRow, TableFooter, TablePag
 
 const SoulBreakTable = ({soulBreaks}) => {
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(25);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);

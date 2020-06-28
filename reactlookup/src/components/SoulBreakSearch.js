@@ -62,11 +62,11 @@ const SoulBreakSearch = () => {
         12: { id: 12, name: 'Water', checked: true },
         13: { id: 13, name: 'Wind', checked: true },
         
-    });    
-
+    });  
+    
     const handleFilterChange = (event, state, setState) => {
         const id = event.target.name;
-        setState({ ...state, [id]: {id: id, name: state[id].name, checked: !state[id].checked} });
+        setState({ ...state, [id]: {id: state[id].id, name: state[id].name, checked: !state[id].checked} });
     };
 
     const handleToggleAll = (state, toggleFlag, setState, setToggleState) => {
@@ -78,7 +78,7 @@ const SoulBreakSearch = () => {
         setState(newState);
     }
 
-    //initial mount useEffect, does all soul breaks need to be set in state?
+    //Initial mount useEffect
     useEffect(() => {
         fetch(`${constants.API_URL_BASE}/SoulBreaks`)
             .then(response => response.json())
@@ -97,22 +97,7 @@ const SoulBreakSearch = () => {
     useEffect(() => {
         setSoulBreaks(allSoulBreaks.filter(soulBreak => {
             if(tiers[soulBreak.soulBreakTier] && realms[soulBreak.realm]) {
-                //loop through elements
-                let elementIsChecked = true;
-                // let elementIsChecked = false;
-                // if(soulBreak.elements.length > 0) {
-                //     soulBreak.elements.forEach(function(element) { //if element is in element state object...
-                //         for(const value of Object.values(elements)) {
-                //             if(element === value.id && value.checked) {
-                //                 elementIsChecked = true;
-                //             }
-                //         }
-                //     });
-                // }
-                // else { elementIsChecked = true; } //combo this with 'No Element'
-
-                areElementsInSB(elements, soulBreak);
-                return (tiers[soulBreak.soulBreakTier].checked && realms[soulBreak.realm].checked && elementIsChecked);
+                return (tiers[soulBreak.soulBreakTier].checked && realms[soulBreak.realm].checked && areElementsInSB(elements, soulBreak));
             }
             else {
                 return false;
@@ -151,7 +136,6 @@ const SoulBreakSearch = () => {
                         onChange={(event) => handleFilterChange(event, elements, setElements)}
                         onToggleAll={() => handleToggleAll(elements, toggleElements, setElements, setToggleAllElements)}
                     />
-                    {/* Element Filters */}
                 </Grid>
                 <Grid item xs={9}>                
                     <SoulBreakTable soulBreaks={soulBreaks}/>
@@ -161,27 +145,22 @@ const SoulBreakSearch = () => {
     }
 };
 
-function helloWorld() {
-    console.log('hello world');
-}
-
+/**
+ * Returns true if the elements in the SoulBreak element array are checked in the element filter
+ * @param {Object} elements - the elements state
+ * @param {Object} soulBreak - JSON object containing information about the soulbreak 
+ */
 function areElementsInSB(elements, soulBreak) {
-    soulBreak.elements.forEach(function (element) {
-       console.log(`these are my elements ${element}`); 
-    });
-    for (const [key, value] of Object.entries(elements)) {
-        console.log(`${key} ${value.id} ${value.name} ${value.checked}`);
+    //if No Elements is selected, include SBs with empty element array
+    if (soulBreak.elements.length === 0 && elements[2].checked) {
+        return true;
     }
-                    // if(soulBreak.elements.length > 0) {
-                //     soulBreak.elements.forEach(function(element) { //if element is in element state object...
-                //         for(const value of Object.values(elements)) {
-                //             if(element === value.id && value.checked) {
-                //                 elementIsChecked = true;
-                //             }
-                //         }
-                //     });
-                // }
-                // else { elementIsChecked = true; } //combo this with 'No Element'
+    for (const value of Object.values(elements)) {
+        if (soulBreak.elements.includes(value.id) && value.checked) {
+            return true;
+        }
+    }
+    return false;
 }
 
 export default SoulBreakSearch;
