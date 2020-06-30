@@ -4,6 +4,7 @@ import {TableRow, TableCell, Avatar, Collapse} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import SoulBreakDetails from './SoulBreakDetails';
 import * as constants from '../constants.js';
 
 const SoulBreak = ({soulBreak}) => {
@@ -26,7 +27,7 @@ const SoulBreak = ({soulBreak}) => {
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0}} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
-                        <p>{soulBreak.effects}</p>
+                        <SoulBreakDetails soulBreak={soulBreak}/>
                     </Collapse>
                 </TableCell>
             </TableRow>
@@ -36,7 +37,7 @@ const SoulBreak = ({soulBreak}) => {
 };
 
 SoulBreak.propTypes = {
-    soulBreak: PropTypes.object,
+    soulBreak: PropTypes.object.isRequired,
 };
 
 export default SoulBreak;
