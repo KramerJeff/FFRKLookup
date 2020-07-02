@@ -15,7 +15,8 @@ import AppBarLink from './components/AppBarLink';
 import CommandsPage from './components/CommandsPage';
 import Header from './components/Header';
 import { Grid } from '@material-ui/core';
-import { styled } from '@material-ui/core/styles';
+import { styled, createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
 import tyro from './static/images/tyro-32.png';
 const ComponentGrid = styled(Grid)({
   width: '97.5%',
@@ -26,38 +27,50 @@ const Tyro = styled(Avatar)({
   width: '32px',
   height: '32px',
 });
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#398CBD'
+    },
+  },
+});
+// const FFRKBar = styled(AppBar)({
+//   backgroundColor: '#398CBD',
+// });
 
 function App() {
   return (
-    <Router>
-      <div className="App">
-          <AppBar position="static">
-            <Toolbar>
-              <Tyro src={tyro}/>
-              <AppBarLink text='Home' route='/' />
-              <AppBarLink text='SB Search' route='/sbsearch'/>
-              <AppBarLink text='Tutorial' route='/tutorial'/>
-              <AppBarLink text='Donate' href='https://www.paypal.me/kramerajeffrey'/>
-            </Toolbar>
+    <ThemeProvider theme={theme}>
+      <Router>
+        <div className="App">
+          <AppBar position="static" color='primary'>
+              <Toolbar>
+                <Tyro src={tyro}/>
+                <AppBarLink text='Home' route='/' />
+                <AppBarLink text='SB Search' route='/sbsearch'/>
+                <AppBarLink text='Tutorial' route='/tutorial'/>
+                <AppBarLink text='Donate' href='https://www.paypal.me/kramerajeffrey'/>
+              </Toolbar>
           </AppBar>
-        <ComponentGrid container>
-            <Header />
-            {/* This is where the content is, shouldn't it have spacing? */}
-              <Switch>
-                <Route exact path='/'>
-                  <CommandsPage/>
-                </Route>
-                <Route path="/sbsearch">
-                  <SoulBreakSearch/>
-                </Route>
-                <Route path='/tutorial'>
-                  <Tutorial/>
-                </Route>
-              </Switch>
-        </ComponentGrid>
-      </div>
-      
-    </Router>
+          <ComponentGrid container>
+              <Header />
+              {/* This is where the content is, shouldn't it have spacing? */}
+                <Switch>
+                  <Route exact path='/'>
+                    <CommandsPage/>
+                  </Route>
+                  <Route path="/sbsearch">
+                    <SoulBreakSearch/>
+                  </Route>
+                  <Route path='/tutorial'>
+                    <Tutorial/>
+                  </Route>
+                </Switch>
+          </ComponentGrid>
+        </div>
+        
+      </Router>
+    </ThemeProvider>
   );
 }
 
