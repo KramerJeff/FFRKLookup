@@ -10,12 +10,12 @@ const imgEnd = "base_hands_up.png";
 
 const sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|SASB|sync|GSB|GSB\+|FSB|AASB|Glint|Glint\+/gi; //lcsb is caught by the CSB
 const lmRegex = /LM|LMR/gi;
-const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|SASB|sync|GSB|GSB\+|FSB|AASB|Glint|Glint\+|lm|lmr|abil|ability|rm|stat|char|rdive|ldive/gi;
-
+const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|SASB|sync|GSB|GSB\+|FSB|AASB|Glint|Glint\+|LB|LBO|LBG|lm|lmr|abil|ability|rm|stat|char|rdive|ldive/gi;
+const lbRegex = /LB|LBO|LBG/gi;
 
 $(function () {
   //Autocomplete stuff
-  const form = document.querySelector('form');
+  //const form = document.querySelector('form');
   const input = document.getElementById('search-text');
   let dataArray = localStorage.getItem('data') !== null ? JSON.parse(localStorage.getItem('data')) : [];
   let options = {
@@ -27,12 +27,11 @@ $(function () {
     }
   };
   localStorage.setItem('data', JSON.stringify(dataArray))
-  const data = JSON.parse(localStorage.getItem('data'));
+  //const data = JSON.parse(localStorage.getItem('data'));
   $("#search-text").easyAutocomplete(options);
   $("#search-text").focus();
-  let dictSequence = Promise.resolve();
   let abilDict = {};
-  let charDict = {};
+  //let charDict = {};
 
   //creates Dictionary of ability names and IDs for quick reference
   createAbilityDict().then(function(data) { abilDict = data; });
@@ -68,6 +67,9 @@ $(function () {
       sequence = sequence.then(function() {
         if(request.length > 1 && request[1].match(sbRegex)) {
           return parseSBRequest(request);
+        }
+        else if (request.length > 1 && request[1].match(lbRegex)) {
+          return parseLBRequest(request);
         }
         else if(request.length > 1 && request[1].match(lmRegex)) { //if I did contains.("lm") that would be too generic
           return getLMsForChar(request);
@@ -155,7 +157,6 @@ function getParts(query) {
  * return Promise with HTML formatted data
  */
 function parseSBRequest(arr) {
-  let sbHTML = "";
   let charName = arr[0];
   let sbTier = arr[1];
   let charID = getCharacterID(charName);
@@ -174,6 +175,59 @@ function parseSBRequest(arr) {
     return Promise.reject(new Error(`${charName} ${sbTier} is not a valid request`));
   }
 }
+
+/**
+ * This function parses if the user is asking for a specific limit break by name
+ * or by a character's name and LB tier e.g. Cloud LBO
+ * @param arr - array index 0 is the character name, index 1 is the lbTier
+ * return Promise with HTML formatted data
+ */
+function parseLBRequest(arr) {
+  let charName = arr[0];
+  let lbTier = arr[1];
+  let charID = getCharacterID(charName);
+  if (charID === -1) {
+    return Promise.reject(new Error(`${charName} is not a valid character name`));
+  }
+  else if (lbTier === 'lb') {
+    let objLBTier = { tierID: 0 };
+    return getTierLBsForCharID(charID, objLBTier, arr);
+  }
+  else if (lbTier.match(lbRegex)) { //contains specific character name and tier
+    let objLBTier = filterLBTier(lbTier); //filter the tier info to pass to getting the soul breaks
+    return getTierLBsForCharID(charID, objLBTier, arr);
+  }
+  else {
+    return Promise.reject(new Error(`${charName} ${lbTier} is not a valid request`));
+  }
+}
+
+/**
+ * Creates an Object based on the SB search string to help create the API
+ * request to retrieve Limit Break data.
+ * @param lbString - the Limit Break search string e.g. LBG1, LBO2, etc.
+ * @returns Object containing the tierID and index of the LB you are looking for e.g. LBO2 (second LBO)
+ */
+function filterLBTier(lbString) {
+  let lbTier = lbString.toLowerCase();
+  let format = { index: 0 };
+  if (hasNumber(lbTier)) { //find if there's a number
+    format.index = lbTier.charAt(lbTier.length - 1); //create an index
+    lbTier = lbTier.substring(0, lbTier.length - 1); //get rid of number in tier
+  }
+  format.tierName = lbTier;
+  switch (lbTier) {
+    case "lbg":
+      format.tierID = 3;
+      break;
+    case "lbo":
+      format.tierID = 4;
+      break;
+  }
+  return format;
+}
+
+
 
 /**
  * Creates an Object based on the SB search string to help create the API
@@ -312,6 +366,48 @@ function getTierSBsForCharID(charID, cbParams, request) {
     });
   });
 }
+
+
+/**
+ * Called when user is searching for a specific tier of character relics e.g. Cloud BSB, Cloud USB
+ * @param charID - character ID
+ * @param cbParams - callback parameters
+ */
+function getTierLBsForCharID(charID, cbParams, request) {
+  return new Promise(function (resolve, reject) {
+    $.getJSON(apiBase + "/LimitBreaks/Character/" + charID, function (json) {    
+      let LBs = `<div class='result'><p class='request lato'><b>Request:</b> ${request[0]} ${request[1].toUpperCase()}</p>`;
+      let arr = [];
+      if (cbParams.tierID === 0) { //if tierID = 0, get all SBs
+        json.forEach((json) => { LBs += formatter.formatLBJSON(json); });
+      }
+      else if (cbParams.index === 0) { //if there is no sb number e.g. cloud usb2
+        json.forEach((json) => {
+          if (json.limitBreakTier === cbParams.tierID) {
+            LBs += formatter.formatLBJSON(json);
+          }
+        });
+      }
+      else { //if there IS an index - TODO REFACTOR so the loop breaks once the correct SB is reached
+        json.forEach((json) => {
+          if (json.limitBreakTier === cbParams.tierID) {
+            arr.push(json);
+          }
+        });
+        if (arr.length > cbParams.index - 1) { //this should handle array out of bound exception
+          LBs += formatter.formatLBJSON(arr[cbParams.index - 1]);
+        }
+        else {
+          reject(new Error(`${request[0]} does not have ${cbParams.index} ${request[1].replace(/[0-9]/g, '')}s`));
+        }
+      }
+      LBs += '</div>';
+      resolve(LBs);
+    });
+  });
+}
+
+
 
 /**
  * Gets the Legend Materia for the specified character
