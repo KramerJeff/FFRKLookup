@@ -3,7 +3,7 @@ import * as constants from '../constants.js';
 import SoulBreakFilter from './SoulBreakFilter';
 import SoulBreakTable from './SoulBreakTable';
 import {Grid} from '@material-ui/core';
-import { styled } from '@material-ui/core/styles';
+//import { styled } from '@material-ui/core/styles';
 
 
 

@@ -5,11 +5,6 @@ import SoulBreakFilter from './SoulBreakFilter';
 const SoulBreakFilters = ({tiers, allTierToggle, realms, allRealmToggle, onTierChange, onTierAllToggle, onRealmChange, onRealmAllToggle}) => {
     return (
         <div>
-            {/* Filter Header */}
-            {/* <FilterHeader 
-                onClick={() => setTierOpen(!tierOpen)}
-                tierOpen={tierOpen}
-            /> */}
             <SoulBreakFilter 
                 filterName='Tiers'
                 filters={tiers} 

@@ -24,7 +24,7 @@ const AppBarLink = ({text, route, ...props}) => {
 
 AppBarLink.propTypes = {
     text: PropTypes.string.isRequired,
-    route: PropTypes.string.isRequired,
+    route: PropTypes.string,
 };
 
 export default AppBarLink;

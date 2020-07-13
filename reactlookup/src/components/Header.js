@@ -1,13 +1,13 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+//import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import Link from '@material-ui/core/Link';
 import reddit from '../static/images/reddit.svg';
 import discord from '../static/images/discord.svg';
 import {styled} from '@material-ui/core/styles';
-import { flexbox } from '@material-ui/system';
+//import { flexbox } from '@material-ui/system';
 
 const HeaderGrid = styled(Grid)({
     display: 'flex',
