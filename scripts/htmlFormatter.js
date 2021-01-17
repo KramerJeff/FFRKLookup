@@ -422,7 +422,18 @@ export function formatLBJSON(json) {
     type = `<b>Type:</b> ${consts.damageFormulaDict[json.damageFormulaType]}`;
   }
 
-  let entry = `<div class='flex'><span class='margin-right entry__castTime'><b>Element:</b> ${formatElements(json)}</span><span class='entry__elements'></span></div><div class='flex'><span class='margin-right entry__castTime'><b>Multiplier:</b> ${json.multiplier}</span><span class='entry__elements'><b>Cast Time:</b> ${json.castTime}</span></div><div class='flex'><span class='margin-right entry__castTime'><b>Target:</b> ${consts.targetTypeDict[json.targetType]}</span><span class='entry__elements'>${type}</span></div></div></div></div>`;
+  let entry = 
+    `<div class='flex'>
+      <span class='margin-right entry__castTime'><b>Element:</b> ${formatElements(json)}</span><span class='entry__elements'></span>
+    </div>
+    <div class='flex'>
+      <span class='margin-right entry__castTime'><b>Multiplier:</b> ${json.multiplier}</span>
+      <span class='entry__elements'><b>Cast Time:</b> ${json.castTime}</span>
+    </div>
+    <div class='flex'>
+      <span class='margin-right entry__castTime'><b>Target:</b> ${consts.targetTypeDict[json.targetType]}</span>
+      <span class='entry__elements'>${type}</span>
+    </div></div></div></div>`;
 
 
   let statuses = "";
