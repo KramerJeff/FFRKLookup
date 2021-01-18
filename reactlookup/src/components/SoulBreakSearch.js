@@ -39,7 +39,7 @@ const SoulBreakSearch = () => {
         6: {id: 6, name: 'VI', checked: true},
         7: {id: 7, name: 'VII', checked: true},
         8: {id: 8, name: 'VIII', checked: true},
-        9: {id: 19, name: 'IX', checked: true},
+        9: {id: 9, name: 'IX', checked: true},
         10: {id: 10, name: 'X', checked: true},
         11: {id: 11, name: 'XI', checked: true},
         12: {id: 12, name: 'XII', checked: true},

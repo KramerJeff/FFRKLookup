@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import SoulBreakCommands from './SoulBreakCommands';
 const SoulBreakDetails = ({soulBreak}) => {
     return (
-        <p>{soulBreak.effects}</p>
+        <div>
+            <p>{soulBreak.effects}</p>
+            {soulBreak.commands && <SoulBreakCommands commands={soulBreak.commands}/>}
+        </div>
     );
 };
 

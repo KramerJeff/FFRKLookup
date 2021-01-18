@@ -2,11 +2,17 @@ import React, {useEffect, useState} from 'react';
 import * as constants from '../constants.js';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { styled } from '@material-ui/core/styles';
+import styled from 'styled-components';
 
-const CommandTextField = styled(TextField)({
-    
-});
+const CommandTextField = styled(TextField)`
+    min-width: 250px;
+    margin-right: 1rem;
+`;
+
+const StyledButton = styled(Button)`
+    height: 100%;
+`;
+
 const CommandsPage = () => {
 
     const [query, setQuery] = useState('');
@@ -116,11 +122,15 @@ const CommandsPage = () => {
     }, [abilArr, charArr]);
 
     return (
-        <form autoComplete='on' onSubmit={handleSubmit}>
-            <CommandTextField id='commands' label='What are you looking for?' variant='outlined' onChange={handleChange}/>
-            <Button variant='contained' color='primary' type='submit'>Search</Button>
-        </form>
-        //iterate through array of objects to render components 
+        <div>
+            <form autoComplete='on' onSubmit={handleSubmit}>
+                <CommandTextField id='commands' label='What are you looking for?' variant='outlined' onChange={handleChange}/>
+                <StyledButton variant='contained' color='primary' type='submit'>Search</StyledButton>
+            </form>
+            
+            {/** Iterate through array of Objects to render components e.g. for each Object, pass props to component */}
+
+        </div>
     );
 };
 

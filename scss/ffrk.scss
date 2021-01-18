@@ -201,10 +201,6 @@ html, body {
   height: 32px;
 }
 
-.title-container {
-
-}
-
 .tutorial {
   font-size: 13px;
   margin-left: auto;
@@ -282,6 +278,9 @@ tbody.left th {
  * Soul Break Results
  */
 
+ #results {
+   margin-bottom: 1rem;
+ }
 /*.sb-result {
   border-bottom: 1px solid grey;  TODO make border-top on all results except the first
   padding-bottom: 14px;

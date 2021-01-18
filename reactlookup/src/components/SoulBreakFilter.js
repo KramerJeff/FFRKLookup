@@ -11,22 +11,36 @@ const SBCheckboxLabel = styled(FormControlLabel)`
     }
 `;
 
+const StyledLink = styled(Link)`
+    display: flex;
+    cursor: pointer;
+    &:hover {
+        text-decoration: none;
+    }
+`;
+
+const CollapseBox = styled(Box)`
+    display: flex;
+    cursor: pointer;
+`;
+
 const SoulBreakFilter = ({filterName, filters, toggleAll, onChange, onToggleAll}) => {
     const [open, setOpen] = useState(true);
 
     return (
         <div>
-            <Box display="flex" onClick={() => setOpen(!open)}>
+            <CollapseBox onClick={() => setOpen(!open)}>
                 <Typography variant='h6' align='left'>{filterName}</Typography>
                 <IconButton aria-label="expand row" size="small">
                     {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                 </IconButton>
-            </Box>
+            </CollapseBox>
             <Collapse in={open} timeout="auto" unmountOnExit>
-            <Link display="flex" href='#' onClick={onToggleAll}>{toggleAll ? 'Uncheck All' : 'Check All'}</Link>
-                <FormGroup column>
-                    {Object.values(filters).map(filter => {
+            <StyledLink onClick={onToggleAll}>{toggleAll ? 'Uncheck All' : 'Check All'}</StyledLink>
+                <FormGroup>
+                    {Object.values(filters).map((filter, key) => {
                         return (<SBCheckboxLabel
+                            key={key}
                             control={<Checkbox checked={filter.checked} onChange={onChange} name={filter.id} />}
                             label={filter.name}
                         />);

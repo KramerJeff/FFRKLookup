@@ -2,3 +2,4 @@
 .idea/
 *.zip
 *.side
+.DS_Store
