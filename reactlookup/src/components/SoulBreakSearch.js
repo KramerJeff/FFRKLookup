@@ -3,9 +3,6 @@ import * as constants from '../constants.js';
 import SoulBreakFilter from './SoulBreakFilter';
 import SoulBreakTable from './SoulBreakTable';
 import {Grid} from '@material-ui/core';
-//import { styled } from '@material-ui/core/styles';
-
-
 
 const SoulBreakSearch = () => {
     const [error, setError] = useState(null);
@@ -117,7 +114,7 @@ const SoulBreakSearch = () => {
     else {
         return (
             <React.Fragment>
-                <Grid item xs={3}>
+                <Grid item xs={3} md={2}>
                     <SoulBreakFilter 
                         filterName='Tiers'
                         filters={tiers} 
@@ -140,7 +137,7 @@ const SoulBreakSearch = () => {
                         onToggleAll={() => handleToggleAll(elements, toggleElements, setElements, setToggleAllElements)}
                     />
                 </Grid>
-                <Grid item xs={9}>                
+                <Grid item xs={9} md={10}>                
                     <SoulBreakTable soulBreaks={soulBreaks}/>
                 </Grid>
             </React.Fragment>

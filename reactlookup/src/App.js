@@ -54,15 +54,14 @@ function App() {
           </AppBar>
           <ComponentGrid container>
               <Header />
-              {/* This is where the content is, shouldn't it have spacing? */}
                 <Switch>
                   <Route exact path='/'>
                     <CommandsPage/>
                   </Route>
-                  <Route path="/sbsearch">
+                  <Route exact path="/sbsearch">
                     <SoulBreakSearch/>
                   </Route>
-                  <Route path='/tutorial'>
+                  <Route exact path='/tutorial'>
                     <Tutorial/>
                   </Route>
                 </Switch>

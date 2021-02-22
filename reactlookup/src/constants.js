@@ -1,7 +1,32 @@
 export const API_URL_BASE = 'https://ffrktoolkit.com/ffrk-api/api/v1.0';
-export const SB_TIER = ["Unknown", "Default", "Shared", "RW", "SB", "SSB", "BSB", "OSB", "USB", "CSB", "Glint", "Glint+", "AOSB", "AASB", "SASB"];
+export const SB_TIER = ["Unknown", "Default", "Shared", "RW", "SB", "SSB", "BSB", "OSB", "USB", "CSB", "Glint", "Glint+", "AOSB", "AASB", "SASB", "ADSB"];
 export const REALMS = ["Unknown", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "FFT", "Beyond", "Type-0", "KH", "Core", "-", "DB Only"];
 export const ELEMENTS = ["Unknown", "", "-", "Dark", "Earth", "Fire", "Holy", "Ice", "Lightning", "NE", "Poison", "Posion", "Water", "Wind", "Light.", "", "?"];
+
+export const SCHOOLS = {
+    0: "Unknown",
+    2: "Bard",
+    3: "Black Magic",
+    4: "Celerity",
+    5: "Combat",
+    6: "Dancer",
+    7: "Darkness",
+    8: "Dragoon",
+    9: "Heavy",
+    10: "Knight",
+    11: "Machinist",
+    12: "Monk",
+    13: "Ninja",
+    14: "Samurai",
+    15: "Sharpshooter",
+    17: "Special",
+    18: "Spellblade",
+    19: "Summoning",
+    20: "Support",
+    21: "Thief",
+    22: "White Magic",
+    23: "Witch"
+  };
 
 export const CHARACTER_ALIASES = {
     "onion knight": ["ok", "onion knight", "onion"],
