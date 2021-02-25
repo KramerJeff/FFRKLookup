@@ -10,7 +10,7 @@ const imgEnd = "base_hands_up.png";
 
 const sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|SASB|sync|GSB|GSB\+|FSB|AASB|ADSB|Glint|Glint\+/gi; //lcsb is caught by the CSB
 const lmRegex = /LM|LMR/gi;
-const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|SASB|sync|GSB|GSB\+|FSB|AASB|ADSB|Glint|Glint\+|LB|LBO|LBG|lm|lmr|abil|ability|rm|stat|char|rdive|ldive/gi;
+const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|SASB|sync|GSB|GSB\+|FSB|AASB|ADSB|Glint|Glint\+|LB|LBO|LBG|lm|lmr|abil|ha|ability|rm|stat|char|rdive|ldive/gi;
 const lbRegex = /LB|LBO|LBG/gi;
 
 $(function () {
@@ -76,6 +76,9 @@ $(function () {
         }
         else if(request.length > 1 && request[1] === "abil" || request[1] === "ability") {
           return getAbility(request[0], abilDict);
+        }
+        else if(request.length > 1 && request[1] === "ha") {
+          return getHeroAbility(request[0]); 
         }
         else if(request.length > 1 && request[1] === "rm") {
           return getRecordMateria(request[0]); //TODO RM aliases
@@ -493,6 +496,32 @@ function getAbility(abilityName, abilDict) {
   else {
     return Promise.reject(new Error(`${abilityName} is not an acceptable ability name`));
   }
+}
+
+/**
+ * Sends a post request to the Abilities endpoint to try and find a 
+ * specific characters's hero ability
+ * @param {string} charName - the name of the character whose ability you want
+ */
+function getHeroAbility(charName) {
+  return new Promise(function(resolve, reject) {
+    $.ajax({
+      url: `${apiBase}/Abilities/Search`, 
+      type:'POST', 
+      data: JSON.stringify({abilityName: `(${charName} Only)`}), 
+      contentType:'application/json; charset=utf-8', 
+      dataType:'json', 
+      success: function(json) {
+        //const json = JSON.stringify(data);
+        let HAs = `<p class='request lato'><b>Request</b> - ${charName} HA</p>`;
+        console.log(json);
+        json.forEach((json) => {
+          HAs += formatter.formatHAJSON(json);
+        });
+        resolve(HAs);
+      }
+    });
+  });
 }
 
 function getRecordMateria(rmName) {

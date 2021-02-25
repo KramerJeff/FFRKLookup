@@ -210,6 +210,37 @@ function formatOrbRequirements(json) {
   return orbReqs + headerRow + row1 + row2 + row3 + row4 + row5;
 }
 
+function formatHAOrbRequirements(json) {
+  let orbReqs = "<p class='info'>Hone Requirements</p><table class='info' border='1'><thead>";
+  let headerRow = "<tr><th>Rank</th>";
+  let row1 = "<tbody class='center'><tr><td>R1</td>";
+  let row2 = "<tr><td>R2</td>";
+  let row3 = "<tr><td>R3</td>";
+  let row4 = "<tr><td>R4</td>";
+  for(let i = 0; i < json.orbRequirements.length; i++) {
+    switch(i % 4) {
+      case 0:
+        if(json.orbRequirements[i].orbName !== "Record Board") {
+          headerRow += "<th>" + json.orbRequirements[i].orbName + "</th>";
+          row1 += "<td>" + json.orbRequirements[i].orbCount + "</td>";
+        }
+        break;
+      case 1:
+        row2 += "<td>" + json.orbRequirements[i].orbCount + "</td>";
+        break;
+      case 2:
+        row3 += "<td>" + json.orbRequirements[i].orbCount + "</td>";
+        break;
+      case 3:
+        row4 += "<td>" + json.orbRequirements[i].orbCount + "</td>";
+        break;
+    }
+  }
+  headerRow += "</tr></thead>";
+  row4 += "</tbody></table>";
+  return orbReqs + headerRow + row1 + row2 + row3 + row4;
+}
+
 /**
  * This helper function will find the element name to match the ID passed in
  * @param elementID - the element ID
@@ -226,21 +257,39 @@ function parseElementNumber(elementID) {
 }
 
 export function formatAbilityJSON(json) {
-  let start = "<div class='result'>";
+  const start = "<div class='result'>";
   let name = `<h3 class='result__name'>${json.abilityName}`;
   name += (json.isInGlobal) ? `</h3>` : ` (JP)</h3>`;
-  let icon = "<div class='icon-container'><img class='icon' src='" + json.imagePath.split('"')[0] + "'/>";
-  let effect = "<p class='effect'>" + json.effects + "</p></div>";
-  let flexDiv = "<div class='flex'>";
-  let castTime = "<span class='margin-right info'><b>Cast Time:</b> " + json.castTime + "</span>";
-  let elements = "<span class='elements info'><b>Elements:</b> " + formatElements(json) + "</span>";
-  let multiplier = "<span class='info'><b>Multiplier:</b> " + json.multiplier + "</span>";
-  let school = "<span class='margin-right info'><b>School:</b> " + consts.schoolDict[json.school] + "</span>";
-  let sbGain = "<span class='margin-right info'><b>SB Gain:</b> " + json.soulBreakPointsGained + "</span>";
-  let target = "<span class='info'><b>Target:</b> " + consts.targetTypeDict[json.targetType] + "</span>";
-  let endDiv = "</div>";
+  const icon = "<div class='icon-container'><img class='icon' src='" + json.imagePath.split('"')[0] + "'/>";
+  const effect = "<p class='effect'>" + json.effects + "</p></div>";
+  const flexDiv = "<div class='flex'>";
+  const castTime = "<span class='margin-right info'><b>Cast Time:</b> " + json.castTime + "</span>";
+  const elements = "<span class='elements info'><b>Elements:</b> " + formatElements(json) + "</span>";
+  const multiplier = "<span class='info'><b>Multiplier:</b> " + json.multiplier + "</span>";
+  const school = "<span class='margin-right info'><b>School:</b> " + consts.schoolDict[json.school] + "</span>";
+  const sbGain = "<span class='margin-right info'><b>SB Gain:</b> " + json.soulBreakPointsGained + "</span>";
+  const target = "<span class='info'><b>Target:</b> " + consts.targetTypeDict[json.targetType] + "</span>";
+  const endDiv = "</div>";
   return start + name + icon + effect + flexDiv + castTime + elements + endDiv + flexDiv + school + multiplier + endDiv + flexDiv + sbGain + target + endDiv + formatOrbRequirements(json) + endDiv;
 }
+
+export function formatHAJSON(json) {
+  const start = "<div class='result'>";
+  let name = `<h3 class='result__name'>${json.abilityName}`;
+  name += (json.isInGlobal) ? `</h3>` : ` (JP)</h3>`;
+  const icon = "<div class='icon-container'><img class='icon' src='" + json.imagePath.split('"')[0] + "'/>";
+  const effect = "<p class='effect'>" + json.effects + "</p></div>";
+  const flexDiv = "<div class='flex'>";
+  const castTime = "<span class='margin-right info'><b>Cast Time:</b> " + json.castTime + "</span>";
+  const elements = "<span class='elements info'><b>Elements:</b> " + formatElements(json) + "</span>";
+  const multiplier = "<span class='info'><b>Multiplier:</b> " + json.multiplier + "</span>";
+  const school = "<span class='margin-right info'><b>School:</b> " + consts.schoolDict[json.school] + "</span>";
+  const sbGain = "<span class='margin-right info'><b>SB Gain:</b> " + json.soulBreakPointsGained + "</span>";
+  const target = "<span class='info'><b>Target:</b> " + consts.targetTypeDict[json.targetType] + "</span>";
+  const endDiv = "</div>";
+  return start + name + icon + effect + flexDiv + castTime + elements + endDiv + flexDiv + school + multiplier + endDiv + flexDiv + sbGain + target + endDiv + formatHAOrbRequirements(json) + endDiv;
+}
+
 
 /**
  * This function will format the Legend Materia JSON into a human-readable result.
