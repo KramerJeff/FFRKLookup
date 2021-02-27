@@ -104,7 +104,7 @@ export const abilityAliases = {
   "ripper plasma": ["ripping plasma"]
 };
 
-export const ignoredStatuses = ["Remove", "Reraise", "Haste", "Burst Mode", "Imp", "Attach", "Blink"];
+export const ignoredStatuses = ["Remove", "Reraise", "Haste", "Burst Mode", "Imperil", "Attach", "Blink"];
 
 export const nightmareSchools = ["Support", "Combat", "White Magic", "Celerity", "Black Magic", "Summoning"];
 

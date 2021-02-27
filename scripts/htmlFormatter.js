@@ -132,7 +132,8 @@ function getSBStatuses(statusJson, braveJson, statusArr) {
       }
       else if(statusAllowed(statusJson[i].description)) { //make sure status is not 'blacklisted'
         statuses += "<span class='status__name'>" + statusJson[i].description + "</span>";
-        statuses += "<p class='status__effect'>" + statusJson[i].effects + "</p>";
+        statuses += `<p class='status__effect'>${statusJson[i].effects}</p><p>Duration: ${statusJson[i].defaultDuration} seconds</p>`;
+
       }
     }
     statuses += "</div>";
@@ -338,7 +339,7 @@ export function formatRMJSON(json) {
 export function formatStatusJSON(json, options) {
   let start = "<div class='result'>";
   let name = "<h3 class='result__name'>" + json.commonName + "</h3>";
-  let effect = "<div><p class='effect'>" + json.effects + "</p></div>";
+  let effect = `<div><p class='effect'>${json.effects}</p><p>Duration: ${json.defaultDuration} seconds</p></div>`;
   let end = "</div>";
   if(options === "append") {
     return name + effect;
