@@ -45,7 +45,7 @@ export const CHARACTER_ALIASES = {
     "gogo (v)": ["gogo v", "gogo5", "gogo 5"],
     "gogo (vi)": ["gogo vi", "gogo6", "gogo 6"],
     "enna kros": ["enna"],
-    "y'shtola": ["y'sh", "ysh"]
+    "y'shtola": ["y'sh", "ysh", "yshtola"]
 };
 
 export const ABILITY_ALIASES = {

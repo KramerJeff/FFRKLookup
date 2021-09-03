@@ -78,23 +78,38 @@ export const charIDs = {
 };
 
 export const characterAliases = {
-  "onion knight": ["ok", "onion knight", "onion"],
-  "orlandeau": ["tg cid", "tgc"],
+  "aerith": "aeris",
+  "alisaie": "ali",
+  "alphinaud": "alph",
+  "barbariccia": "barb",
+  "cait sith": "cait",
   "cecil (dark knight)": ["decil", "dcecil", "dark knight cecil", "cecil dark knight"],
   "cecil (paladin)": ["pecil", "pcecil", "paladin cecil", "cecil paladin"],
-  "gilgamesh": "greg",
-  "aerith": "aeris",
+  "cid raines": ["cid13", "raines"],
   "cid (iv)": ["cid iv", "cid4", "cid 4"],
-  "cid (xiv)": ["cid xiv", "cid 14", "cid14"],
   "cid (vii)": ["cid vii", "cid7", "cid 7"],
-  "elarra": "urara",
-  "barbariccia": "barb",
+  "cid (xiv)": ["cid xiv", "cid 14", "cid14"],
   "cloud of darkness": "cod",
-  "red xiii": ["nanaki", "red13", "red 13"],
+  "elarra": "urara",
+  "enna kros": ["enna"],
+  "gladiolus": "gladio",
+  "gilgamesh": "greg",
   "gogo (v)": ["gogo v", "gogo5", "gogo 5"],
   "gogo (vi)": ["gogo vi", "gogo6", "gogo 6"],
-  "enna kros": ["enna"],
-  "y'shtola": ["y'sh", "ysh"]
+  "haurchefant": ["horse"],
+  "kelger": "kelgar",
+  "lightning": "claire",
+  "lunafreya": "luna",
+  "meliadoul": "melia",
+  "orlandeau": ["tg cid", "tgc"],
+  "onion knight": ["ok", "onion knight", "onion"],
+  "papalymo": ["papa"],
+  "red xiii": ["red", "red13", "red 13", "nanaki"],
+  "thief (i)": ["thief"],
+  "sephiroth": "seph",
+  "ultimecia": ["ulty"],
+  "warrior of light": ["warrior"],
+  "y'shtola": ["y'sh", "ysh", "yshtola"]
 };
 
 export const abilityAliases = {

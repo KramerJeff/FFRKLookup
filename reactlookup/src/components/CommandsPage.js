@@ -23,18 +23,20 @@ function getSoulBreak(query) {
  * 
  * @param {*} arr 
  * @param {Array} charArr - list of characters names and their IDs
+ * TODO grab charArr from Context API (????)
  */
 function parseSBRequest(arr, charArr) {
     console.log(`arrrrrr ${arr}`);
     const charName = arr[0]; 
     const sbTier = arr[1]; //e.g. BSB, BSB1, OSB
-    console.log(`parseSBRequest ${charArr}`);
     const charID = charArr.indexOf(charName);
-    console.log(charID);
     return new Promise((resolve, reject) => {
         fetch(`${constants.API_URL_BASE}/SoulBreaks/Character/${charID}`)
             .then(response => response.json())
             .then((data) => {
+                if(sbTier) {
+                    data = data.filter(sb => sb.soulBreakTier === constants.SB_TIER.indexOf(sbTier.toUpperCase()));
+                }
                 resolve(data);
             });
     });    
@@ -43,7 +45,7 @@ function parseSBRequest(arr, charArr) {
 const CommandsPage = () => {
 
     const [query, setQuery] = useState('');
-    const [searchData, setSearchData] = useState();
+    const [searchData, setSearchData] = useState([]);
     const [abilArr, setAbilArr] = useState([]);
     const [charArr, setCharArr] = useState([]);
 
@@ -78,20 +80,9 @@ const CommandsPage = () => {
                     return getSoulBreak(query);    
                 }
             }).then((data) => {
-                setSearchData(data); //currently only works for one query
-                console.log(data);
+                setSearchData((searchData) => { return [...searchData, ...data]});
             });
         });
-        //setSearchData(mySearchData);
-        //pass data to components
-        // fetch(`${constants.API_URL_BASE}/SoulBreaks`)
-        //     .then(response => response.json())
-        //     .then(
-        //         (result) => {
-        //             setSearchData(result);
-        //             console.log(result);
-        //         }
-        //     )
     };
     /**
      * Take the input from the search box and parses it into
@@ -166,16 +157,16 @@ const CommandsPage = () => {
     }, []);
 
     //test function
-    useEffect(() => {
-        if(abilArr && abilArr.length > 0) {
-            console.log(`ability 31 is ${abilArr[31]}`);
-        }
-        if (charArr && charArr.length > 0) {
-            console.log(`character 31 is ${charArr[31]}`);
-            console.log(charArr);
-            console.log(`Cloud is here? ${charArr.indexOf('cloud')}`);
-        }
-    }, [abilArr, charArr]);
+    // useEffect(() => {
+    //     if(abilArr && abilArr.length > 0) {
+    //         console.log(`ability 31 is ${abilArr[31]}`);
+    //     }
+    //     if (charArr && charArr.length > 0) {
+    //         console.log(`character 31 is ${charArr[31]}`);
+    //         console.log(charArr);
+    //         console.log(`Cloud is here? ${charArr.indexOf('cloud')}`);
+    //     }
+    // }, [abilArr, charArr]);
 
     return (
         <div>
@@ -185,7 +176,10 @@ const CommandsPage = () => {
             </form>
             
             {/** Iterate through array of Objects to render components e.g. for each Object, pass props to component */}
-            {/** TODO: Make results component which can handle all different data types */}
+            {/** TODO
+             * Make SBs filter by tier
+             * Make other commands work like abilities, LMs, Hero Abilities, etc.
+             */}
             {searchData && searchData.map((datum, i) => {
                 console.log(datum);
                 return <Request data={datum} key={i}/>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {Avatar, Typography} from '@material-ui/core';
 
@@ -13,7 +13,6 @@ const SBIcon = styled(Avatar)`
 `;
 
 const Request = ({data}) => {
-  console.log(`Request: ${data}`);
   return (
     <div>
       {data.description && <Typography variant='h5'>{data.description}</Typography>}

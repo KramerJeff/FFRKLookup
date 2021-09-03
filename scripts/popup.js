@@ -12,6 +12,8 @@ const sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|SASB|sync|GSB|GSB\+|
 const lmRegex = /LM|LMR/gi;
 const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|SASB|sync|GSB|GSB\+|FSB|AASB|ADSB|Glint|Glint\+|LB|LBO|LBG|lm|lmr|abil|ha|ability|rm|stat|char|rdive|ldive/gi;
 const lbRegex = /LB|LBO|LBG/gi;
+let charDict = {};
+
 
 $(function () {
   //Autocomplete stuff
@@ -31,11 +33,16 @@ $(function () {
   $("#search-text").easyAutocomplete(options);
   $("#search-text").focus();
   let abilDict = {};
-  //let charDict = {};
 
   //creates Dictionary of ability names and IDs for quick reference
   createAbilityDict().then(function(data) { abilDict = data; });
-  //createCharacterDict().then(function(data) { charDict = data; }); //TODO
+
+  createCharacterDict().then(function(data) { 
+    charDict = data;
+    console.log(charDict);
+    console.log(consts.charIDs);
+  });
+
 	$("#search-button").click(function(e) {
     e.preventDefault();
     //based on command, send data to correct function
@@ -47,7 +54,8 @@ $(function () {
     let query = $("#search-text").val();
     //places query into localStorage for autocomplete
     let search = input.value;
-
+    console.log('hi');
+    console.log(charDict);
     input.value = '';
     options = {
       data: dataArray,
@@ -331,7 +339,7 @@ function searchAliases(aliasDict, name) {
  * @returns charID - the integer ID of the character, -1 if charName is not in dictionary
  */
 function getCharacterID(charName) {
-  return (consts.charIDs[charName] ? consts.charIDs[charName] : -1);
+  return (charDict[charName] ? charDict[charName] : -1);
 }
 
 /**
@@ -514,7 +522,6 @@ function getHeroAbility(charName) {
       success: function(json) {
         //const json = JSON.stringify(data);
         let HAs = `<p class='request lato'><b>Request</b> - ${charName} HA</p>`;
-        console.log(json);
         json.forEach((json) => {
           HAs += formatter.formatHAJSON(json);
         });

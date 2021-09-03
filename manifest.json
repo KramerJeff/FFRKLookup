@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "FFRK Lookup",
-  "version": "1.2.2",
+  "version": "1.2.4",
   "description": "This extension is used as a quick reference tool for Enlir's FFRK spreadsheet.",
   "icons": {
     "48": "images/tyro-48.png",
