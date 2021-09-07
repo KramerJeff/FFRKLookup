@@ -5,6 +5,7 @@ import {
   Route
 } from 'react-router-dom';
 import './App.css';
+import 'antd/dist/antd.css';
 import './components/SoulBreakSearch';
 import SoulBreakSearch from './components/SoulBreakSearch';
 import AppBar from '@material-ui/core/AppBar';
@@ -18,6 +19,7 @@ import { Grid } from '@material-ui/core';
 import { styled, createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import tyro from './static/images/tyro-32.png';
+
 const ComponentGrid = styled(Grid)({
   width: '97.5%',
   margin: '0 auto',

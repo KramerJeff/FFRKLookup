@@ -1,15 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-const SoulBreakStatuses = ({statuses}) => {
+const Title = styled.h3`
+  margin-bottom: 0;
+`;
+
+const Effects = styled.p`
+  margin-bottom: 1rem;
+`;
+
+const SoulBreakStatuses = ({statuses, className}) => {
   return (
     <>
-      {statuses.map(status => {
+      {statuses.map((status, i) => {
         return (
-          <>
-            <h3>{status.description}</h3>
-            <p>{status.effects}</p>
-          </>
+          <div className={className} key={i}>
+            <Title className='sbStatusTitle'>{status.description}</Title>
+            <Effects className='sbStatusEffect'>{status.effects}</Effects>
+          </div>
         );
       })}
     </>

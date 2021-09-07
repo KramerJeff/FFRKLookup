@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 const StyledLink = styled(Link)`
     color: white;
-    margin: 0 4rem;
+    margin: 0 3%;
 `;
 
 const AppBarLink = ({text, route, ...props}) => {

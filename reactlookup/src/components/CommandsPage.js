@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import { useLocation } from 'react-router-dom';
 import * as constants from '../constants.js';
+import { handleErrors, capitalize } from '../helpers';
+
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Request from './Request';
@@ -12,7 +13,7 @@ const CommandTextField = styled(TextField)`
 `;
 
 const StyledButton = styled(Button)`
-    height: 100%;
+    height: 56px;
 `;
 
 function getSoulBreak(query) {
@@ -32,14 +33,35 @@ function parseSBRequest(arr, charArr) {
     const charID = charArr.indexOf(charName);
     return new Promise((resolve, reject) => {
         fetch(`${constants.API_URL_BASE}/SoulBreaks/Character/${charID}`)
+            .then(handleErrors)
             .then(response => response.json())
             .then((data) => {
                 if(sbTier) {
                     data = data.filter(sb => sb.soulBreakTier === constants.SB_TIER.indexOf(sbTier.toUpperCase()));
                 }
+                console.log('DATA');
+                data.unshift({title: `${capitalize(charName)} ${sbTier.toUpperCase()}`});
+                console.log(data);
+                resolve(data);
+            })
+            .catch(error => reject(error));
+    });    
+}
+
+function parseLMRequest(arr, charArr) {
+    console.log(`LMarrrr ${arr}`);
+    const charName = arr[0];
+    const lmTier = arr[1];
+    const charID = charArr.indexOf(charName);
+    return new Promise((resolve, reject) => {
+        fetch(`${constants.API_URL_BASE}/LegendMaterias/Character/${charID}`)
+            .then(handleErrors)
+            .then(response => response.json())
+            .then((data) => {
+                data.unshift({title: `${capitalize(charName)} ${lmTier.toUpperCase()}`});
                 resolve(data);
             });
-    });    
+    });
 }
 
 const CommandsPage = () => {
@@ -48,14 +70,20 @@ const CommandsPage = () => {
     const [searchData, setSearchData] = useState([]);
     const [abilArr, setAbilArr] = useState([]);
     const [charArr, setCharArr] = useState([]);
+    const [error, setError] = useState(''); //TODO make array
 
     const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|SASB|sync|GSB|GSB\+|FSB|AASB|ADSB|Glint|Glint\+|LB|LBO|LBG|lm|lmr|abil|ability|rm|stat|char|rdive|ldive/gi;
     const lmRegex = /LM|LMR/gi;
     const sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|SASB|sync|GSB|GSB\+|FSB|AASB|ADSB|Glint|Glint\+/gi;
+    const lbRegex = /LB|LBO|LBG/gi;
     const handleChange = (event) => {
         setQuery(event.target.value);
     }
 
+    /**
+     * 
+     * @param {*} event 
+     */
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log('i submitted the thing ' + query);
@@ -67,23 +95,45 @@ const CommandsPage = () => {
         console.log(queries);
         let sequence = Promise.resolve();
         //process query request(s)
+        setSearchData([]); //reset data
+        setError('');
         queries.forEach((query) => { //
+            console.log(query);
             sequence = sequence.then(() => {
-                if(query.length > 1) {
+                if(typeof(query) === 'object') { //query will be an array (object) if it has matched a cmd
                     const requestName = query[1];
                     if(requestName.match(sbRegex)) {
                         console.log(`it's an SB!`);
                         return parseSBRequest(query, charArr);
                     }
+                    else if(requestName.match(lmRegex)) {
+                        console.log(`it's a LM!`);
+                        return parseLMRequest(query, charArr);
+                    }
+                    else if(requestName.match(lbRegex)) {
+                        console.log(`it's a LB`);
+                    }
+                    else {
+                        //throw an error
+                        console.log('throwing an error');
+                        console.log(query);
+                        console.log(requestName);
+                        throw new Error(`${requestName} is not a recognized command`);
+                    }
                 }
                 else {
-                    return getSoulBreak(query);    
+                    //return getSoulBreak(query);    
+                    throw new Error(`${query} is not a recognized command`);
                 }
             }).then((data) => {
-                setSearchData((searchData) => { return [...searchData, ...data]});
-            });
+                if(data) {
+                    setSearchData((searchData) => { return [...searchData, ...data]});
+                }
+            })
+            .catch(newError => setError((error) => `${error} ${newError.toString()}`));
         });
     };
+    
     /**
      * Take the input from the search box and parses it into
      * one or multiple requests, depending on the content
@@ -140,7 +190,7 @@ const CommandsPage = () => {
                     
                 },
                 (error) => {
-
+                    setError(error);
                 }
             );
         fetch(`${constants.API_URL_BASE}/IdLists/Character`) //create Character ID array
@@ -177,9 +227,10 @@ const CommandsPage = () => {
             
             {/** Iterate through array of Objects to render components e.g. for each Object, pass props to component */}
             {/** TODO
-             * Make SBs filter by tier
+             * Make SB index param work
              * Make other commands work like abilities, LMs, Hero Abilities, etc.
              */}
+            {error && <p>{error}</p>}
             {searchData && searchData.map((datum, i) => {
                 console.log(datum);
                 return <Request data={datum} key={i}/>

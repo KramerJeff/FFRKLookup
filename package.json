@@ -20,5 +20,6 @@
   "dependencies": {
     "lodash": "^4.17.21",
     "node-sass": "^4.14.1"
-  }
+  },
+  "devDependencies": {}
 }
