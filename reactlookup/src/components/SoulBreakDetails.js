@@ -7,7 +7,6 @@ const SoulBreakDetails = ({soulBreak}) => {
     return (
         <div>
             <p>Effects: {soulBreak.effects}</p>
-            <p>SB ID: {soulBreak.id}</p>
             {soulBreak.elements.length > 0 && <p>Elements: {helpers.getElements(soulBreak.elements, 'string')}</p>}
             {soulBreak.multiplier > 0 && <p>Multiplier: {soulBreak.multiplier}</p>}
             {soulBreak.castTime && <p>Cast Time: {soulBreak.castTime}</p>}

@@ -2,53 +2,63 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as consts from '../constants';
+import { Avatar } from 'antd';
 
-const Icon = styled.img`
+const Icon = styled(Avatar)`
   min-height: 32px;
   min-width: 32px;
   height: 32px;
   width: 32px;
-
+  margin: 0 16px;
+  @media (min-width: 62em) {
+    min-height: 64px;
+    min-width: 64px;
+    height: 64px;
+    width: 64px;
+    margin: 0 32px;
+  }
 `;
 
 const Command = styled.div`
   display: flex;
+  flex-flow: row wrap;
   align-items: center;
+  flex-basis: 100%;
 `;
 
 const Effect = styled.p`
-  margin-left: 0.75rem;
+  flex-basis: 100%;
 `;
 
-const Row = styled.div`
+const HalfText = styled.p`
+  flex-basis: 50%;
+`;
+
+const TextContainer = styled.div`
   display: flex;
-  margin-bottom: 0.25rem;
-`;
-
-const LeftCol = styled.span`
-  margin-right: auto;
+  flex-flow: row wrap;
+  align-items: center;
+  flex-basis: 85%;
 `;
 
 const SoulBreakCommands = ({commands}) => {
   return (
-    <div>
+    <>
       {commands.map(function(command, index) {
+        console.log(command);
         return ( 
           <Command key={index}>
             <Icon src={getImgPath(command)}/>
-            <Effect>{command.effects}</Effect>
-            <Row>
-              <LeftCol>
-                <b>Element:</b> {formatElements(command)}
-              </LeftCol>
-              <span>
-                <b>School:</b> {consts.SCHOOLS[command.school]}
-              </span>
-            </Row>
+            <TextContainer>
+              <Effect>{command.effects}</Effect>
+              <HalfText><b>Element:</b> {formatElements(command)}</HalfText>
+              <HalfText><b>School:</b> {consts.SCHOOLS[command.school]}</HalfText>
+              
+            </TextContainer>
           </Command>
         )
       })}
-    </div>
+    </>
   );
 };
 

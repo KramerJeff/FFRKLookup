@@ -9,6 +9,9 @@ import * as consts from './constants';
 export function getElements(elementArray, retType) {
   if(retType === 'string') {
     let retString = '';
+    if(elementArray.length === 0) {
+      return 'None';
+    }
     elementArray.forEach((element, index) => {
       if(index === elementArray.length-1) {
         retString += consts.ELEMENTS[element];

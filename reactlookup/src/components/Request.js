@@ -5,15 +5,20 @@ import { Avatar } from 'antd';
 import { getElements, getDamageType, getTargetType } from '../helpers';
 import styled from 'styled-components';
 import SoulBreakStatuses from './SoulBreakStatuses';
+import SoulBreakCommands from './SoulBreakCommands';
 
 //TODO: Should this be exported out to a component?
 const SBIcon = styled(Avatar)`
   min-height: 64px;
   min-width: 64px;
-  max-height: 128px;
-  max-width: 128px;
-  height: 100%;
-  flex-basis: 10%;
+  height: 64px;
+  width: 64px;  
+  @media (min-width: 62em) {
+    min-height: 128px;
+    min-width: 128px;
+    height: 128px;
+    width: 128px;
+  }
 `;
 
 const RequestContainer = styled.div`
@@ -23,7 +28,7 @@ const RequestContainer = styled.div`
 `;
 
 const TextContainer = styled.div`
-  flex-basis: 90%;
+  flex-basis: 85%;
   display: flex;
   flex-flow: row wrap;
 `;
@@ -44,28 +49,36 @@ const StyledSoulBreakStatuses = styled(SoulBreakStatuses)`
   flex-basis: 100%;
 `
 
+const Container = styled.div`
+  display: flex;
+`;
+
 const Request = ({data}) => {
   if(data.title) {
     return (
       <h2>Request: {data.title}</h2>
     )
   }
+  //console.log(data);
   return (
     <RequestContainer>
       {data.description && <Title variant='h5'>{data.description}</Title>}
-      {data.imagePath && <SBIcon src={data.imagePath.split('"')[0]} />}
-      <TextContainer>
-        {data.effect && <span>{data.effect}</span>}
-        {data.effects && <Effects>{data.effects}</Effects>}
-        
-        {data.elements && <Effects><b>Elements:</b> {getElements(data.elements, 'string')}</Effects>}
-        {data.multiplier && <HalfSpan><b>Multiplier:</b> {data.multiplier}</HalfSpan>}
-        {data.castTime && <HalfSpan><b>Cast Time:</b> {data.castTime}</HalfSpan>}
-        {data.targetType && <HalfSpan><b>Target:</b> {getTargetType(data.targetType)}</HalfSpan>}
-        {data.damageFormulaType && <HalfSpan><b>Type:</b> {getDamageType(data.damageFormulaType)}</HalfSpan>}
-        {/** Statuses */}
-      </TextContainer>
-      {data.statuses.length > 0 && <StyledSoulBreakStatuses statuses={data.statuses} />}
+      <Container>
+        {data.imagePath && <SBIcon src={data.imagePath.split('"')[0]} />}
+        <TextContainer>
+          {'effect' in data && <span>{data.effect}</span>}
+          {'effects' in data && <Effects>{data.effects}</Effects>}
+          
+          {'elements' in data && <Effects><b>Elements:</b> {getElements(data.elements, 'string')}</Effects>}
+          {'multiplier' in data && <HalfSpan><b>Multiplier:</b> {data.multiplier}</HalfSpan>}
+          {'castTime' in data && <HalfSpan><b>Cast Time:</b> {data.castTime}</HalfSpan>}
+          {'targetType' in data && <HalfSpan><b>Target:</b> {getTargetType(data.targetType)}</HalfSpan>}
+          {'damageFormulaType' in data && <HalfSpan><b>Type:</b> {getDamageType(data.damageFormulaType)}</HalfSpan>}
+          {/** Statuses */}
+        </TextContainer>
+      </Container>
+      {/* {data.statuses.length > 0 && <StyledSoulBreakStatuses statuses={data.statuses} />} */}
+      {'commands' in data && <SoulBreakCommands commands={data.commands}/>}
     </RequestContainer>
   );
 };

@@ -70,7 +70,7 @@ const CommandsPage = () => {
     const [searchData, setSearchData] = useState([]);
     const [abilArr, setAbilArr] = useState([]);
     const [charArr, setCharArr] = useState([]);
-    const [error, setError] = useState(''); //TODO make array
+    const [error, setError] = useState([]);
 
     const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|SASB|sync|GSB|GSB\+|FSB|AASB|ADSB|Glint|Glint\+|LB|LBO|LBG|lm|lmr|abil|ability|rm|stat|char|rdive|ldive/gi;
     const lmRegex = /LM|LMR/gi;
@@ -94,10 +94,9 @@ const CommandsPage = () => {
         const queries = parseQuery(query);
         console.log(queries);
         let sequence = Promise.resolve();
-        //process query request(s)
         setSearchData([]); //reset data
-        setError('');
-        queries.forEach((query) => { //
+        setError([]);
+        queries.forEach((query) => { //process query request(s)
             console.log(query);
             sequence = sequence.then(() => {
                 if(typeof(query) === 'object') { //query will be an array (object) if it has matched a cmd
@@ -130,7 +129,7 @@ const CommandsPage = () => {
                     setSearchData((searchData) => { return [...searchData, ...data]});
                 }
             })
-            .catch(newError => setError((error) => `${error} ${newError.toString()}`));
+            .catch(newError => setError((prevState) => [...prevState, newError.toString()]));
         });
     };
     
@@ -189,8 +188,8 @@ const CommandsPage = () => {
                     setAbilArr(abilArr);
                     
                 },
-                (error) => {
-                    setError(error);
+                (newError) => {
+                    setError((prevState) => [...prevState, newError.toString()]);
                 }
             );
         fetch(`${constants.API_URL_BASE}/IdLists/Character`) //create Character ID array
@@ -230,7 +229,9 @@ const CommandsPage = () => {
              * Make SB index param work
              * Make other commands work like abilities, LMs, Hero Abilities, etc.
              */}
-            {error && <p>{error}</p>}
+            {error.length > 0 && error.map((error, i) => {
+                return <p key={i}>{error}</p>
+            })}
             {searchData && searchData.map((datum, i) => {
                 console.log(datum);
                 return <Request data={datum} key={i}/>

@@ -77,8 +77,7 @@ const SoulBreakSearch = () => {
         setToggleState(!toggleFlag);
         setState(newState);
     }
-
-    //Initial mount useEffect
+    
     useEffect(() => {
         fetch(`${constants.API_URL_BASE}/SoulBreaks`)
             .then(response => response.json())
