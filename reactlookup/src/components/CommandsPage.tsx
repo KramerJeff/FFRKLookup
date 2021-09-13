@@ -16,7 +16,7 @@ const StyledButton = styled(Button)`
     height: 56px;
 `;
 
-function getSoulBreak(query) {
+function getSoulBreak(query: string) {
     return query;
 }
 
@@ -26,7 +26,7 @@ function getSoulBreak(query) {
  * @param {Array} charArr - list of characters names and their IDs
  * TODO grab charArr from Context API (????)
  */
-function parseSBRequest(arr, charArr) {
+function parseSBRequest(arr: Array<string>, charArr: Array<string>) {
     console.log(`arrrrrr ${arr}`);
     const charName = arr[0]; 
     const sbTier = arr[1]; //e.g. BSB, BSB1, OSB
@@ -37,7 +37,7 @@ function parseSBRequest(arr, charArr) {
             .then(response => response.json())
             .then((data) => {
                 if(sbTier) {
-                    data = data.filter(sb => sb.soulBreakTier === constants.SB_TIER.indexOf(sbTier.toUpperCase()));
+                    data = data.filter((sb: any) => sb.soulBreakTier === constants.SB_TIER.indexOf(sbTier.toUpperCase()));
                 }
                 console.log('DATA');
                 data.unshift({title: `${capitalize(charName)} ${sbTier.toUpperCase()}`});
@@ -48,7 +48,17 @@ function parseSBRequest(arr, charArr) {
     });    
 }
 
-function parseLMRequest(arr, charArr) {
+/**
+ * TODO - COMPLETE THIS 
+ * @param {*} arr 
+ * @param {*} charArr 
+ */
+function parseLBRequest(arr: Array<string>, charArr: Array<string>) {
+    console.log(`arr ${arr}`);
+    const charName = arr[0];
+}
+
+function parseLMRequest(arr: Array<string>, charArr: Array<string>) {
     console.log(`LMarrrr ${arr}`);
     const charName = arr[0];
     const lmTier = arr[1];
@@ -64,19 +74,21 @@ function parseLMRequest(arr, charArr) {
     });
 }
 
+
+
 const CommandsPage = () => {
 
     const [query, setQuery] = useState('');
-    const [searchData, setSearchData] = useState([]);
-    const [abilArr, setAbilArr] = useState([]);
-    const [charArr, setCharArr] = useState([]);
-    const [error, setError] = useState([]);
+    const [searchData, setSearchData] = useState<Array<Object>>([]);
+    const [abilArr, setAbilArr] = useState<Array<string>>([]);
+    const [charArr, setCharArr] = useState<Array<string>>([]);
+    const [error, setError] = useState<Array<string>>([]);
 
     const cmdRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|SASB|sync|GSB|GSB\+|FSB|AASB|ADSB|Glint|Glint\+|LB|LBO|LBG|lm|lmr|abil|ability|rm|stat|char|rdive|ldive/gi;
     const lmRegex = /LM|LMR/gi;
     const sbRegex = /SB|SSB|BSB|USB|CSB|chain|OSB|AOSB|ASB|UOSB|SASB|sync|GSB|GSB\+|FSB|AASB|ADSB|Glint|Glint\+/gi;
     const lbRegex = /LB|LBO|LBG/gi;
-    const handleChange = (event) => {
+    const handleChange = (event: any) => {
         setQuery(event.target.value);
     }
 
@@ -84,7 +96,7 @@ const CommandsPage = () => {
      * 
      * @param {*} event 
      */
-    const handleSubmit = (event) => {
+    const handleSubmit = (event: any) => {
         event.preventDefault();
         console.log('i submitted the thing ' + query);
 
@@ -100,7 +112,7 @@ const CommandsPage = () => {
             console.log(query);
             sequence = sequence.then(() => {
                 if(typeof(query) === 'object') { //query will be an array (object) if it has matched a cmd
-                    const requestName = query[1];
+                    const requestName = query[1].toLowerCase();
                     if(requestName.match(sbRegex)) {
                         console.log(`it's an SB!`);
                         return parseSBRequest(query, charArr);
@@ -111,6 +123,10 @@ const CommandsPage = () => {
                     }
                     else if(requestName.match(lbRegex)) {
                         console.log(`it's a LB`);
+                        return parseLBRequest(query, charArr);
+                    }
+                    else if(requestName === 'abil' || requestName === 'ability') {
+                        console.log(`it's an ability!`);
                     }
                     else {
                         //throw an error
@@ -124,7 +140,7 @@ const CommandsPage = () => {
                     //return getSoulBreak(query);    
                     throw new Error(`${query} is not a recognized command`);
                 }
-            }).then((data) => {
+            }).then((data: any) => {
                 if(data) {
                     setSearchData((searchData) => { return [...searchData, ...data]});
                 }
@@ -139,7 +155,7 @@ const CommandsPage = () => {
      * @param query - the text from the search box
      * @param delimiter - the delimiter used to split up multiple queries
      */
-    function parseQuery(query, delimiter=';') {
+    function parseQuery(query: string, delimiter=';') {
         const requests = [];
         if(query.includes(delimiter)) {
             const queries = query.split(delimiter);
@@ -158,10 +174,11 @@ const CommandsPage = () => {
     * Get the parts of the query and make sure it is a proper command
     * @param query - the query to split up into parts
     */
-    function getQueryParts(query) {
+    function getQueryParts(query: string) {
         let parts = [];
         const words = query.trim().split(" ");
-        const cmd = words.pop().toLowerCase();
+        const cmd = words[words.length-1].toLowerCase();
+        words.pop();
         if(cmd.match(cmdRegex)) {
             parts[0] = words.join(" ").toLowerCase();
             parts[1] = cmd;
@@ -182,7 +199,7 @@ const CommandsPage = () => {
             .then(
                 (result) => {
                     let abilArr = [''];
-                    result.forEach(entry => {
+                    result.forEach((entry: any) => {
                         abilArr.push(entry.Value.toLowerCase());
                     });
                     setAbilArr(abilArr);
@@ -197,7 +214,7 @@ const CommandsPage = () => {
             .then(
                 (result) => {
                     let charArr = [''];
-                    result.forEach(entry => {
+                    result.forEach((entry: any) => {
                         charArr.push(entry.Value.toLowerCase());
                     });
                     setCharArr(charArr);
