@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Typography } from '@material-ui/core';
 import { Avatar } from 'antd';
 import { getElements, getDamageType, getTargetType } from '../helpers';
+import FFRKAPI from '../types';
 import styled from 'styled-components';
 import SoulBreakStatuses from './SoulBreakStatuses';
 import SoulBreakCommands from './SoulBreakCommands';
@@ -53,12 +54,12 @@ const Container = styled.div`
   display: flex;
 `;
 
-const Request = ({data}) => {
-  if(data.title) {
-    return (
-      <h2>Request: {data.title}</h2>
-    )
-  }
+interface RequestProps {
+  data: FFRKAPI.SoulBreak | FFRKAPI.LegendMateria;
+}
+
+const Request = ({data}: RequestProps) => {
+
   //console.log(data);
   return (
     <RequestContainer>
@@ -74,7 +75,7 @@ const Request = ({data}) => {
           {'castTime' in data && <HalfSpan><b>Cast Time:</b> {data.castTime}</HalfSpan>}
           {'targetType' in data && <HalfSpan><b>Target:</b> {getTargetType(data.targetType)}</HalfSpan>}
           {'damageFormulaType' in data && <HalfSpan><b>Type:</b> {getDamageType(data.damageFormulaType)}</HalfSpan>}
-          {/** Statuses */}
+          {'statuses' in data && <SoulBreakStatuses statuses={data.statuses}/>}
         </TextContainer>
       </Container>
       {/* {data.statuses.length > 0 && <StyledSoulBreakStatuses statuses={data.statuses} />} */}

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import * as constants from '../constants.js';
 import { handleErrors, capitalize } from '../helpers';
-
+import FFRKAPI from '../types';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Request from './Request';
@@ -26,8 +26,8 @@ function getSoulBreak(query: string) {
  * @param {Array} charArr - list of characters names and their IDs
  * TODO grab charArr from Context API (????)
  */
-function parseSBRequest(arr: Array<string>, charArr: Array<string>) {
-    console.log(`arrrrrr ${arr}`);
+function parseSBRequest(arr: Array<string>, charArr: Array<string>): Promise<{data: Array<FFRKAPI.SoulBreak>}> {
+    console.log(`sbArr ${arr}`);
     const charName = arr[0]; 
     const sbTier = arr[1]; //e.g. BSB, BSB1, OSB
     const charID = charArr.indexOf(charName);
@@ -37,11 +37,8 @@ function parseSBRequest(arr: Array<string>, charArr: Array<string>) {
             .then(response => response.json())
             .then((data) => {
                 if(sbTier) {
-                    data = data.filter((sb: any) => sb.soulBreakTier === constants.SB_TIER.indexOf(sbTier.toUpperCase()));
+                    data = data.filter((sb: FFRKAPI.SoulBreak) => sb.soulBreakTier === constants.SB_TIER.indexOf(sbTier.toUpperCase()));
                 }
-                console.log('DATA');
-                data.unshift({title: `${capitalize(charName)} ${sbTier.toUpperCase()}`});
-                console.log(data);
                 resolve(data);
             })
             .catch(error => reject(error));
@@ -58,7 +55,7 @@ function parseLBRequest(arr: Array<string>, charArr: Array<string>) {
     const charName = arr[0];
 }
 
-function parseLMRequest(arr: Array<string>, charArr: Array<string>) {
+function parseLMRequest(arr: Array<string>, charArr: Array<string>): Promise<{data: Array<FFRKAPI.LegendMateria>}> {
     console.log(`LMarrrr ${arr}`);
     const charName = arr[0];
     const lmTier = arr[1];
@@ -79,7 +76,7 @@ function parseLMRequest(arr: Array<string>, charArr: Array<string>) {
 const CommandsPage = () => {
 
     const [query, setQuery] = useState('');
-    const [searchData, setSearchData] = useState<Array<Object>>([]);
+    const [searchData, setSearchData] = useState<Array<FFRKAPI.SoulBreak | FFRKAPI.LegendMateria>>([]);
     const [abilArr, setAbilArr] = useState<Array<string>>([]);
     const [charArr, setCharArr] = useState<Array<string>>([]);
     const [error, setError] = useState<Array<string>>([]);
@@ -105,25 +102,24 @@ const CommandsPage = () => {
         window.history.pushState({ path: newURI }, '', newURI);
         const queries = parseQuery(query);
         console.log(queries);
-        let sequence = Promise.resolve();
         setSearchData([]); //reset data
         setError([]);
         queries.forEach((query) => { //process query request(s)
             console.log(query);
-            sequence = sequence.then(() => {
+            new Promise(function(resolve) {
                 if(typeof(query) === 'object') { //query will be an array (object) if it has matched a cmd
                     const requestName = query[1].toLowerCase();
                     if(requestName.match(sbRegex)) {
                         console.log(`it's an SB!`);
-                        return parseSBRequest(query, charArr);
+                        resolve(parseSBRequest(query, charArr));
                     }
                     else if(requestName.match(lmRegex)) {
                         console.log(`it's a LM!`);
-                        return parseLMRequest(query, charArr);
+                        resolve(parseLMRequest(query, charArr));
                     }
                     else if(requestName.match(lbRegex)) {
                         console.log(`it's a LB`);
-                        return parseLBRequest(query, charArr);
+                        //return parseLBRequest(query, charArr);
                     }
                     else if(requestName === 'abil' || requestName === 'ability') {
                         console.log(`it's an ability!`);
@@ -141,6 +137,8 @@ const CommandsPage = () => {
                     throw new Error(`${query} is not a recognized command`);
                 }
             }).then((data: any) => {
+                console.log('dataaaaaaa');
+                console.log(data);
                 if(data) {
                     setSearchData((searchData) => { return [...searchData, ...data]});
                 }
@@ -189,8 +187,6 @@ const CommandsPage = () => {
         return parts;
     }
 
-
-
     //TODO store data in localStorage (?) and use HEAD to check if size of payload has changed?
     //Prevent using as much data from the API
     useEffect(() => {
@@ -203,7 +199,6 @@ const CommandsPage = () => {
                         abilArr.push(entry.Value.toLowerCase());
                     });
                     setAbilArr(abilArr);
-                    
                 },
                 (newError) => {
                     setError((prevState) => [...prevState, newError.toString()]);
@@ -222,18 +217,6 @@ const CommandsPage = () => {
             );  
     }, []);
 
-    //test function
-    // useEffect(() => {
-    //     if(abilArr && abilArr.length > 0) {
-    //         console.log(`ability 31 is ${abilArr[31]}`);
-    //     }
-    //     if (charArr && charArr.length > 0) {
-    //         console.log(`character 31 is ${charArr[31]}`);
-    //         console.log(charArr);
-    //         console.log(`Cloud is here? ${charArr.indexOf('cloud')}`);
-    //     }
-    // }, [abilArr, charArr]);
-
     return (
         <div>
             <form autoComplete='on' onSubmit={handleSubmit}>
@@ -250,7 +233,7 @@ const CommandsPage = () => {
                 return <p key={i}>{error}</p>
             })}
             {searchData && searchData.map((datum, i) => {
-                console.log(datum);
+                console.log('hi');
                 return <Request data={datum} key={i}/>
             })}
         </div>
