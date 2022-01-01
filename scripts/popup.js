@@ -287,6 +287,7 @@ function filterSBTier(sbString) {
       format.tierID = 12;
       break;
     case "aasb":
+    case "woke":
       format.tierID = 13;
       break;
     case "sasb":
@@ -294,7 +295,15 @@ function filterSBTier(sbString) {
       format.tierID = 14;
       break;
     case "adsb":
+    case "dyad":
       format.tierID = 15;
+      break;
+    case "csb+":
+      format.tierID = 16;
+      break;
+    case "dasb":
+    case "dual":
+      format.tierID = 17;
       break;
   }
   return format;
