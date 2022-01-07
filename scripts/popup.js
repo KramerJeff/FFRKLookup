@@ -299,6 +299,7 @@ function filterSBTier(sbString) {
       format.tierID = 15;
       break;
     case "csb+":
+    case "chain+":
       format.tierID = 16;
       break;
     case "dasb":

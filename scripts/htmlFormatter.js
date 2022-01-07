@@ -53,7 +53,9 @@ export function formatSBJSON(json) {
 function getCommands(cmdArr) {
     let commands = "";
     for(let i = 0; i < cmdArr.length; i++) {
+      commands += `<span class='cmdName'>${cmdArr[i].commandName}</span>`;
       commands += "<div class='cmd'>";
+
       //TODO create container for these so they never overlap
       commands += `<img class='cmd__icon' src='${getImgPath(cmdArr[i])}'/>`;
       commands += `<div class='cmd__text'><p class='cmd__effect'>${cmdArr[i].effects}</p>`; //TODO SEARCH FOR STATUS
@@ -62,19 +64,24 @@ function getCommands(cmdArr) {
       commands += `<div class='flex'>`;
       commands += `<span class='margin-right col-2'><b>Elements:</b> ${formatElements(cmdArr[i])}</span>`;
       commands += `<span class='col-2'><b>School:</b> ${consts.schoolDict[cmdArr[i].school]}</span>`;
-
       commands += `</div>`;
 
+      //Multiplier and Cast Time
       commands += `<div class='flex'><span class='margin-right col-2'><b>Multiplier:</b> ${cmdArr[i].multiplier}</span>`;
       commands += `<span class='col-2'><b>Cast Time:</b> ${cmdArr[i].castTime}</span></div>`;
 
-      //Multiplier and Cast Time
+      //Target and Damage Type
       commands += `<div class='flex'>`;
-
       commands += `<span class='margin-right col-2'><b>Target:</b> ${consts.targetTypeDict[cmdArr[i].targetType]}</span>`;
-      commands += `<span class='col-2'><b>Type:</b> ${consts.damageFormulaDict[cmdArr[i].damageFormulaType]}</span></div></div>`;
+      commands += `<span class='col-2'><b>Type:</b> ${consts.damageFormulaDict[cmdArr[i].damageFormulaType]}</span></div>`;
 
+      //SB Gain and Synchro Condition
+      commands += `<div class='flex'>`;
+      commands += `<span class='margin-right col-2'><b>SB Gain:</b> ${cmdArr[i].soulBreakPointsGained}</span>`;
+      if(cmdArr[i].synchroCondition) commands += `<span class='col-2'><b>Links On:</b> ${cmdArr[i].synchroCondition}</span>`;
       commands += `</div>`;
+
+      commands += `</div></div>`;
     }
 
     return commands;

@@ -405,6 +405,13 @@ tbody.left th {
     }
 }
 
+.cmdName {
+  display: inline-block;
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
 .cmd__icon, .sm-icon {
   min-height: 32px;
   min-width: 32px;
